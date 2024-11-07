@@ -1,0 +1,107 @@
+.article-view {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 2rem;
+  background: #fff;
+}
+
+.article-view.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-article {
+  color: #6c757d;
+  font-size: 1.2rem;
+}
+
+.article-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.article-header h1 {
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+  line-height: 1.4;
+  color: #212529;
+}
+
+.article-meta {
+  display: flex;
+  gap: 1rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.original-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.original-link:hover {
+  text-decoration: underline;
+}
+
+.article-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #212529;
+}
+
+/* 文章内容样式 */
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
+
+.article-content pre {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.article-content blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 4px solid #dee2e6;
+  color: #6c757d;
+}
+
+.article-content a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.article-content a:hover {
+  text-decoration: underline;
+}
+
+/* 适配暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .article-view {
+    background: #1a1a1a;
+  }
+
+  .article-header h1 {
+    color: #fff;
+  }
+
+  .article-content {
+    color: #e1e1e1;
+  }
+
+  .article-content pre {
+    background: #2d2d2d;
+  }
+
+  .article-content blockquote {
+    border-left-color: #404040;
+    color: #b0b0b0;
+  }
+} 

@@ -1,0 +1,94 @@
+.feed-list {
+  width: 250px;
+  border-right: 1px solid #eee;
+  padding: 1rem;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.add-feed-form {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-feed-form input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.add-feed-form button {
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-feed-form button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.feeds {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feed-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+}
+
+.feed-item:hover {
+  background: #f5f5f5;
+}
+
+.feed-item.selected {
+  background: #e3f2fd;
+}
+
+.feed-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 0.75rem;
+}
+
+.feed-info {
+  flex: 1;
+}
+
+.feed-info h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.feed-url {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.error-message {
+  color: #dc3545;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.offline-notice {
+  text-align: center;
+  padding: 0.5rem;
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 4px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+} 
