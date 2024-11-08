@@ -27,7 +27,11 @@ export async function loadArticles(feedId) {
   try {
     await storage.init()
     const loadedArticles = await storage.getArticles(feedId)
-    articles.set(loadedArticles || [])
+    // 按发布时间倒序排序
+    const sortedArticles = loadedArticles?.sort((a, b) => {
+      return new Date(b.published_at) - new Date(a.published_at)
+    }) || []
+    articles.set(sortedArticles)
   } catch (err) {
     console.error('加载文章失败:', err)
     error.set('加载文章失败')
