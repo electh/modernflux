@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import FeedList from './components/FeedList';
-import ArticleList from './components/ArticleList';
-import ArticleView from './components/ArticleView';
-import './styles/App.css';
-import { selectedArticle } from './stores/articles';
+import { useState } from "react";
+import FeedList from "./components/FeedList/FeedList.jsx";
+import ArticleList from "./components/ArticleList/ArticleList.jsx";
+import ArticleView from "./components/ArticleView/ArticleView.jsx";
+import "./App.css";
+import { selectedArticle } from "./stores/articles";
 
 function App() {
   const [selectedFeedId, setSelectedFeedId] = useState(null);
@@ -19,17 +19,15 @@ function App() {
 
   return (
     <div className="app">
-      <FeedList 
+      <FeedList
         onFeedSelect={handleFeedSelect}
         selectedFeedId={selectedFeedId}
       />
-      <ArticleList 
+      <ArticleList
         feedId={selectedFeedId}
         onArticleSelect={handleArticleSelect}
       />
-      <ArticleView 
-        article={selectedArticle.get()}
-      />
+      <ArticleView article={selectedArticle.get()} />
     </div>
   );
 }

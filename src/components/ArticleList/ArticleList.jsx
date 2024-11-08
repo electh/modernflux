@@ -1,35 +1,36 @@
-import { useEffect } from 'react';
-import { useStore } from '@nanostores/react'
-import { 
-  filteredArticles, 
-  loading, 
-  error, 
+import { useEffect } from "react";
+import { useStore } from "@nanostores/react";
+import {
+  error,
   filter,
+  filteredArticles,
+  loadArticles,
+  loading,
   updateArticleStatus,
-  loadArticles
-} from '../stores/articles'
-import '../styles/ArticleList.css'
+} from "../../stores/articles.js";
+import "./ArticleList.css";
+import { Button } from "@nextui-org/react";
 
 const ArticleList = ({ feedId, onArticleSelect }) => {
-  const $articles = useStore(filteredArticles)
-  const $loading = useStore(loading)
-  const $error = useStore(error)
-  const $filter = useStore(filter)
+  const $articles = useStore(filteredArticles);
+  const $loading = useStore(loading);
+  const $error = useStore(error);
+  const $filter = useStore(filter);
 
   useEffect(() => {
     if (feedId) {
-      loadArticles(feedId)
+      loadArticles(feedId);
     }
-  }, [feedId])
+  }, [feedId]);
 
   const handleMarkStatus = async (article, e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     try {
-      await updateArticleStatus(article)
+      await updateArticleStatus(article);
     } catch (err) {
-      console.error('更新文章状态失败:', err)
+      console.error("更新文章状态失败:", err);
     }
-  }
+  };
 
   if ($loading) {
     return <div className="article-list-loading">加载中...</div>;
@@ -49,7 +50,7 @@ const ArticleList = ({ feedId, onArticleSelect }) => {
               type="radio"
               name="filter"
               value="all"
-              checked={$filter === 'all'}
+              checked={$filter === "all"}
               onChange={(e) => filter.set(e.target.value)}
             />
             全部
@@ -59,22 +60,22 @@ const ArticleList = ({ feedId, onArticleSelect }) => {
               type="radio"
               name="filter"
               value="unread"
-              checked={$filter === 'unread'}
+              checked={$filter === "unread"}
               onChange={(e) => filter.set(e.target.value)}
             />
             未读
           </label>
         </div>
       </div>
-      
+
       {$articles.length === 0 ? (
         <div className="no-articles">暂无文章</div>
       ) : (
         <ul className="articles">
-          {$articles.map(article => (
-            <li 
+          {$articles.map((article) => (
+            <li
               key={article.id}
-              className={`article-item ${article.status === 'read' ? 'read' : ''}`}
+              className={`article-item ${article.status === "read" ? "read" : ""}`}
               onClick={() => onArticleSelect(article)}
             >
               <div className="article-content">
@@ -85,12 +86,12 @@ const ArticleList = ({ feedId, onArticleSelect }) => {
                   </span>
                 </div>
               </div>
-              <button
-                className="status-toggle"
+              <Button
+                color="primary"
                 onClick={(e) => handleMarkStatus(article, e)}
               >
-                {article.status === 'read' ? '标为未读' : '标为已读'}
-              </button>
+                {article.status === "read" ? "标为未读" : "标为已读"}
+              </Button>
             </li>
           ))}
         </ul>
@@ -99,4 +100,4 @@ const ArticleList = ({ feedId, onArticleSelect }) => {
   );
 };
 
-export default ArticleList; 
+export default ArticleList;

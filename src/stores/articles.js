@@ -13,16 +13,13 @@ export const filter = atom('all')
 export const filteredArticles = computed(
   [articles, filter],
   (articles, filter) => {
-    const sorted = [...articles].sort(
-      (a, b) => new Date(b.published_at) - new Date(a.published_at)
-    )
-    return filter === 'unread' 
-      ? sorted.filter(article => article.status !== 'read')
-      : sorted
+    return filter === 'unread'
+      ? articles.filter(article => article.status !== 'read') 
+      : articles
   }
 )
 
-// 加载文章列表
+// 从数据库加载文章列表
 export async function loadArticles(feedId) {
   loading.set(true)
   error.set(null)
@@ -43,12 +40,13 @@ export async function loadArticles(feedId) {
 export async function updateArticleStatus(article) {
   try {
     if (navigator.onLine) {
+      // 更新miniflux文章状态
       await minifluxAPI.updateEntryStatus(article)
     }
     
     const newStatus = article.status === 'read' ? 'unread' : 'read'
     
-    // 先更新文章状态
+    // 先更新数据库中的文章状态
     await storage.addArticles([{
       id: article.id,
       feedId: article.feedId, // 添加 feedId
@@ -64,7 +62,7 @@ export async function updateArticleStatus(article) {
       )
     )
 
-    // 更新未读计数
+    // 更新未读计数状态
     await updateUnreadCount(article.feedId)
   } catch (err) {
     console.error('更新文章状态失败:', err)
@@ -72,7 +70,7 @@ export async function updateArticleStatus(article) {
   }
 }
 
-// 更新未读计数
+// 更新未读计数状态
 export async function updateUnreadCount(feedId) {
   try {
     const count = await storage.getUnreadCount(feedId)
