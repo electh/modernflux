@@ -7,21 +7,28 @@ import {
   loadArticles,
   loading,
   updateArticleStatus,
+  selectedArticle,
 } from "../../stores/articles.js";
+import { selectedFeedId } from "../../stores/feeds";
 import "./ArticleList.css";
 import { Button } from "@nextui-org/react";
 
-const ArticleList = ({ feedId, onArticleSelect }) => {
+const ArticleList = () => {
   const $articles = useStore(filteredArticles);
   const $loading = useStore(loading);
   const $error = useStore(error);
   const $filter = useStore(filter);
+  const $selectedFeedId = useStore(selectedFeedId);
 
   useEffect(() => {
-    if (feedId) {
-      loadArticles(feedId);
+    if ($selectedFeedId) {
+      loadArticles($selectedFeedId);
     }
-  }, [feedId]);
+  }, [$selectedFeedId]);
+
+  const handleArticleSelect = (article) => {
+    selectedArticle.set(article);
+  };
 
   const handleMarkStatus = async (article, e) => {
     e.stopPropagation();
@@ -76,7 +83,7 @@ const ArticleList = ({ feedId, onArticleSelect }) => {
             <li
               key={article.id}
               className={`article-item ${article.status === "read" ? "read" : ""}`}
-              onClick={() => onArticleSelect(article)}
+              onClick={() => handleArticleSelect(article)}
             >
               <div className="article-content">
                 <h3>{article.title}</h3>

@@ -8,13 +8,16 @@ import {
   loadFeeds,
   newFeedUrl,
   unreadCounts,
+  selectedFeedId,
 } from "../../stores/feeds.js";
 import { forceSync, isOnline, isSyncing, lastSync } from "../../stores/sync.js";
 import "./FeedList.css";
 import { Button } from "@nextui-org/react";
+import { selectedArticle } from "../../stores/articles";
 
-const FeedList = ({ onFeedSelect, selectedFeedId }) => {
+const FeedList = () => {
   const $feeds = useStore(feeds);
+  const $selectedFeedId = useStore(selectedFeedId);
   const $newFeedUrl = useStore(newFeedUrl);
   const $isAdding = useStore(isAdding);
   const $error = useStore(error);
@@ -40,6 +43,11 @@ const FeedList = ({ onFeedSelect, selectedFeedId }) => {
     await addFeed($newFeedUrl);
   };
 
+  const handleFeedSelect = (feedId) => {
+    selectedFeedId.set(feedId);
+    selectedArticle.set(null);
+  };
+
   return (
     <div className="feed-list">
       <h2>订阅源</h2>
@@ -63,13 +71,14 @@ const FeedList = ({ onFeedSelect, selectedFeedId }) => {
       </form>
 
       {$error && <div className="error-message">{$error}</div>}
+      <Button onClick={() => handleFeedSelect(null)}>All</Button>
 
       <ul className="feeds">
         {$feeds.map((feed) => (
           <li
             key={feed.id}
-            className={`feed-item ${selectedFeedId === feed.id ? "selected" : ""}`}
-            onClick={() => onFeedSelect(feed.id)}
+            className={`feed-item ${$selectedFeedId === feed.id ? "selected" : ""}`}
+            onClick={() => handleFeedSelect(feed.id)}
           >
             <div className="feed-info">
               <h3>{feed.title}</h3>

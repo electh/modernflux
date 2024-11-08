@@ -3,6 +3,7 @@ import storage from '../db/storage'
 import minifluxAPI from '../api/miniflux'
 
 export const feeds = atom([])
+export const selectedFeedId = atom(null)
 export const newFeedUrl = atom('')
 export const isAdding = atom(false)
 export const error = atom(null)
