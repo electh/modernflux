@@ -8,6 +8,7 @@ export const newFeedUrl = atom('')
 export const isAdding = atom(false)
 export const error = atom(null)
 export const unreadCounts = atom({})
+export const starredCounts = atom({})
 
 export async function loadFeeds() {
   try {
@@ -15,12 +16,15 @@ export async function loadFeeds() {
     const storedFeeds = await storage.getFeeds()
     feeds.set(storedFeeds || [])
 
-    // 获取未读计数
-    const counts = {}
+    // 获取未读和收藏计数
+    const unreadCount = {}
+    const starredCount = {}
     for (const feed of storedFeeds) {
-      counts[feed.id] = await storage.getUnreadCount(feed.id)
+      unreadCount[feed.id] = await storage.getUnreadCount(feed.id)
+      starredCount[feed.id] = await storage.getStarredCount(feed.id)
     }
-    unreadCounts.set(counts)
+    unreadCounts.set(unreadCount)
+    starredCounts.set(starredCount)
   } catch (err) {
     error.set('加载订阅源失败')
     console.error(err)

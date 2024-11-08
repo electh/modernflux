@@ -23,10 +23,26 @@ if (typeof window !== "undefined") {
 // 从miniflux同步订阅源并保存到数据库
 async function syncFeeds() {
   try {
-    const feeds = await minifluxAPI.getFeeds();
+    // 获取服务器上的所有订阅源
+    const serverFeeds = await minifluxAPI.getFeeds();
     await storage.init();
+    
+    // 获取本地数据库中的所有订阅源
+    const localFeeds = await storage.getFeeds();
+    
+    // 找出需要删除的订阅源（在本地存在但服务器上已不存在）
+    const serverFeedIds = new Set(serverFeeds.map(feed => feed.id));
+    const feedsToDelete = localFeeds.filter(feed => !serverFeedIds.has(feed.id));
+    
+    // 删除不再存在的订阅源
+    for (const feed of feedsToDelete) {
+      await storage.deleteFeed(feed.id);
+      // 同时删除该订阅源的所有文章
+      await storage.deleteArticlesByFeedId(feed.id);
+    }
 
-    for (const feed of feeds) {
+    // 添加或更新现有订阅源
+    for (const feed of serverFeeds) {
       await storage.addFeed({
         id: feed.id,
         title: feed.title,
@@ -34,7 +50,8 @@ async function syncFeeds() {
         site_url: feed.site_url,
       });
     }
-    return feeds;
+    
+    return serverFeeds;
   } catch (error) {
     console.error("同步订阅源失败:", error);
     throw error;

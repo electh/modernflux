@@ -14,7 +14,10 @@ import { Button } from "@nextui-org/react";
 import {
   handleArticleSelect,
   handleMarkStatus,
+  handleToggleStar,
 } from "../../handlers/articleHandlers";
+import { StarIcon } from "@heroicons/react/24/outline";
+import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 
 const ArticleList = () => {
   const $articles = useStore(filteredArticles);
@@ -61,6 +64,16 @@ const ArticleList = () => {
             />
             未读
           </label>
+          <label>
+            <input
+              type="radio"
+              name="filter"
+              value="starred"
+              checked={$filter === "starred"}
+              onChange={(e) => filter.set(e.target.value)}
+            />
+            收藏
+          </label>
         </div>
       </div>
 
@@ -82,12 +95,26 @@ const ArticleList = () => {
                   </span>
                 </div>
               </div>
-              <Button
-                color="primary"
-                onClick={(e) => handleMarkStatus(article, e)}
-              >
-                {article.status === "read" ? "标为未读" : "标为已读"}
-              </Button>
+              <div className="article-actions">
+                <Button
+                  isIconOnly
+                  variant="light"
+                  onClick={(e) => handleToggleStar(article, e)}
+                  className="star-button"
+                >
+                  {article.starred ? (
+                    <StarIconSolid className="h-5 w-5 text-warning" />
+                  ) : (
+                    <StarIcon className="h-5 w-5" />
+                  )}
+                </Button>
+                <Button
+                  color="primary"
+                  onClick={(e) => handleMarkStatus(article, e)}
+                >
+                  {article.status === "read" ? "标为未读" : "标为已读"}
+                </Button>
+              </div>
             </li>
           ))}
         </ul>

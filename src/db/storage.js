@@ -126,6 +126,56 @@ class Storage {
       request.onerror = () => reject(request.error);
     });
   }
+
+  // 删除数据库中的订阅源
+  async deleteFeed(feedId) {
+    const tx = this.db.transaction('feeds', 'readwrite');
+    const store = tx.objectStore('feeds');
+    
+    return new Promise((resolve, reject) => {
+      const request = store.delete(feedId);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  // 删除数据库中指定订阅源的所有文章
+  async deleteArticlesByFeedId(feedId) {
+    const tx = this.db.transaction('articles', 'readwrite');
+    const store = tx.objectStore('articles');
+    const index = store.index('feedId');
+    
+    return new Promise((resolve, reject) => {
+      const request = index.getAllKeys(feedId);
+      
+      request.onsuccess = async () => {
+        const articleIds = request.result;
+        for (const articleId of articleIds) {
+          await store.delete(articleId);
+        }
+        resolve();
+      };
+      
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  // 获取订阅源收藏文章数量
+  async getStarredCount(feedId) {
+    const tx = this.db.transaction('articles', 'readonly');
+    const store = tx.objectStore('articles');
+    const index = store.index('feedId');
+    
+    return new Promise((resolve, reject) => {
+      const request = index.getAll(feedId);
+      request.onsuccess = () => {
+        const articles = request.result;
+        const starredCount = articles.filter(article => article.starred).length;
+        resolve(starredCount);
+      };
+      request.onerror = () => reject(request.error);
+    });
+  }
 }
 
 export default new Storage(); 

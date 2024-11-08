@@ -1,4 +1,4 @@
-import { selectedArticle, updateArticleStatus } from '../stores/articles';
+import { selectedArticle, updateArticleStatus, updateArticleStarred } from '../stores/articles';
 
 // 处理文章选择
 export const handleArticleSelect = (article) => {
@@ -14,5 +14,17 @@ export const handleMarkStatus = async (article, e) => {
     await updateArticleStatus(article);
   } catch (err) {
     console.error("更新文章状态失败:", err);
+  }
+};
+
+// 处理文章星标状态更新
+export const handleToggleStar = async (article, e) => {
+  if (e) {
+    e.stopPropagation();
+  }
+  try {
+    await updateArticleStarred(article);
+  } catch (err) {
+    console.error("更新文章星标状态失败:", err);
   }
 }; 

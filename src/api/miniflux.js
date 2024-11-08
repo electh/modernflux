@@ -61,6 +61,16 @@ class miniFluxAPI {
       throw error;
     }
   }
+
+  // 更新文章星标状态
+  async updateEntryStarred(entry) {
+    try {
+      await this.client.put(`/v1/entries/${entry.id}/bookmark`);
+    } catch (error) {
+      console.error('更新文章星标状态失败:', error);
+      throw error;
+    }
+  }
 }
 
 export default new miniFluxAPI();

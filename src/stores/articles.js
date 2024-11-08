@@ -1,7 +1,7 @@
 import { atom, computed } from 'nanostores'
 import storage from '../db/storage'
 import minifluxAPI from '../api/miniflux'
-import { unreadCounts } from './feeds'
+import { unreadCounts, starredCounts } from './feeds'
 
 export const articles = atom([])
 export const selectedArticle = atom(null)
@@ -13,9 +13,14 @@ export const filter = atom('all')
 export const filteredArticles = computed(
   [articles, filter],
   (articles, filter) => {
-    return filter === 'unread'
-      ? articles.filter(article => article.status !== 'read') 
-      : articles
+    switch(filter) {
+      case 'unread':
+        return articles.filter(article => article.status !== 'read')
+      case 'starred':
+        return articles.filter(article => article.starred)
+      default:
+        return articles
+    }
   }
 )
 
@@ -84,5 +89,43 @@ export async function updateUnreadCount(feedId) {
     })
   } catch (err) {
     console.error('更新未读计数失败:', err)
+  }
+}
+
+// 更新文章星标状态的函数
+export async function updateArticleStarred(article) {
+  try {
+    if (navigator.onLine) {
+      // 更新 miniflux 文章星标状态
+      await minifluxAPI.updateEntryStarred(article)
+    }
+    
+    const newStarred = !article.starred
+    
+    // 更新数据库中的文章星标状态
+    await storage.addArticles([{
+      ...article,
+      starred: newStarred
+    }])
+    
+    // 更新内存中的文章列表
+    articles.set(
+      articles.get().map(a => 
+        a.id === article.id 
+          ? { ...a, starred: newStarred }
+          : a
+      )
+    )
+
+    // 更新收藏计数
+    const count = await storage.getStarredCount(article.feedId)
+    const currentCounts = starredCounts.get()
+    starredCounts.set({
+      ...currentCounts,
+      [article.feedId]: count
+    })
+  } catch (err) {
+    console.error('更新文章星标状态失败:', err)
+    throw err
   }
 } 
