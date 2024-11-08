@@ -48,8 +48,7 @@ export async function updateArticleStatus(article) {
     
     // 先更新数据库中的文章状态
     await storage.addArticles([{
-      id: article.id,
-      feedId: article.feedId, // 添加 feedId
+      ...article,
       status: newStatus
     }])
     

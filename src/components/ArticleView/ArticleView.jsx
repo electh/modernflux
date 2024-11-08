@@ -1,16 +1,15 @@
 import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
-import { selectedArticle, updateArticleStatus } from "../../stores/articles.js";
+import { selectedArticle } from "../../stores/articles.js";
 import "./ArticleView.css";
+import { handleMarkStatus } from "../../handlers/articleHandlers";
 
 const ArticleView = () => {
   const $article = useStore(selectedArticle);
 
   useEffect(() => {
-    if ($article && $article.status !== "read") {
-      updateArticleStatus($article).catch((err) => {
-        console.error("自动标记已读失败:", err);
-      });
+    if ($article && $article.status !== 'read') {
+      handleMarkStatus($article);
     }
   }, [$article]);
 

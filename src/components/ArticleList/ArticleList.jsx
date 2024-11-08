@@ -1,17 +1,20 @@
 import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
+import { lastSync } from "../../stores/sync";
 import {
   error,
   filter,
   filteredArticles,
   loadArticles,
   loading,
-  updateArticleStatus,
-  selectedArticle,
 } from "../../stores/articles.js";
 import { selectedFeedId } from "../../stores/feeds";
 import "./ArticleList.css";
 import { Button } from "@nextui-org/react";
+import {
+  handleArticleSelect,
+  handleMarkStatus,
+} from "../../handlers/articleHandlers";
 
 const ArticleList = () => {
   const $articles = useStore(filteredArticles);
@@ -19,25 +22,11 @@ const ArticleList = () => {
   const $error = useStore(error);
   const $filter = useStore(filter);
   const $selectedFeedId = useStore(selectedFeedId);
+  const $lastSync = useStore(lastSync);
 
   useEffect(() => {
-    if ($selectedFeedId) {
-      loadArticles($selectedFeedId);
-    }
-  }, [$selectedFeedId]);
-
-  const handleArticleSelect = (article) => {
-    selectedArticle.set(article);
-  };
-
-  const handleMarkStatus = async (article, e) => {
-    e.stopPropagation();
-    try {
-      await updateArticleStatus(article);
-    } catch (err) {
-      console.error("更新文章状态失败:", err);
-    }
-  };
+    loadArticles($selectedFeedId);
+  }, [$selectedFeedId, $lastSync]);
 
   if ($loading) {
     return <div className="article-list-loading">加载中...</div>;
