@@ -1,23 +1,22 @@
 import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
-import { lastSync } from "../../stores/sync";
+import { lastSync } from "@/stores/sync.js";
 import {
   error,
   filter,
   filteredArticles,
   loadArticles,
   loading,
-} from "../../stores/articles.js";
-import { selectedFeedId } from "../../stores/feeds";
+} from "@/stores/articles.js";
+import { selectedFeedId } from "@/stores/feeds.js";
 import "./ArticleList.css";
-import { Button } from "@nextui-org/react";
+import { Button } from "@/components/ui/button.jsx";
 import {
   handleArticleSelect,
   handleMarkStatus,
   handleToggleStar,
-} from "../../handlers/articleHandlers";
-import { StarIcon } from "@heroicons/react/24/outline";
-import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
+} from "@/handlers/articleHandlers.js";
+import { Star } from "lucide-react";
 
 const ArticleList = () => {
   const $articles = useStore(filteredArticles);
@@ -103,9 +102,9 @@ const ArticleList = () => {
                   className="star-button"
                 >
                   {article.starred ? (
-                    <StarIconSolid className="h-5 w-5 text-warning" />
+                    <Star className="h-5 w-5 fill-amber-300" />
                   ) : (
-                    <StarIcon className="h-5 w-5" />
+                    <Star className="h-5 w-5" />
                   )}
                 </Button>
                 <Button

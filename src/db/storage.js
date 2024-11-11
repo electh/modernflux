@@ -32,6 +32,7 @@ class Storage {
         if (!db.objectStoreNames.contains('feeds')) {
           const feedsStore = db.createObjectStore('feeds', { keyPath: 'id', autoIncrement: true });
           feedsStore.createIndex('url', 'url', { unique: true });
+          feedsStore.createIndex('categoryName', 'categoryName', { unique: false });
         }
       };
     });
@@ -137,6 +138,13 @@ class Storage {
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error);
     });
+  }
+
+  // 删除全部订阅源
+  async deleteAllFeeds() {
+    const tx = this.db.transaction('feeds', 'readwrite');
+    const store = tx.objectStore('feeds');
+    await store.clear();
   }
 
   // 删除数据库中指定订阅源的所有文章

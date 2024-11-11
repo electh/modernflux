@@ -34,20 +34,22 @@ async function syncFeeds() {
     const serverFeedIds = new Set(serverFeeds.map(feed => feed.id));
     const feedsToDelete = localFeeds.filter(feed => !serverFeedIds.has(feed.id));
     
-    // 删除不再存在的订阅源
+    // 删除该订阅源的所有文章
     for (const feed of feedsToDelete) {
-      await storage.deleteFeed(feed.id);
-      // 同时删除该订阅源的所有文章
       await storage.deleteArticlesByFeedId(feed.id);
     }
 
-    // 添加或更新现有订阅源
+    await storage.deleteAllFeeds();
+
+    // 重置现有订阅源
     for (const feed of serverFeeds) {
       await storage.addFeed({
         id: feed.id,
         title: feed.title,
         url: feed.feed_url,
         site_url: feed.site_url,
+        categoryId: feed.category.id,
+        categoryName: feed.category.title
       });
     }
     

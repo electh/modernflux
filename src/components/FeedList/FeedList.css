@@ -1,8 +1,17 @@
 .feed-list {
-  border-right: 1px solid #eee;
+  border-right: 1px solid hsl(var(--border));
   height: 100vh;
-  overflow-y: auto;
   width: 280px;
+  background-color: hsl(var(--sidebar-background));
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-list h2 {
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: hsl(var(--sidebar-foreground));
 }
 
 .add-feed-form {

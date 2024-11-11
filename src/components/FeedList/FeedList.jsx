@@ -5,7 +5,6 @@ import { lastSync } from "../../stores/sync";
 import "./FeedList.css";
 import { selectedArticle } from "../../stores/articles";
 import { selectedFeedId } from "../../stores/feeds";
-import AddFeed from "./components/AddFeed";
 import SyncButton from "./components/SyncButton";
 import AllItemsListbox from "./components/AllItemsListbox";
 import FeedListbox from "./components/FeedListbox";
@@ -26,7 +25,6 @@ const FeedList = () => {
     <div className="feed-list px-2 py-2">
       <h2>订阅源</h2>
       <SyncButton />
-      <AddFeed />
       <AllItemsListbox onSelect={handleFeedSelect} />
       <FeedListbox onSelect={handleFeedSelect} />
     </div>

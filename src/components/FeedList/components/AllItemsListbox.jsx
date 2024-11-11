@@ -1,5 +1,4 @@
 import { useStore } from "@nanostores/react";
-import { Listbox, ListboxItem } from "@nextui-org/react";
 import { selectedFeedId, unreadCounts, starredCounts } from "../../../stores/feeds";
 import { filter } from "../../../stores/articles";
 
@@ -33,22 +32,21 @@ const AllItemsListbox = ({ onSelect }) => {
   const { text, count } = getDisplayInfo();
 
   return (
-    <Listbox aria-label="Feeds" onAction={() => onSelect(null)}>
-      <ListboxItem
-        key={0}
-        className={`feed-item ${$selectedFeedId === null ? "selected" : ""}`}
-        textValue={text}
-        endContent={
-          count > 0 && (
-            <span className="text-small text-default-400">
-              {count}
-            </span>
-          )
-        }
+    <div className="w-full">
+      <button
+        onClick={() => onSelect(null)}
+        className={`w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-accent hover:text-accent-foreground ${
+          $selectedFeedId === null ? "bg-accent text-accent-foreground" : ""
+        }`}
       >
-        <span className="text-foreground text-medium font-bold">{text}</span>
-      </ListboxItem>
-    </Listbox>
+        <span className="font-bold">{text}</span>
+        {count > 0 && (
+          <span className="text-sm text-muted-foreground">
+            {count}
+          </span>
+        )}
+      </button>
+    </div>
   );
 };
 

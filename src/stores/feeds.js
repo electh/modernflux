@@ -1,14 +1,22 @@
-import { atom } from 'nanostores'
+import { atom, computed } from 'nanostores'
 import storage from '../db/storage'
-import minifluxAPI from '../api/miniflux'
 
 export const feeds = atom([])
 export const selectedFeedId = atom(null)
 export const newFeedUrl = atom('')
-export const isAdding = atom(false)
 export const error = atom(null)
 export const unreadCounts = atom({})
 export const starredCounts = atom({})
+
+// 计算当前选中的分组名称
+export const selectedCategoryName = computed(
+  [feeds, selectedFeedId],
+  (feeds, selectedFeedId) => {
+    if (!selectedFeedId) return null
+    const selectedFeed = feeds.find(feed => feed.id === selectedFeedId)
+    return selectedFeed?.categoryName || "未分类"
+  }
+)
 
 export async function loadFeeds() {
   try {
@@ -30,28 +38,3 @@ export async function loadFeeds() {
     console.error(err)
   }
 }
-
-export async function addFeed(url) {
-  if (!url.trim() || !navigator.onLine) return
-
-  isAdding.set(true)
-  error.set(null)
-
-  try {
-    const newFeed = await minifluxAPI.addFeed(url)
-    await storage.addFeed({
-      id: newFeed.id,
-      title: newFeed.title,
-      url: newFeed.feed_url,
-      site_url: newFeed.site_url,
-    })
-    
-    await loadFeeds()
-    newFeedUrl.set('')
-  } catch (err) {
-    error.set('添加订阅源失败')
-    console.error(err)
-  } finally {
-    isAdding.set(false)
-  }
-} 

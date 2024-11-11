@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image } from "@nextui-org/react";
+import { Rss } from "lucide-react";
 
 const FeedIcon = ({ url }) => {
   const [error, setError] = useState(false);
@@ -36,25 +36,11 @@ const FeedIcon = ({ url }) => {
 
   // 如果URL无效、图片加载失败或图片模糊，显示默认图标
   if (!url || error || isBlurry) {
-    return (
-      <svg
-        className="w-5 h-5 text-gray-500"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"
-        />
-      </svg>
-    );
+    return <Rss className="w-5 h-5 text-muted-foreground" />;
   }
 
   return (
-    <Image
+    <img
       alt="Feed icon"
       src={getFaviconUrl(url)}
       className="w-5 h-5 rounded"
