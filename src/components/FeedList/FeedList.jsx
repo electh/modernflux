@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
-import { loadFeeds } from "../../stores/feeds";
-import { lastSync } from "../../stores/sync";
+import { loadFeeds, selectedFeedId } from "@/stores/feeds.js";
+import { lastSync } from "@/stores/sync.js";
 import "./FeedList.css";
-import { selectedArticle } from "../../stores/articles";
-import { selectedFeedId } from "../../stores/feeds";
+import { selectedArticle } from "@/stores/articles.js";
 import SyncButton from "./components/SyncButton";
 import AllItemsListbox from "./components/AllItemsListbox";
 import FeedListbox from "./components/FeedListbox";

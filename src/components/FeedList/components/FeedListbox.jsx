@@ -1,6 +1,6 @@
 import { useStore } from "@nanostores/react";
-import { feeds, starredCounts, unreadCounts } from "../../../stores/feeds";
-import { filter } from "../../../stores/articles";
+import { feeds, starredCounts, unreadCounts } from "@/stores/feeds.js";
+import { filter } from "@/stores/articles.js";
 import FeedIcon from "./FeedIcon";
 
 const FeedListbox = ({ onSelect }) => {
@@ -46,7 +46,11 @@ const FeedListbox = ({ onSelect }) => {
                 strokeWidth={2}
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </summary>
             <div className="mt-1 space-y-1 px-2">
