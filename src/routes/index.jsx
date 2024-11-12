@@ -3,6 +3,17 @@ import App from "@/App";
 import ArticleList from "@/components/ArticleList/ArticleList";
 import ArticleView from "@/components/ArticleView/ArticleView";
 
+const routerConfig = {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+    v7_fetcherPersist: true,
+    v7_normalizeFormMethod: true,
+    v7_partialHydration: true,
+    v7_skipActionErrorRevalidation: true
+  }
+};
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -29,7 +40,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "category/:categoryName",
+        path: "category/:categoryId",
         element: <ArticleList />,
         children: [
           {
@@ -40,4 +51,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]); 
+], routerConfig); 

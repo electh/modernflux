@@ -39,11 +39,11 @@ const FeedsGroup = () => {
       <SidebarGroupContent>
         <SidebarMenu>
           {$feedsByCategory.map((category) => (
-            <Collapsible key={category.title}>
-              <SidebarMenuItem key={`menu-${category.title}`}>
+            <Collapsible key={category.id}>
+              <SidebarMenuItem key={`menu-${category.id}`}>
                 <SidebarMenuButton asChild>
                   <Link
-                    to={`/category/${category.title}`}
+                    to={`/category/${category.id}`}
                     onClick={() => isMobile && setOpenMobile(false)}
                   >
                     <span className={"pl-6"}>{category.title}</span>
@@ -55,7 +55,8 @@ const FeedsGroup = () => {
                   </SidebarMenuAction>
                 </CollapsibleTrigger>
                 <SidebarMenuBadge className="justify-end">
-                  {$getCategoryCount(category.feeds)}
+                  {$getCategoryCount(category.feeds) !== 0 &&
+                    $getCategoryCount(category.feeds)}
                 </SidebarMenuBadge>
                 <CollapsibleContent>
                   <SidebarMenuSub className="m-0 px-0 border-none">

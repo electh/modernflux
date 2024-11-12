@@ -8,21 +8,36 @@ import { ScrollArea } from "@/components/ui/scroll-area.jsx";
 const ArticleView = () => {
   const { articleId } = useParams();
   const [article, setArticle] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadArticle = async () => {
       if (articleId) {
-        const loadedArticle = await storage.getArticle(parseInt(articleId));
-        setArticle(loadedArticle);
+        try {
+          await storage.init();
+          const loadedArticle = await storage.getArticle(parseInt(articleId));
+          setArticle(loadedArticle);
 
-        if (loadedArticle && loadedArticle.status !== "read") {
-          handleMarkStatus(loadedArticle);
+          if (loadedArticle && loadedArticle.status !== "read") {
+            handleMarkStatus(loadedArticle);
+          }
+        } catch (err) {
+          console.error("加载文章失败:", err);
+          setError("加载文章失败");
         }
       }
     };
 
     loadArticle();
   }, [articleId]);
+
+  if (error) {
+    return (
+      <div className="article-view empty">
+        <div className="no-article">{error}</div>
+      </div>
+    );
+  }
 
   if (!article) {
     return (

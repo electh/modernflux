@@ -130,7 +130,7 @@ export async function updateArticleStarred(article) {
   }
 }
 
-export async function loadArticlesByCategory(categoryName) {
+export async function loadArticlesByCategory(categoryId) {
   loading.set(true);
   error.set(null);
 
@@ -139,7 +139,7 @@ export async function loadArticlesByCategory(categoryName) {
     // 先获取该分类下的所有订阅源
     const feeds = await storage.getFeeds();
     const categoryFeeds = feeds.filter(
-      (feed) => feed.categoryName === categoryName,
+      (feed) => feed.categoryId === parseInt(categoryId),
     );
 
     // 获取所有订阅源的文章

@@ -2,7 +2,7 @@ import { atom, computed } from "nanostores";
 import storage from "../db/storage";
 import { filter } from "@/stores/articlesStore.js";
 
-export const feedsStore = atom([]);
+export const feeds = atom([]);
 export const selectedFeedId = atom(null);
 export const error = atom(null);
 export const unreadCounts = atom({});
@@ -10,7 +10,7 @@ export const starredCounts = atom({});
 
 // 计算当前选中的分组名称
 export const selectedCategoryName = computed(
-  [feedsStore, selectedFeedId],
+  [feeds, selectedFeedId],
   (feeds, selectedFeedId) => {
     if (!selectedFeedId) return null;
     const selectedFeed = feeds.find((feed) => feed.id === selectedFeedId);
@@ -19,7 +19,7 @@ export const selectedCategoryName = computed(
 );
 
 export const filteredFeeds = computed(
-  [feedsStore, filter, starredCounts, unreadCounts],
+  [feeds, filter, starredCounts, unreadCounts],
   ($feeds, $filter, $starredCounts, $unreadCounts) => {
     return $feeds.filter((feed) => {
       switch ($filter) {
@@ -40,20 +40,24 @@ export const feedsByCategory = computed(
     return Object.entries(
       $filteredFeeds.reduce((acc, feed) => {
         const categoryName = feed.categoryName || "未分类";
-        if (!acc[categoryName]) {
-          acc[categoryName] = [];
+        const categoryId = feed.categoryId || "uncategorized";
+        if (!acc[categoryId]) {
+          acc[categoryId] = {
+            name: categoryName,
+            feeds: []
+          };
         }
-        acc[categoryName].push(feed);
+        acc[categoryId].feeds.push(feed);
         return acc;
       }, {}),
-    ).map(([title, feeds]) => ({
-      title,
-      url: "#",
+    ).map(([id, category]) => ({
+      id,
+      title: category.name,
       isActive: false,
-      feeds: feeds.map((feed) => ({
+      feeds: category.feeds.map((feed) => ({
         id: feed.id,
         title: feed.title,
-        url: feed.url || "#",
+        url: feed.url || "#", 
         site_url: feed.site_url || "#",
         unreadCount: $unreadCounts[feed.id] || 0,
         starredCount: $starredCounts[feed.id] || 0,
@@ -98,7 +102,7 @@ export async function loadFeeds() {
   try {
     await storage.init();
     const storedFeeds = await storage.getFeeds();
-    feedsStore.set(storedFeeds || []);
+    feeds.set(storedFeeds || []);
 
     // 获取未读和收藏计数
     const unreadCount = {};

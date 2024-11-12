@@ -64,7 +64,7 @@ const ArticlesGroup = () => {
               <span>{text}</span>
             </Link>
           </SidebarMenuButton>
-          <SidebarMenuBadge>{count}</SidebarMenuBadge>
+          <SidebarMenuBadge>{count !== 0 && count}</SidebarMenuBadge>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>

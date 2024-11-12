@@ -21,6 +21,7 @@ const SyncButton = () => {
       disabled={$isSyncing || !$isOnline}
       variant="ghost"
       size="icon"
+      className={"h-7 w-7"}
       aria-label="同步"
     >
       {$isSyncing ? (
