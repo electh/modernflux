@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
 import { lastSync } from "@/stores/syncStore.js";
 import {
-  filter,
   filteredArticles,
   loadArticles,
   loadArticlesByCategory,
