@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import storage from "@/db/storage";
 import "./ArticleView.css";
 import { handleMarkStatus } from "@/handlers/articleHandlers.js";
+import { ScrollArea } from "@/components/ui/scroll-area.jsx";
 
 const ArticleView = () => {
   const { articleId } = useParams();
@@ -13,13 +14,13 @@ const ArticleView = () => {
       if (articleId) {
         const loadedArticle = await storage.getArticle(parseInt(articleId));
         setArticle(loadedArticle);
-        
+
         if (loadedArticle && loadedArticle.status !== "read") {
           handleMarkStatus(loadedArticle);
         }
       }
     };
-    
+
     loadArticle();
   }, [articleId]);
 
@@ -32,7 +33,7 @@ const ArticleView = () => {
   }
 
   return (
-    <div className="article-view">
+    <ScrollArea className="flex-1 h-screen bg-background px-8">
       <header className="article-header">
         <h1>{article.title}</h1>
         <div className="article-meta">
@@ -49,12 +50,11 @@ const ArticleView = () => {
           </a>
         </div>
       </header>
-
       <div
         className="article-content"
         dangerouslySetInnerHTML={{ __html: article.content }}
       />
-    </div>
+    </ScrollArea>
   );
 };
 

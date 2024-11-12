@@ -2,12 +2,10 @@ import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
 import { lastSync } from "@/stores/syncStore.js";
 import {
-  error,
   filter,
   filteredArticles,
   loadArticles,
   loadArticlesByCategory,
-  loading,
 } from "@/stores/articlesStore.js";
 import "./ArticleList.css";
 import { Button } from "@/components/ui/button.jsx";
@@ -17,12 +15,12 @@ import {
 } from "@/handlers/articleHandlers.js";
 import { Star } from "lucide-react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { SidebarTrigger } from "@/components/ui/sidebar.jsx";
+import { ScrollArea } from "@/components/ui/scroll-area.jsx";
 
 const ArticleList = () => {
   const { feedId, categoryName } = useParams();
   const $articles = useStore(filteredArticles);
-  const $loading = useStore(loading);
-  const $error = useStore(error);
   const $filter = useStore(filter);
   const $lastSync = useStore(lastSync);
   const navigate = useNavigate();
@@ -42,22 +40,18 @@ const ArticleList = () => {
 
   const handleArticleClick = (article) => {
     const basePath = window.location.pathname.split("/article/")[0];
-    const toUrl = basePath === "/" ? `/article/${article.id}` : `${basePath}/article/${article.id}`;
+    const toUrl =
+      basePath === "/"
+        ? `/article/${article.id}`
+        : `${basePath}/article/${article.id}`;
     navigate(toUrl);
   };
 
-  if ($loading) {
-    return <div className="article-list-loading">加载中...</div>;
-  }
-
-  if ($error) {
-    return <div className="article-list-error">{$error}</div>;
-  }
-
   return (
     <div className="flex">
-      <div className="article-list">
+      <ScrollArea className="w-80 border-r h-screen bg-background">
         <div className="article-list-header">
+          <SidebarTrigger />
           <h2>文章列表</h2>
           <div className="article-filter">
             <label>
@@ -135,7 +129,7 @@ const ArticleList = () => {
             ))}
           </ul>
         )}
-      </div>
+      </ScrollArea>
       <Outlet />
     </div>
   );

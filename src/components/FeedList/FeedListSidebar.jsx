@@ -25,7 +25,7 @@ const FeedListSidebar = () => {
   }, [$lastSync]);
 
   return (
-    <Sidebar variant="inset">
+    <Sidebar variant="sidebar">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

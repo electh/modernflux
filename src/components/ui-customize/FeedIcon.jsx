@@ -37,7 +37,7 @@ const FeedIcon = ({ url }) => {
   // 如果URL无效、图片加载失败或图片模糊，显示默认图标
   if (!url || error || isBlurry) {
     return (
-      <span className="flex items-center justify-center w-5 h-5 bg-background rounded">
+      <span className="flex items-center justify-center w-5 h-5 bg-background rounded transition-opacity duration-300 ease-in-out animate-in fade-in-0">
         <Rss className="size-4 text-muted-foreground" />
       </span>
     );
@@ -47,9 +47,13 @@ const FeedIcon = ({ url }) => {
     <img
       alt="Feed icon"
       src={getFaviconUrl(url)}
-      className="w-5 h-5 rounded"
+      className="w-5 h-5 rounded transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
       onError={handleError}
-      onLoad={handleLoad}
+      onLoad={(e) => {
+        handleLoad(e);
+        e.target.classList.remove('opacity-0');
+        e.target.classList.add('opacity-100');
+      }}
     />
   );
 };
