@@ -105,7 +105,7 @@ async function syncEntries() {
 }
 
 // 执行完整同步
-export async function syncStore() {
+export async function sync() {
   // 如果网络不在线或正在同步，则不执行同步
   if (!isOnline.get() || isSyncing.get()) return;
 
@@ -128,7 +128,7 @@ export async function syncStore() {
   }
 }
 
-// 自动同步
+// 后台自动同步数据
 if (typeof window !== "undefined") {
   async function performSync() {
     // 如果网络在线且未正在同步，则执行同步
@@ -141,7 +141,7 @@ if (typeof window !== "undefined") {
         // 如果最后同步时间不存在或距离上次同步时间超过5分钟，则执行同步
         if (!lastSyncTime || now - lastSyncTime > 5 * 60 * 1000) {
           // 执行完整同步
-          await syncStore();
+          await sync();
           // 更新最后同步时间
           await storage.setLastSyncTime(now);
         }
@@ -166,11 +166,11 @@ if (typeof window !== "undefined") {
   });
 }
 
-// 手动强制同步
+// 手动强制同步,由侧边栏刷新按钮触发
 export async function forceSync() {
   if (isOnline.get() && !isSyncing.get()) {
     try {
-      await syncStore();
+      await sync();
       const now = new Date();
       await storage.setLastSyncTime(now);
     } catch (error) {

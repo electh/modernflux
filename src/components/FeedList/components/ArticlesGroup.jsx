@@ -55,7 +55,7 @@ const ArticlesGroup = () => {
   const { icon, text, count } = getDisplayInfo();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Articles</SidebarGroupLabel>
+      <SidebarGroupLabel>文章</SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>

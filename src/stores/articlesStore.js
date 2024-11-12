@@ -3,15 +3,14 @@ import storage from "../db/storage";
 import minifluxAPI from "../api/miniflux";
 import { starredCounts, unreadCounts } from "./feedsStore.js";
 
-export const articlesStore = atom([]);
-export const selectedArticle = atom(null);
+export const UnfilteredArticles = atom([]);
 export const loading = atom(false);
 export const error = atom(null);
 export const filter = atom("all");
 
 // 计算过滤后的文章列表
 export const filteredArticles = computed(
-  [articlesStore, filter],
+  [UnfilteredArticles, filter],
   (articles, filter) => {
     switch (filter) {
       case "unread":
@@ -37,7 +36,7 @@ export async function loadArticles(feedId) {
       loadedArticles?.sort((a, b) => {
         return new Date(b.published_at) - new Date(a.published_at);
       }) || [];
-    articlesStore.set(sortedArticles);
+    UnfilteredArticles.set(sortedArticles);
   } catch (err) {
     console.error("加载文章失败:", err);
     error.set("加载文章失败");
@@ -65,10 +64,10 @@ export async function updateArticleStatus(article) {
     ]);
 
     // 更新内存中的文章列表
-    articlesStore.set(
-      articlesStore
-        .get()
-        .map((a) => (a.id === article.id ? { ...a, status: newStatus } : a)),
+    UnfilteredArticles.set(
+      UnfilteredArticles.get().map((a) =>
+        a.id === article.id ? { ...a, status: newStatus } : a,
+      ),
     );
 
     // 更新未读计数状态
@@ -112,10 +111,10 @@ export async function updateArticleStarred(article) {
     ]);
 
     // 更新内存中的文章列表
-    articlesStore.set(
-      articlesStore
-        .get()
-        .map((a) => (a.id === article.id ? { ...a, starred: newStarred } : a)),
+    UnfilteredArticles.set(
+      UnfilteredArticles.get().map((a) =>
+        a.id === article.id ? { ...a, starred: newStarred } : a,
+      ),
     );
 
     // 更新收藏计数
@@ -128,5 +127,38 @@ export async function updateArticleStarred(article) {
   } catch (err) {
     console.error("更新文章星标状态失败:", err);
     throw err;
+  }
+}
+
+export async function loadArticlesByCategory(categoryName) {
+  loading.set(true);
+  error.set(null);
+
+  try {
+    await storage.init();
+    // 先获取该分类下的所有订阅源
+    const feeds = await storage.getFeeds();
+    const categoryFeeds = feeds.filter(
+      (feed) => feed.categoryName === categoryName,
+    );
+
+    // 获取所有订阅源的文章
+    let allArticles = [];
+    for (const feed of categoryFeeds) {
+      const articles = await storage.getArticles(feed.id);
+      allArticles = [...allArticles, ...articles];
+    }
+
+    // 按时间排序
+    const sortedArticles = allArticles.sort(
+      (a, b) => new Date(b.published_at) - new Date(a.published_at),
+    );
+
+    UnfilteredArticles.set(sortedArticles);
+  } catch (err) {
+    console.error("加载分类文章失败:", err);
+    error.set("加载分类文章失败");
+  } finally {
+    loading.set(false);
   }
 }

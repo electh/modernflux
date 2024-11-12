@@ -1,13 +1,7 @@
 import {
-  selectedArticle,
   updateArticleStarred,
   updateArticleStatus,
 } from "../stores/articlesStore.js";
-
-// 处理文章选择
-export const handleArticleSelect = (article) => {
-  selectedArticle.set(article);
-};
 
 // 处理文章状态更新
 export const handleMarkStatus = async (article, e) => {
