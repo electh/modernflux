@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
-import { lastSync } from "@/stores/sync.js";
+import { lastSync } from "@/stores/syncStore.js";
 import {
   error,
   filter,
   filteredArticles,
   loadArticles,
   loading,
-} from "@/stores/articles.js";
-import { selectedFeedId } from "@/stores/feeds.js";
+} from "@/stores/articlesStore.js";
+import { selectedFeedId } from "@/stores/feedsStore.js";
 import "./ArticleList.css";
 import { Button } from "@/components/ui/button.jsx";
 import {
@@ -96,8 +96,8 @@ const ArticleList = () => {
               </div>
               <div className="article-actions">
                 <Button
-                  isIconOnly
-                  variant="light"
+                  variant="ghost"
+                  size="icon"
                   onClick={(e) => handleToggleStar(article, e)}
                   className="star-button"
                 >

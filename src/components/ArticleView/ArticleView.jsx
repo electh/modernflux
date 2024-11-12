@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
-import { selectedArticle } from "../../stores/articles.js";
+import { selectedArticle } from "@/stores/articlesStore.js";
 import "./ArticleView.css";
-import { handleMarkStatus } from "../../handlers/articleHandlers";
+import { handleMarkStatus } from "@/handlers/articleHandlers.js";
 
 const ArticleView = () => {
   const $article = useStore(selectedArticle);
 
   useEffect(() => {
-    if ($article && $article.status !== 'read') {
+    if ($article && $article.status !== "read") {
       handleMarkStatus($article);
     }
   }, [$article]);

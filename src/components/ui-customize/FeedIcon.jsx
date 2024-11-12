@@ -28,15 +28,19 @@ const FeedIcon = ({ url }) => {
   // 检查图片质量
   const handleLoad = (e) => {
     const img = e.target;
-    // 如果图片实际尺寸小于预期尺寸(64x64)，认为图片质量不佳
-    if (img.naturalWidth < 64 || img.naturalHeight < 64) {
+    // 如果图片实际尺寸小于预期尺寸(32x32)，认为图片质量不佳
+    if (img.naturalWidth < 32 || img.naturalHeight < 32) {
       setIsBlurry(true);
     }
   };
 
   // 如果URL无效、图片加载失败或图片模糊，显示默认图标
   if (!url || error || isBlurry) {
-    return <Rss className="w-5 h-5 text-muted-foreground" />;
+    return (
+      <span className="flex items-center justify-center w-5 h-5 bg-background rounded">
+        <Rss className="size-4 text-muted-foreground" />
+      </span>
+    );
   }
 
   return (

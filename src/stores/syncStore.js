@@ -14,6 +14,21 @@ export const error = atom(null);
 // 全局定时器变量
 let syncInterval = null;
 
+// 异步初始化最近同步时间
+async function initLastSync() {
+  try {
+    const time = await storage.getLastSyncTime();
+    lastSync.set(time);
+  } catch (err) {
+    console.error("初始化同步时间失败:", err);
+  }
+}
+
+// 在浏览器环境下执行初始化
+if (typeof window !== "undefined") {
+  initLastSync();
+}
+
 // 监听在线状态
 if (typeof window !== "undefined") {
   window.addEventListener("online", () => isOnline.set(true));
@@ -26,14 +41,16 @@ async function syncFeeds() {
     // 获取服务器上的所有订阅源
     const serverFeeds = await minifluxAPI.getFeeds();
     await storage.init();
-    
+
     // 获取本地数据库中的所有订阅源
     const localFeeds = await storage.getFeeds();
-    
+
     // 找出需要删除的订阅源（在本地存在但服务器上已不存在）
-    const serverFeedIds = new Set(serverFeeds.map(feed => feed.id));
-    const feedsToDelete = localFeeds.filter(feed => !serverFeedIds.has(feed.id));
-    
+    const serverFeedIds = new Set(serverFeeds.map((feed) => feed.id));
+    const feedsToDelete = localFeeds.filter(
+      (feed) => !serverFeedIds.has(feed.id),
+    );
+
     // 删除该订阅源的所有文章
     for (const feed of feedsToDelete) {
       await storage.deleteArticlesByFeedId(feed.id);
@@ -49,10 +66,10 @@ async function syncFeeds() {
         url: feed.feed_url,
         site_url: feed.site_url,
         categoryId: feed.category.id,
-        categoryName: feed.category.title
+        categoryName: feed.category.title,
       });
     }
-    
+
     return serverFeeds;
   } catch (error) {
     console.error("同步订阅源失败:", error);
@@ -88,7 +105,7 @@ async function syncEntries() {
 }
 
 // 执行完整同步
-export async function sync() {
+export async function syncStore() {
   // 如果网络不在线或正在同步，则不执行同步
   if (!isOnline.get() || isSyncing.get()) return;
 
@@ -124,7 +141,7 @@ if (typeof window !== "undefined") {
         // 如果最后同步时间不存在或距离上次同步时间超过5分钟，则执行同步
         if (!lastSyncTime || now - lastSyncTime > 5 * 60 * 1000) {
           // 执行完整同步
-          await sync();
+          await syncStore();
           // 更新最后同步时间
           await storage.setLastSyncTime(now);
         }
@@ -153,7 +170,7 @@ if (typeof window !== "undefined") {
 export async function forceSync() {
   if (isOnline.get() && !isSyncing.get()) {
     try {
-      await sync();
+      await syncStore();
       const now = new Date();
       await storage.setLastSyncTime(now);
     } catch (error) {

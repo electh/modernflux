@@ -1,7 +1,7 @@
 import { useStore } from "@nanostores/react";
 import { Button } from "@/components/ui/button";
-import { forceSync, isOnline, isSyncing } from "@/stores/sync.js";
-import { RefreshCw } from "lucide-react";
+import { forceSync, isOnline, isSyncing } from "@/stores/syncStore.js";
+import { Loader2, RefreshCw } from "lucide-react";
 
 const SyncButton = () => {
   const $isOnline = useStore(isOnline);
@@ -19,12 +19,15 @@ const SyncButton = () => {
     <Button
       onClick={handleForceSync}
       disabled={$isSyncing || !$isOnline}
-      variant="light"
-      isIconOnly
-      isLoading={$isSyncing}
+      variant="ghost"
+      size="icon"
       aria-label="同步"
     >
-      <RefreshCw className="h-5 w-5" />
+      {$isSyncing ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        <RefreshCw className="h-5 w-5" />
+      )}
     </Button>
   );
 };

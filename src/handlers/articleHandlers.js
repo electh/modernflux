@@ -1,4 +1,8 @@
-import { selectedArticle, updateArticleStatus, updateArticleStarred } from '../stores/articles';
+import {
+  selectedArticle,
+  updateArticleStarred,
+  updateArticleStatus,
+} from "../stores/articlesStore.js";
 
 // 处理文章选择
 export const handleArticleSelect = (article) => {
@@ -27,4 +31,4 @@ export const handleToggleStar = async (article, e) => {
   } catch (err) {
     console.error("更新文章星标状态失败:", err);
   }
-}; 
+};
