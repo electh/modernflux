@@ -1,34 +1,35 @@
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui-customize/AnimatedTabs.jsx";
 import { filter } from "@/stores/articlesStore";
+import { CircleDot, Infinity, Star } from "lucide-react";
+import { Separator } from "@/components/ui/separator.jsx";
 
 export default function ArticleListFooter() {
   return (
-    <div className="border-t absolute bottom-0 bg-background/80 backdrop-blur-sm w-full z-10">
+    <div className="absolute bottom-0 bg-sidebar/80 backdrop-blur-sm w-full">
+      <Separator className="mx-2 w-auto" />
       <Tabs
         defaultValue="all"
         onValueChange={(value) => {
           filter.set(value);
         }}
       >
-        <div className="flex items-center px-4 py-2">
-          <TabsList className="w-full">
-            <TabsTrigger
-              value="starred"
-              className="flex-1 text-zinc-600 dark:text-zinc-200"
-            >
-              收藏
+        <div className="flex items-center justify-center p-2">
+          <TabsList className="rounded-full gap-3 p-1 h-auto">
+            <TabsTrigger value="starred" className="rounded-full px-2 py-1">
+              <Star className="size-3 mr-1" />
+              <span className="text-xs">收藏</span>
             </TabsTrigger>
-            <TabsTrigger
-              value="unread"
-              className="flex-1 text-zinc-600 dark:text-zinc-200"
-            >
-              未读
+            <TabsTrigger value="unread" className="rounded-full px-2 py-1">
+              <CircleDot className="size-3 mr-1" />
+              <span className="text-xs">未读</span>
             </TabsTrigger>
-            <TabsTrigger
-              value="all"
-              className="flex-1 text-zinc-600 dark:text-zinc-200"
-            >
-              全部
+            <TabsTrigger value="all" className="rounded-full px-2 py-1">
+              <Infinity className="size-3 mr-1" />
+              <span className="text-xs">全部</span>
             </TabsTrigger>
           </TabsList>
         </div>

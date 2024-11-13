@@ -18,5 +18,5 @@ export const formatLastSync = (date) => {
 };
 
 export const formatPublishDate = (date) => {
-  return dayjs(date).format("YYYY-MM-DD HH:mm");
+  return dayjs(date).fromNow();
 }; 

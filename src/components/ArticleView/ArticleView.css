@@ -1,99 +1,107 @@
-.article-view.empty {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-
-.no-article {
-  color: #6c757d;
-  font-size: 1.2rem;
-}
-
-.article-header {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-}
-
-.article-header h1 {
-  color: #212529;
-  font-size: 2rem;
-  line-height: 1.4;
-  margin: 0 0 1rem 0;
-}
-
-.article-meta {
-  color: #6c757d;
-  display: flex;
-  font-size: 0.9rem;
-  gap: 1rem;
-}
-
-.original-link {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.original-link:hover {
-  text-decoration: underline;
-}
-
-.article-content {
-  color: #212529;
-  font-size: 1.1rem;
-  line-height: 1.8;
-}
-
-/* 文章内容样式 */
-.article-content img {
-  height: auto;
-  margin: 1rem 0;
+.article-content * {
   max-width: 100%;
 }
 
-.article-content pre {
-  background: #f8f9fa;
-  border-radius: 4px;
-  overflow-x: auto;
-  padding: 1rem;
+.article-content {
+  line-height: 1.8;
 }
 
-.article-content blockquote {
-  border-left: 4px solid #dee2e6;
-  color: #6c757d;
-  margin: 1rem 0;
-  padding-left: 1rem;
+.article-content h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong {
+  font-weight: 500;
 }
 
-.article-content a {
-  color: #007bff;
+.article-content li,
+p {
+  margin-block-end: 1.6em;
+  margin-block-start: 1.6em;
+}
+
+/* 文章内容图片样式 */
+.article-content img {
+  border-radius: var(--radius);
+  height: auto; /* 自动调整高度，保持原始比例 */
+  max-width: 100%; /* 图片最大宽度为容器的 100% */
+}
+
+/*video 相关样式 */
+.article-content video {
+  border-radius: var(--radius);
+}
+
+/* 文章内容文本样式 */
+.article-content {
+  color: hsl(var(--foreground));
+}
+
+/* 文章标题链接样式 */
+.article-title a {
+  color: hsl(var(--foreground)); /* 设置链接文字颜色 */
+  font-weight: 500;
   text-decoration: none;
 }
 
-.article-content a:hover {
-  text-decoration: underline;
+/* 文章内容链接样式 */
+.article-content a {
+  border-bottom: 1px dotted hsl(var(--primary)); /* 设置链接文字颜色 */
+  color: hsl(var(--primary));
+  text-decoration: none;
+  transition: color 0.1s linear;
 }
 
-/* 适配暗色模式 */
-@media (prefers-color-scheme: dark) {
-  .article-view {
-    background: #1a1a1a;
-  }
+.article-content a:hover {
+  border-bottom: 1px dotted hsl(var(--primary)); /* 设置链接文字颜色 */
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
 
-  .article-header h1 {
-    color: #fff;
-  }
+/* 文章内容引用样式 */
+.article-content blockquote {
+  border-left: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  margin: 1em 0;
+  padding: 0 20px;
+}
 
-  .article-content {
-    color: #e1e1e1;
-  }
+/*code 相关样式 - 表格 */
+.article-content td {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.8em;
+}
 
-  .article-content pre {
-    background: #2d2d2d;
-  }
+/*code 相关样式 */
+.article-content code {
+  background-color: hsl(var(--muted));
+  border-radius: 2px;
+  color: hsl(var(--muted-foreground));
+  font-family: "JetBrains Mono", Consolas, Monaco, "Andale Mono", monospace;
+  font-size: 0.8em;
+  padding: 2px;
+}
 
-  .article-content blockquote {
-    border-left-color: #404040;
-    color: #b0b0b0;
-  }
+/*code 相关样式 */
+.article-content figure {
+  margin: 16px 0;
+}
+
+/*code 相关样式 */
+.article-content pre {
+  background-color: hsl(var(--muted));
+  border-radius: 4px;
+  line-height: 1.2;
+  overflow: auto;
+  padding: 10px;
+}
+
+iframe {
+  aspect-ratio: 16/9;
+  border: none !important;
+  border-radius: 4px;
+  width: 100%;
 }

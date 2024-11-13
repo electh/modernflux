@@ -1,24 +1,21 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Rss } from "lucide-react";
 
 const FeedIcon = ({ url }) => {
   const [error, setError] = useState(false);
   const [isBlurry, setIsBlurry] = useState(false);
 
-  // 从URL中提取域名
-  const getDomain = (url) => {
+  const getDomain = useMemo(() => {
     try {
       return new URL(url).hostname;
     } catch {
       return "";
     }
-  };
+  }, [url]);
 
-  // 生成Google Favicon API的URL
-  const getFaviconUrl = (url) => {
-    const domain = getDomain(url);
-    return `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}`;
-  };
+  const faviconUrl = useMemo(() => {
+    return `https://www.google.com/s2/favicons?sz=64&domain_url=${getDomain}`;
+  }, [getDomain]);
 
   // 处理图片加载错误
   const handleError = () => {
@@ -46,7 +43,7 @@ const FeedIcon = ({ url }) => {
   return (
     <img
       alt="Feed icon"
-      src={getFaviconUrl(url)}
+      src={faviconUrl}
       className="w-5 h-5 rounded transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
       onError={handleError}
       onLoad={(e) => {

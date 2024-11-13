@@ -89,6 +89,7 @@ async function syncEntries() {
           id: entry.id,
           feedId: feed.id,
           title: entry.title,
+          author: entry.author,
           url: entry.url,
           content: entry.content,
           status: entry.status,

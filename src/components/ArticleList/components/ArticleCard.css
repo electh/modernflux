@@ -1,0 +1,159 @@
+.card-author {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.7rem;
+  font-weight: normal;
+  margin-top: -3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-body {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transform: translateZ(0);
+  will-change: opacity, background-color;
+}
+
+.card-image-wide {
+  aspect-ratio: 16/9;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-custom);
+  margin: 4px 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card-image-wide .card-thumbnail img {
+  display: block;
+  position: unset;
+}
+
+.card-meta {
+  align-items: flex-start;
+  display: flex;
+  gap: 4px;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.card-preview {
+  -webkit-box-orient: vertical;
+  color: hsl(var(--muted-foreground));
+  display: -webkit-box;
+  font-size: 0.9rem;
+  margin: 0;
+  overflow: hidden;
+}
+
+.card-reading-time {
+  align-items: center;
+  color: hsl(var(--muted-foreground));
+  display: flex;
+  font-size: 0.75rem;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.card-source {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  gap: 4px;
+  min-width: 0;
+}
+
+.card-source-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.card-source-title {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.card-star {
+  margin-top: -2px;
+}
+
+.card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-thumbnail {
+  background-color: hsl(var(--muted));
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.card-thumbnail img {
+  border-radius: 2px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+}
+
+.card-time {
+  white-space: nowrap;
+}
+
+.card-time-wrapper {
+  align-items: center;
+  color: hsl(var(--muted-foreground));
+  display: flex;
+  font-size: 0.75rem;
+  gap: 4px;
+}
+
+.card-title {
+  -webkit-box-orient: vertical;
+  color: hsl(var(--muted-foreground));
+  display: -webkit-box;
+  font-size: 1rem;
+  font-weight: bold;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  margin: 0;
+  overflow: hidden;
+}
+
+.card-wrapper {
+  background-color: transparent;
+  border-radius: var(--radius);
+  contain: content;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 12px;
+  position: relative;
+  transform: translateZ(0);
+  transition: background-color 0.2s;
+  user-select: none;
+  will-change: background-color;
+}
+
+.card-wrapper:hover {
+  background-color: hsl(var(--muted));
+}
+
+.card-wrapper.selected {
+  background-color: hsl(var(--background));
+  box-shadow: var(--shadow-custom);
+}
+
+.icon-starred {
+  transition: opacity 0.2s;
+}

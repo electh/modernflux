@@ -1,13 +1,16 @@
-import { Button } from "@/components/ui/button.jsx";
-import {
-  handleMarkStatus,
-  handleToggleStar,
-} from "@/handlers/articleHandlers.js";
+import { useNavigate, useParams } from "react-router-dom";
 import { Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-
-export default function ArticleCard({article}) {
+import "./ArticleCard.css";
+import { extractFirstImage } from "@/lib/utils";
+import { useMemo } from "react";
+import { formatPublishDate } from "@/lib/format";
+export default function ArticleCard({ article }) {
   const navigate = useNavigate();
+  const { articleId } = useParams();
+  const imageUrl = useMemo(
+    () => extractFirstImage(article.content),
+    [article.content],
+  );
 
   const handleArticleClick = (article) => {
     const basePath = window.location.pathname.split("/article/")[0];
@@ -19,36 +22,51 @@ export default function ArticleCard({article}) {
   };
 
   return (
-    <li
-      key={article.id}
-      className={`article-item ${article.status === "read" ? "read" : ""}`}
+    <div
+      className={
+        parseInt(articleId) === article.id
+          ? "card-wrapper selected"
+          : "card-wrapper"
+      }
+      data-article-id={article.id}
       onClick={() => handleArticleClick(article)}
     >
-      <div className="article-content">
-        <h3>{article.title}</h3>
-        <div className="article-meta">
-          <span className="article-date">
-            {new Date(article.published_at).toLocaleDateString()}
-          </span>
+      <div className="card-content">
+        <div className="card-header">
+          <div className="card-meta">
+            <div className="card-source">
+              <div className="card-source-content">
+                <span className="card-source-title">{article.feed?.title}</span>
+                {article.author && (
+                  <span className="card-author">{article.author}</span>
+                )}
+              </div>
+            </div>
+            <div className="card-time-wrapper">
+              <span className="card-star">
+                <Star
+                  className="size-3"
+                  style={{ opacity: article.starred ? 1 : 0 }}
+                />
+              </span>
+              <span className="card-time">{formatPublishDate(article.published_at)}</span>
+            </div>
+          </div>
+
+          <h3 className="card-title">{article.title}</h3>
         </div>
+
+        {imageUrl && (
+          <div className="card-image-wide">
+            <img
+              className="w-full h-full object-cover"
+              src={imageUrl}
+              alt=""
+              loading="lazy"
+            />
+          </div>
+        )}
       </div>
-      <div className="article-actions">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={(e) => handleToggleStar(article, e)}
-          className="star-button"
-        >
-          {article.starred ? (
-            <Star className="h-5 w-5 fill-amber-300" />
-          ) : (
-            <Star className="h-5 w-5" />
-          )}
-        </Button>
-        <Button color="primary" onClick={(e) => handleMarkStatus(article, e)}>
-          {article.status === "read" ? "标为未读" : "标为已读"}
-        </Button>
-      </div>
-    </li>
+    </div>
   );
 }

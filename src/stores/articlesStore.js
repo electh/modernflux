@@ -31,11 +31,25 @@ export async function loadArticles(feedId) {
   try {
     await storage.init();
     const loadedArticles = await storage.getArticles(feedId);
+    const feeds = await storage.getFeeds();
+    
+    // 为每篇文章添加feed信息
+    const articlesWithFeed = loadedArticles.map(article => {
+      const feed = feeds.find(f => f.id === article.feedId);
+      return {
+        ...article,
+        feed: {
+          title: feed?.title || "未知来源",
+          site_url: feed?.site_url || "#"
+        }
+      };
+    });
+
     // 按发布时间倒序排序
-    const sortedArticles =
-      loadedArticles?.sort((a, b) => {
-        return new Date(b.published_at) - new Date(a.published_at);
-      }) || [];
+    const sortedArticles = articlesWithFeed.sort((a, b) => {
+      return new Date(b.published_at) - new Date(a.published_at);
+    }) || [];
+    
     UnfilteredArticles.set(sortedArticles);
   } catch (err) {
     console.error("加载文章失败:", err);
@@ -146,7 +160,14 @@ export async function loadArticlesByCategory(categoryId) {
     let allArticles = [];
     for (const feed of categoryFeeds) {
       const articles = await storage.getArticles(feed.id);
-      allArticles = [...allArticles, ...articles];
+      const articlesWithFeed = articles.map(article => ({
+        ...article,
+        feed: {
+          title: feed.title,
+          site_url: feed.site_url
+        }
+      }));
+      allArticles = [...allArticles, ...articlesWithFeed];
     }
 
     // 按时间排序

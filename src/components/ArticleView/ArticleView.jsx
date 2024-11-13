@@ -1,18 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import storage from "@/db/storage";
 import "./ArticleView.css";
 import { handleMarkStatus } from "@/handlers/articleHandlers.js";
 import { ScrollArea } from "@/components/ui/scroll-area.jsx";
+import ActionButtons from "@/components/ArticleView/components/ActionButtons.jsx";
 
 const ArticleView = () => {
   const { articleId } = useParams();
   const [article, setArticle] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const formattedDate = useMemo(() => {
+    if (!article?.published_at) return "";
+    return new Date(article.published_at).toLocaleString();
+  }, [article?.published_at]);
 
   useEffect(() => {
     const loadArticle = async () => {
       if (articleId) {
+        setLoading(true);
+        setError(null);
         try {
           await storage.init();
           const loadedArticle = await storage.getArticle(parseInt(articleId));
@@ -23,7 +32,9 @@ const ArticleView = () => {
           }
         } catch (err) {
           console.error("加载文章失败:", err);
-          setError("加载文章失败");
+          setError(err.message);
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -31,45 +42,52 @@ const ArticleView = () => {
     loadArticle();
   }, [articleId]);
 
-  if (error) {
+  if (loading) {
     return (
-      <div className="article-view empty">
-        <div className="no-article">{error}</div>
+      <div className="flex-1 bg-sidebar p-2 h-screen">
+        <div className="flex items-center justify-center h-full">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
       </div>
     );
   }
 
-  if (!article) {
+  if (error) {
     return (
-      <div className="article-view empty">
-        <div className="no-article">请选择一篇文章阅读</div>
+      <div className="flex-1 bg-sidebar p-2 h-screen">
+        <div className="flex items-center justify-center h-full text-red-500">
+          {error}
+        </div>
       </div>
     );
   }
 
   return (
-    <ScrollArea className="flex-1 h-screen bg-background px-8">
-      <header className="article-header">
-        <h1>{article.title}</h1>
-        <div className="article-meta">
-          <time dateTime={article.published_at}>
-            {new Date(article.published_at).toLocaleString()}
-          </time>
-          <a
-            href={article.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="original-link"
-          >
-            阅读原文
-          </a>
+    <div className="flex-1 bg-sidebar p-2 h-screen">
+      <ScrollArea className="h-full bg-background px-8 rounded-lg shadow-custom">
+        <ActionButtons article={article} />
+        <div className="max-w-3xl mx-auto py-20">
+          <header className="article-header">
+            <h1>{article.title}</h1>
+            <div className="article-meta">
+              <time dateTime={article.published_at}>{formattedDate}</time>
+              <a
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="original-link"
+              >
+                阅读原文
+              </a>
+            </div>
+          </header>
+          <div
+            className="article-content"
+            dangerouslySetInnerHTML={{ __html: article.content }}
+          />
         </div>
-      </header>
-      <div
-        className="article-content"
-        dangerouslySetInnerHTML={{ __html: article.content }}
-      />
-    </ScrollArea>
+      </ScrollArea>
+    </div>
   );
 };
 

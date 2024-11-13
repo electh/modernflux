@@ -16,6 +16,7 @@ import { BookOpenText } from "lucide-react";
 import ArticlesGroup from "@/components/FeedList/components/ArticlesGroup.jsx";
 import FeedsGroup from "@/components/FeedList/components/FeedsGroup.jsx";
 import { formatLastSync } from "@/lib/format";
+import { ModeToggle } from "@/components/mode-toggle.jsx";
 
 const FeedListSidebar = () => {
   const $lastSync = useStore(lastSync);
@@ -40,6 +41,7 @@ const FeedListSidebar = () => {
                 </span>
               </div>
               <SyncButton />
+              <ModeToggle />
             </div>
           </SidebarMenuItem>
         </SidebarMenu>

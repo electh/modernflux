@@ -6,8 +6,7 @@ import {
   loadArticles,
   loadArticlesByCategory,
 } from "@/stores/articlesStore.js";
-import "./ArticleList.css";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area.jsx";
 import ArticleListHeader from "./components/ArticleListHeader";
 import ArticleListContent from "./components/ArticleListContent";
@@ -17,6 +16,7 @@ const ArticleList = () => {
   const { feedId, categoryId } = useParams();
   const $articles = useStore(filteredArticles);
   const $lastSync = useStore(lastSync);
+  const location = useLocation();
 
   useEffect(() => {
     if (feedId) {
@@ -30,12 +30,20 @@ const ArticleList = () => {
 
   return (
     <div className="flex">
-      <ScrollArea className="w-80 border-r h-screen bg-background flex flex-col">
-        <ArticleListHeader />
+      <ScrollArea className="w-[22rem] border-r h-screen bg-sidebar flex flex-col">
         <ArticleListContent articles={$articles} />
+        <ArticleListHeader />
         <ArticleListFooter />
       </ScrollArea>
-      <Outlet />
+      {!location.pathname.includes("/article/") ? (
+        <div className="flex-1 bg-sidebar p-2 h-screen">
+          <div className="flex items-center justify-center h-full">
+            请选择要阅读的文章
+          </div>
+        </div>
+      ) : (
+        <Outlet />
+      )}
     </div>
   );
 };
