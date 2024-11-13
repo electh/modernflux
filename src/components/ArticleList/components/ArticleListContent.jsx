@@ -8,6 +8,7 @@ const ArticleItem = memo(({ article, isLast }) => (
     {!isLast && <Separator className="my-2" />}
   </li>
 ));
+ArticleItem.displayName = 'ArticleItem';
 
 export default function ArticleListContent({ articles }) {
   return (
