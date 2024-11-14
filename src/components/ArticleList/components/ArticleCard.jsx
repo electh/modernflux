@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Star } from "lucide-react";
-import { extractFirstImage } from "@/lib/utils";
+import { cn, extractFirstImage } from "@/lib/utils";
 import { useMemo, useState } from "react";
 import { formatPublishDate } from "@/lib/format";
-import { cn } from "@/lib/utils";
 
 export default function ArticleCard({ article }) {
   const [error, setError] = useState(false);
@@ -63,13 +62,13 @@ export default function ArticleCard({ article }) {
             </div>
           </div>
 
-          <h3 className="card-title text-foreground text-[1rem] font-bold line-clamp-2">
+          <h3 className="card-title text-foreground text-base font-bold line-clamp-2">
             {article.title}
           </h3>
         </div>
 
         {imageUrl && !error && (
-          <div className="card-image-wide aspect-video rounded-lg shadow-custom w-full mt-1 overflow-hidden">
+          <div className="card-image-wide aspect-video bg-muted rounded-lg shadow-custom w-full mt-1 overflow-hidden">
             <img
               className="w-full h-full object-cover transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
               src={imageUrl}
@@ -77,8 +76,8 @@ export default function ArticleCard({ article }) {
               loading="lazy"
               onError={() => setError(true)}
               onLoad={(e) => {
-                e.target.classList.remove('opacity-0');
-                e.target.classList.add('opacity-100');
+                e.target.classList.remove("opacity-0");
+                e.target.classList.add("opacity-100");
               }}
             />
           </div>
