@@ -1,30 +1,29 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import storage from "@/db/storage";
+import { useStore } from "@nanostores/react";
 import "./ArticleView.css";
 import { handleMarkStatus } from "@/handlers/articleHandlers.js";
 import { ScrollArea } from "@/components/ui/scroll-area.jsx";
 import ActionButtons from "@/components/ArticleView/components/ActionButtons.jsx";
+import { generateReadableDate } from "@/lib/format.js";
+import { filteredArticles } from "@/stores/articlesStore.js";
 
 const ArticleView = () => {
   const { articleId } = useParams();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const formattedDate = useMemo(() => {
-    if (!article?.published_at) return "";
-    return new Date(article.published_at).toLocaleString();
-  }, [article?.published_at]);
+  const $filteredArticles = useStore(filteredArticles);
 
   useEffect(() => {
-    const loadArticle = async () => {
+    const loadArticleByArticleId = async () => {
       if (articleId) {
         setLoading(true);
         setError(null);
         try {
-          await storage.init();
-          const loadedArticle = await storage.getArticle(parseInt(articleId));
+          const loadedArticle = $filteredArticles.find(
+            (article) => article.id === parseInt(articleId),
+          );
           setArticle(loadedArticle);
 
           if (loadedArticle && loadedArticle.status !== "read") {
@@ -39,8 +38,8 @@ const ArticleView = () => {
       }
     };
 
-    loadArticle();
-  }, [articleId]);
+    loadArticleByArticleId();
+  }, [$filteredArticles, articleId]);
 
   if (loading) {
     return (
@@ -50,6 +49,10 @@ const ArticleView = () => {
         </div>
       </div>
     );
+  }
+
+  if (!article) {
+    return <div className="flex-1 bg-sidebar p-2 h-screen"></div>;
   }
 
   if (error) {
@@ -68,17 +71,11 @@ const ArticleView = () => {
         <ActionButtons article={article} />
         <div className="max-w-3xl mx-auto py-20">
           <header className="article-header">
-            <h1>{article.title}</h1>
-            <div className="article-meta">
-              <time dateTime={article.published_at}>{formattedDate}</time>
-              <a
-                href={article.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="original-link"
-              >
-                阅读原文
-              </a>
+            <h1 className="text-3xl font-bold my-2">{article.title}</h1>
+            <div className="article-meta text-muted-foreground text-sm">
+              <time dateTime={article.published_at}>
+                {generateReadableDate(article.published_at)}
+              </time>
             </div>
           </header>
           <div

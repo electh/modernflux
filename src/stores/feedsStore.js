@@ -8,16 +8,6 @@ export const error = atom(null);
 export const unreadCounts = atom({});
 export const starredCounts = atom({});
 
-// 计算当前选中的分组名称
-export const selectedCategoryName = computed(
-  [feeds, selectedFeedId],
-  (feeds, selectedFeedId) => {
-    if (!selectedFeedId) return null;
-    const selectedFeed = feeds.find((feed) => feed.id === selectedFeedId);
-    return selectedFeed?.categoryName || "未分类";
-  },
-);
-
 export const filteredFeeds = computed(
   [feeds, filter, starredCounts, unreadCounts],
   ($feeds, $filter, $starredCounts, $unreadCounts) => {
@@ -44,7 +34,7 @@ export const feedsByCategory = computed(
         if (!acc[categoryId]) {
           acc[categoryId] = {
             name: categoryName,
-            feeds: []
+            feeds: [],
           };
         }
         acc[categoryId].feeds.push(feed);
@@ -57,7 +47,7 @@ export const feedsByCategory = computed(
       feeds: category.feeds.map((feed) => ({
         id: feed.id,
         title: feed.title,
-        url: feed.url || "#", 
+        url: feed.url || "#",
         site_url: feed.site_url || "#",
         unreadCount: $unreadCounts[feed.id] || 0,
         starredCount: $starredCounts[feed.id] || 0,
