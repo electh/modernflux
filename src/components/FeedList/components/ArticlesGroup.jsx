@@ -11,14 +11,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar.jsx";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const ArticlesGroup = () => {
   const $unreadCounts = useStore(unreadCounts);
   const $starredCounts = useStore(starredCounts);
   const $filter = useStore(filter);
   const { isMobile, setOpenMobile } = useSidebar();
-
+  const location = useLocation().pathname;
   // 根据筛选条件获取显示文本和计数
   const getDisplayInfo = () => {
     switch ($filter) {
@@ -57,7 +58,9 @@ const ArticlesGroup = () => {
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>文章</SidebarGroupLabel>
       <SidebarMenu>
-        <SidebarMenuItem>
+        <SidebarMenuItem
+          className={cn(location === "/" && "bg-sidebar-accent rounded-lg")}
+        >
           <SidebarMenuButton asChild>
             <Link to="/" onClick={() => isMobile && setOpenMobile(false)}>
               {icon}

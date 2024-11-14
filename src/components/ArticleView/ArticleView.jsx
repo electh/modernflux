@@ -67,7 +67,7 @@ const ArticleView = () => {
 
   return (
     <div className="flex-1 bg-sidebar p-2 h-screen">
-      <ScrollArea className="h-full bg-background px-8 rounded-lg shadow-custom">
+      <ScrollArea className="article-scroll-area h-full bg-background px-8 rounded-lg shadow-custom">
         <ActionButtons article={article} />
         <div className="max-w-3xl mx-auto py-20">
           <header className="article-header">

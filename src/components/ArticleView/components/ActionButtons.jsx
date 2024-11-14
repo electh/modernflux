@@ -17,22 +17,23 @@ import { filteredArticles } from "@/stores/articlesStore";
 export default function ActionButtons({ article }) {
   const navigate = useNavigate();
   const $articles = useStore(filteredArticles);
-  
+
   // 获取当前文章在列表中的索引
   const currentIndex = $articles.findIndex((a) => a.id === article.id);
-  
+
+  // 获取当前路径并去掉 article 部分
+  const basePath = window.location.pathname.split("/article/")[0];
+
   // 处理关闭按钮点击
   const handleClose = () => {
-    // 获取当前路径并去掉 article 部分
-    const basePath = window.location.pathname.split("/article/")[0];
     navigate(basePath || "/");
   };
 
-  // 处理上一篇按钮点击 
+  // 处理上一篇按钮点击
   const handlePrevious = () => {
     if (currentIndex > 0) {
       const prevArticle = $articles[currentIndex - 1];
-      navigate(`/article/${prevArticle.id}`);
+      navigate(`${basePath}/article/${prevArticle.id}`);
     }
   };
 
@@ -40,18 +41,18 @@ export default function ActionButtons({ article }) {
   const handleNext = () => {
     if (currentIndex < $articles.length - 1) {
       const nextArticle = $articles[currentIndex + 1];
-      navigate(`/article/${nextArticle.id}`);
+      navigate(`${basePath}/article/${nextArticle.id}`);
     }
   };
 
   return (
-    <div className="border-b absolute top-0 left-0 right-0 bg-background/80 backdrop-blur-sm w-full z-10 p-2">
+    <div className="border-b absolute top-0 left-0 right-0 bg-background/80 backdrop-blur-sm w-full p-2">
       <div className="flex items-center space-between">
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 onClick={handleClose}
                 disabled={false}
@@ -65,8 +66,8 @@ export default function ActionButtons({ article }) {
           <Separator orientation="vertical" className="h-6" />
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 onClick={handlePrevious}
                 disabled={currentIndex <= 0}
@@ -79,8 +80,8 @@ export default function ActionButtons({ article }) {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 onClick={handleNext}
                 disabled={currentIndex >= $articles.length - 1}
@@ -100,7 +101,9 @@ export default function ActionButtons({ article }) {
                 size="icon"
                 onClick={(e) => handleToggleStar(article, e)}
               >
-                <Star className={`h-4 w-4 ${article.starred ? "fill-current" : ""}`} />
+                <Star
+                  className={`h-4 w-4 ${article.starred ? "fill-current" : ""}`}
+                />
                 <span className="sr-only">收藏</span>
               </Button>
             </TooltipTrigger>
@@ -113,7 +116,9 @@ export default function ActionButtons({ article }) {
                 size="icon"
                 onClick={(e) => handleMarkStatus(article, e)}
               >
-                <CircleDot className={`h-4 w-4 ${article.status === "read" ? "fill-current" : ""}`} />
+                <CircleDot
+                  className={`h-4 w-4 ${article.status === "read" ? "fill-current" : ""}`}
+                />
                 <span className="sr-only">已读</span>
               </Button>
             </TooltipTrigger>

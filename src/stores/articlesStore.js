@@ -23,33 +23,48 @@ export const filteredArticles = computed(
   },
 );
 
-// 从数据库加载文章列表
-export async function loadArticles(feedId) {
+// 加载文章列表
+export async function loadArticles(sourceId = null, type = "feed") {
   loading.set(true);
   error.set(null);
 
   try {
     await storage.init();
-    const loadedArticles = await storage.getArticles(feedId);
     const feeds = await storage.getFeeds();
+    let targetFeeds;
+    let articles = [];
 
-    // 为每篇文章添加feed信息
-    const articlesWithFeed = loadedArticles.map((article) => {
-      const feed = feeds.find((f) => f.id === article.feedId);
-      return {
+    // 根据类型确定要加载的订阅源
+    if (type === "category" && sourceId) {
+      // 获取分类下的所有订阅源
+      targetFeeds = feeds.filter(
+        (feed) => feed.categoryId === parseInt(sourceId),
+      );
+    } else if (sourceId) {
+      // 获取单个订阅源
+      targetFeeds = feeds.filter((feed) => feed.id === parseInt(sourceId));
+    } else {
+      // 获取所有订阅源
+      targetFeeds = feeds;
+    }
+
+    // 获取所有目标订阅源的文章
+    for (const feed of targetFeeds) {
+      const feedArticles = await storage.getArticles(feed.id);
+      const articlesWithFeed = feedArticles.map((article) => ({
         ...article,
         feed: {
-          title: feed?.title || "未知来源",
-          site_url: feed?.site_url || "#",
+          title: feed.title || "未知来源",
+          site_url: feed.site_url || "#",
         },
-      };
-    });
+      }));
+      articles = [...articles, ...articlesWithFeed];
+    }
 
     // 按发布时间倒序排序
-    const sortedArticles =
-      articlesWithFeed.sort((a, b) => {
-        return new Date(b.published_at) - new Date(a.published_at);
-      }) || [];
+    const sortedArticles = articles.sort(
+      (a, b) => new Date(b.published_at) - new Date(a.published_at),
+    );
 
     UnfilteredArticles.set(sortedArticles);
   } catch (err) {
@@ -92,7 +107,6 @@ export async function updateArticleStatus(article) {
     throw err;
   }
 }
-
 // 更新未读计数状态
 export async function updateUnreadCount(feedId) {
   try {
@@ -145,42 +159,3 @@ export async function updateArticleStarred(article) {
   }
 }
 
-export async function loadArticlesByCategory(categoryId) {
-  loading.set(true);
-  error.set(null);
-
-  try {
-    await storage.init();
-    // 先获取该分类下的所有订阅源
-    const feeds = await storage.getFeeds();
-    const categoryFeeds = feeds.filter(
-      (feed) => feed.categoryId === parseInt(categoryId),
-    );
-
-    // 获取所有订阅源的文章
-    let allArticles = [];
-    for (const feed of categoryFeeds) {
-      const articles = await storage.getArticles(feed.id);
-      const articlesWithFeed = articles.map((article) => ({
-        ...article,
-        feed: {
-          title: feed.title || "未知来源",
-          site_url: feed.site_url || "#",
-        },
-      }));
-      allArticles = [...allArticles, ...articlesWithFeed];
-    }
-
-    // 按时间排序
-    const sortedArticles = allArticles.sort(
-      (a, b) => new Date(b.published_at) - new Date(a.published_at),
-    );
-
-    UnfilteredArticles.set(sortedArticles);
-  } catch (err) {
-    console.error("加载分类文章失败:", err);
-    error.set("加载分类文章失败");
-  } finally {
-    loading.set(false);
-  }
-}

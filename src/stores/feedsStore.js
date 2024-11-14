@@ -3,7 +3,6 @@ import storage from "../db/storage";
 import { filter } from "@/stores/articlesStore.js";
 
 export const feeds = atom([]);
-export const selectedFeedId = atom(null);
 export const error = atom(null);
 export const unreadCounts = atom({});
 export const starredCounts = atom({});

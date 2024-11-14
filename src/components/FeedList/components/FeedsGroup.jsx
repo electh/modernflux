@@ -4,13 +4,14 @@ import {
   getCategoryCount,
   getFeedCount,
 } from "@/stores/feedsStore.js";
+import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible.jsx";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -32,6 +33,7 @@ const FeedsGroup = () => {
   const $getCategoryCount = useStore(getCategoryCount);
   const $getFeedCount = useStore(getFeedCount);
   const { isMobile, setOpenMobile } = useSidebar();
+  const { categoryId, feedId } = useParams();
 
   return (
     <SidebarGroup>
@@ -41,7 +43,13 @@ const FeedsGroup = () => {
           {$feedsByCategory.map((category) => (
             <Collapsible key={category.id}>
               <SidebarMenuItem key={`menu-${category.id}`}>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton
+                  className={cn(
+                    categoryId === category.id &&
+                      "bg-sidebar-accent rounded-md",
+                  )}
+                  asChild
+                >
                   <Link
                     to={`/category/${category.id}`}
                     onClick={() => isMobile && setOpenMobile(false)}
@@ -62,7 +70,14 @@ const FeedsGroup = () => {
                   <SidebarMenuSub className="m-0 px-0 border-none">
                     {category.feeds.map((feed) => (
                       <SidebarMenuSubItem key={feed.id}>
-                        <SidebarMenuSubButton asChild className="pl-8 pr-2">
+                        <SidebarMenuSubButton
+                          asChild
+                          className={cn(
+                            "pl-8 pr-2",
+                            parseInt(feedId) === feed.id &&
+                              "bg-sidebar-accent rounded-md",
+                          )}
+                        >
                           <Link
                             to={`/feed/${feed.id}`}
                             onClick={() => isMobile && setOpenMobile(false)}
