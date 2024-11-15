@@ -1,27 +1,13 @@
-import { atom, computed } from "nanostores";
+import { atom } from "nanostores";
 import storage from "../db/storage";
 import minifluxAPI from "../api/miniflux";
 import { starredCounts, unreadCounts } from "./feedsStore.js";
 
-export const UnfilteredArticles = atom([]);
+export const filteredArticles = atom([]);
+export const activeArticle = atom(null);
 export const loading = atom(false);
 export const error = atom(null);
 export const filter = atom("all");
-
-// 计算过滤后的文章列表
-export const filteredArticles = computed(
-  [UnfilteredArticles, filter],
-  (articles, filter) => {
-    switch (filter) {
-      case "unread":
-        return articles.filter((article) => article.status !== "read");
-      case "starred":
-        return articles.filter((article) => article.starred);
-      default:
-        return articles;
-    }
-  },
-);
 
 // 加载文章列表
 export async function loadArticles(sourceId = null, type = "feed") {
@@ -61,12 +47,23 @@ export async function loadArticles(sourceId = null, type = "feed") {
       articles = [...articles, ...articlesWithFeed];
     }
 
+    // 根据筛选条件过滤文章
+    let filtered = articles;
+    switch (filter.get()) {
+      case "unread":
+        filtered = articles.filter((article) => article.status !== "read");
+        break;
+      case "starred":
+        filtered = articles.filter((article) => article.starred);
+        break;
+    }
+
     // 按发布时间倒序排序
-    const sortedArticles = articles.sort(
+    const sortedArticles = filtered.sort(
       (a, b) => new Date(b.published_at) - new Date(a.published_at),
     );
 
-    UnfilteredArticles.set(sortedArticles);
+    filteredArticles.set(sortedArticles);
   } catch (err) {
     console.error("加载文章失败:", err);
     error.set("加载文章失败");
@@ -75,7 +72,7 @@ export async function loadArticles(sourceId = null, type = "feed") {
   }
 }
 
-// 更新文章状态
+// 更新文章未读状态
 export async function updateArticleStatus(article) {
   try {
     if (navigator.onLine) {
@@ -94,34 +91,26 @@ export async function updateArticleStatus(article) {
     ]);
 
     // 更新内存中的文章列表
-    UnfilteredArticles.set(
-      UnfilteredArticles.get().map((a) =>
+    filteredArticles.set(
+      filteredArticles.get().map((a) =>
         a.id === article.id ? { ...a, status: newStatus } : a,
       ),
     );
 
     // 更新未读计数状态
-    await updateUnreadCount(article.feedId);
+    const count = await storage.getUnreadCount(article.feedId);
+    const currentCounts = unreadCounts.get();
+    unreadCounts.set({
+      ...currentCounts,
+      [article.feedId]: count,
+    });
   } catch (err) {
     console.error("更新文章状态失败:", err);
     throw err;
   }
 }
-// 更新未读计数状态
-export async function updateUnreadCount(feedId) {
-  try {
-    const count = await storage.getUnreadCount(feedId);
-    const currentCounts = unreadCounts.get();
-    unreadCounts.set({
-      ...currentCounts,
-      [feedId]: count,
-    });
-  } catch (err) {
-    console.error("更新未读计数失败:", err);
-  }
-}
 
-// 更新文章星标状态的函数
+// 更新文章收藏状态
 export async function updateArticleStarred(article) {
   try {
     if (navigator.onLine) {
@@ -140,8 +129,8 @@ export async function updateArticleStarred(article) {
     ]);
 
     // 更新内存中的文章列表
-    UnfilteredArticles.set(
-      UnfilteredArticles.get().map((a) =>
+    filteredArticles.set(
+      filteredArticles.get().map((a) =>
         a.id === article.id ? { ...a, starred: newStarred } : a,
       ),
     );
@@ -158,4 +147,3 @@ export async function updateArticleStarred(article) {
     throw err;
   }
 }
-

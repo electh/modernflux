@@ -3,6 +3,7 @@ import { Star } from "lucide-react";
 import { cn, extractFirstImage } from "@/lib/utils";
 import { useMemo, useState } from "react";
 import { formatPublishDate } from "@/lib/format";
+import LazyImage from "@/components/ui-customize/LazyImage";
 
 export default function ArticleCard({ article }) {
   const [error, setError] = useState(false);
@@ -28,7 +29,7 @@ export default function ArticleCard({ article }) {
         "cursor-pointer select-none overflow-hidden p-2 rounded-lg",
         "relative transform-gpu transition-colors duration-200",
         "bg-transparent contain-content",
-        "hover:bg-background",
+        "hover:bg-sidebar-accent",
         parseInt(articleId) === article.id && "bg-background shadow-custom",
       )}
       data-article-id={article.id}
@@ -62,23 +63,24 @@ export default function ArticleCard({ article }) {
             </div>
           </div>
 
-          <h3 className="card-title text-foreground text-base font-bold line-clamp-2">
+          <h3
+            className={cn(
+              "card-title text-base font-bold line-clamp-2",
+              article.status === "read"
+                ? "text-muted-foreground"
+                : "text-foreground",
+            )}
+          >
             {article.title}
           </h3>
         </div>
 
         {imageUrl && !error && (
           <div className="card-image-wide aspect-video bg-muted rounded-lg shadow-custom w-full mt-1 overflow-hidden">
-            <img
-              className="w-full h-full object-cover transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
+            <LazyImage
               src={imageUrl}
-              alt=""
-              loading="lazy"
+              opacity={article.status === "read" ? "50" : "100"}
               onError={() => setError(true)}
-              onLoad={(e) => {
-                e.target.classList.remove("opacity-0");
-                e.target.classList.add("opacity-100");
-              }}
             />
           </div>
         )}

@@ -1,6 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { starredCounts, unreadCounts } from "@/stores/feedsStore.js";
-import { filter } from "@/stores/articlesStore.js";
+import { filter, filteredArticles } from "@/stores/articlesStore.js";
 import { CircleDot, Infinity, Star } from "lucide-react";
 import {
   SidebarGroup,
@@ -15,9 +14,8 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const ArticlesGroup = () => {
-  const $unreadCounts = useStore(unreadCounts);
-  const $starredCounts = useStore(starredCounts);
   const $filter = useStore(filter);
+  const $filteredArticles = useStore(filteredArticles);
   const { isMobile, setOpenMobile } = useSidebar();
   const location = useLocation().pathname;
   // 根据筛选条件获取显示文本和计数
@@ -27,28 +25,19 @@ const ArticlesGroup = () => {
         return {
           icon: <CircleDot />,
           text: "未读",
-          count: Object.values($unreadCounts).reduce(
-            (sum, count) => sum + count,
-            0,
-          ),
+          count: $filteredArticles.length,
         };
       case "starred":
         return {
           icon: <Star />,
           text: "收藏",
-          count: Object.values($starredCounts).reduce(
-            (sum, count) => sum + count,
-            0,
-          ),
+          count: $filteredArticles.length,
         };
       default:
         return {
           icon: <Infinity />,
           text: "全部文章",
-          count: Object.values($unreadCounts).reduce(
-            (sum, count) => sum + count,
-            0,
-          ),
+          count: $filteredArticles.length,
         };
     }
   };

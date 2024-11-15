@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
 import { lastSync } from "@/stores/syncStore.js";
-import { filteredArticles, loadArticles } from "@/stores/articlesStore.js";
+import { filter, filteredArticles, loadArticles } from "@/stores/articlesStore.js";
 import { Outlet, useLocation, useParams } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area.jsx";
 import ArticleListHeader from "./components/ArticleListHeader";
@@ -10,24 +10,29 @@ import ArticleListFooter from "./components/ArticleListFooter";
 
 const ArticleList = () => {
   const { feedId, categoryId } = useParams();
-  const $articles = useStore(filteredArticles);
+  const $filteredArticles = useStore(filteredArticles);
   const $lastSync = useStore(lastSync);
+  const $filter = useStore(filter);
   const location = useLocation();
 
   useEffect(() => {
-    if (feedId) {
-      loadArticles(feedId, "feed");
-    } else if (categoryId) {
-      loadArticles(categoryId, "category");
-    } else {
-      loadArticles();
-    }
-  }, [feedId, categoryId, $lastSync]);
+    const loadAndFilterArticles = () => {
+        if (feedId) {
+           loadArticles(feedId, "feed");
+        } else if (categoryId) {
+           loadArticles(categoryId, "category");
+        } else {
+           loadArticles();
+        }
+    };
+    
+    loadAndFilterArticles();
+  }, [feedId, categoryId, $lastSync, $filter]);
 
   return (
     <div className="flex">
       <ScrollArea className="w-[22rem] border-r h-screen bg-sidebar flex flex-col">
-        <ArticleListContent articles={$articles} />
+        <ArticleListContent articles={$filteredArticles} />
         <ArticleListHeader />
         <ArticleListFooter />
       </ScrollArea>

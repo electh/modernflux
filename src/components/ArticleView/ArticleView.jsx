@@ -2,32 +2,31 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useStore } from "@nanostores/react";
 import "./ArticleView.css";
-import { handleMarkStatus } from "@/handlers/articleHandlers.js";
 import { ScrollArea } from "@/components/ui/scroll-area.jsx";
 import ActionButtons from "@/components/ArticleView/components/ActionButtons.jsx";
 import { generateReadableDate } from "@/lib/format.js";
-import { filteredArticles } from "@/stores/articlesStore.js";
+import { filteredArticles, activeArticle } from "@/stores/articlesStore.js";
+import { Separator } from "@/components/ui/separator.jsx";
 
 const ArticleView = () => {
   const { articleId } = useParams();
-  const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const $filteredArticles = useStore(filteredArticles);
-
+  const $activeArticle = useStore(activeArticle);
   useEffect(() => {
     const loadArticleByArticleId = async () => {
-      if (articleId) {
+      if (articleId && $filteredArticles.length > 0) {
         setLoading(true);
         setError(null);
         try {
           const loadedArticle = $filteredArticles.find(
             (article) => article.id === parseInt(articleId),
           );
-          setArticle(loadedArticle);
-
-          if (loadedArticle && loadedArticle.status !== "read") {
-            handleMarkStatus(loadedArticle);
+          if (loadedArticle) {
+            activeArticle.set(loadedArticle);
+          } else {
+            setError("文章不存在或正在加载中");
           }
         } catch (err) {
           console.error("加载文章失败:", err);
@@ -51,7 +50,7 @@ const ArticleView = () => {
     );
   }
 
-  if (!article) {
+  if (!$activeArticle) {
     return <div className="flex-1 bg-sidebar p-2 h-screen"></div>;
   }
 
@@ -68,19 +67,23 @@ const ArticleView = () => {
   return (
     <div className="flex-1 bg-sidebar p-2 h-screen">
       <ScrollArea className="article-scroll-area h-full bg-background px-8 rounded-lg shadow-custom">
-        <ActionButtons article={article} />
+        <ActionButtons articleId={$activeArticle?.id} />
         <div className="max-w-3xl mx-auto py-20">
           <header className="article-header">
-            <h1 className="text-3xl font-bold my-2">{article.title}</h1>
-            <div className="article-meta text-muted-foreground text-sm">
-              <time dateTime={article.published_at}>
-                {generateReadableDate(article.published_at)}
+            <div className="text-muted-foreground text-sm">
+              {$activeArticle?.feed?.title}
+            </div>
+            <h1 className="text-3xl font-bold my-2">{$activeArticle?.title}</h1>
+            <div className="text-muted-foreground text-sm">
+              <time dateTime={$activeArticle?.published_at}>
+                {generateReadableDate($activeArticle?.published_at)}
               </time>
             </div>
           </header>
+          <Separator className="my-4" />
           <div
             className="article-content"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            dangerouslySetInnerHTML={{ __html: $activeArticle?.content }}
           />
         </div>
       </ScrollArea>

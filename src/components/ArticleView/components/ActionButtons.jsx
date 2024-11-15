@@ -1,4 +1,11 @@
-import { ArrowLeft, CircleDot, Forward, Reply, Star } from "lucide-react";
+import {
+  ArrowLeft,
+  Circle,
+  CircleDot,
+  Forward,
+  Reply,
+  Star,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   handleMarkStatus,
@@ -12,14 +19,14 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "@nanostores/react";
-import { filteredArticles } from "@/stores/articlesStore";
+import { filteredArticles, activeArticle } from "@/stores/articlesStore";
 
-export default function ActionButtons({ article }) {
+export default function ActionButtons() {
   const navigate = useNavigate();
   const $articles = useStore(filteredArticles);
-
+  const $activeArticle = useStore(activeArticle);
   // 获取当前文章在列表中的索引
-  const currentIndex = $articles.findIndex((a) => a.id === article.id);
+  const currentIndex = $articles.findIndex((a) => a.id === $activeArticle?.id);
 
   // 获取当前路径并去掉 article 部分
   const basePath = window.location.pathname.split("/article/")[0];
@@ -99,30 +106,44 @@ export default function ActionButtons({ article }) {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={(e) => handleToggleStar(article, e)}
+                onClick={(e) => handleMarkStatus($activeArticle, e)}
               >
-                <Star
-                  className={`h-4 w-4 ${article.starred ? "fill-current" : ""}`}
-                />
-                <span className="sr-only">收藏</span>
+                {$activeArticle?.status === "read" ? (
+                  <Circle className="size-4" />
+                ) : (
+                  <CircleDot className="size-4" />
+                )}
+                <span className="sr-only">
+                  {$activeArticle?.status === "read"
+                    ? "标记为未读"
+                    : "标记为已读"}
+                </span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>收藏</TooltipContent>
+            <TooltipContent>
+              {$activeArticle?.status === "read"
+                ? "标记为未读"
+                : "标记为已读"}
+            </TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={(e) => handleMarkStatus(article, e)}
+                onClick={(e) => handleToggleStar($activeArticle, e)}
               >
-                <CircleDot
-                  className={`h-4 w-4 ${article.status === "read" ? "fill-current" : ""}`}
+                <Star
+                  className={`size-4 ${$activeArticle?.starred ? "fill-current" : ""}`}
                 />
-                <span className="sr-only">已读</span>
+                <span className="sr-only">
+                  {$activeArticle?.starred ? "取消收藏" : "收藏"}
+                </span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>已读</TooltipContent>
+            <TooltipContent>
+              {$activeArticle?.starred ? "取消收藏" : "收藏"}
+            </TooltipContent>
           </Tooltip>
         </div>
       </div>

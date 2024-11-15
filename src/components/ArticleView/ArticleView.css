@@ -19,8 +19,8 @@ strong {
 
 .article-content li,
 p {
-  margin-block-end: 1.6em;
-  margin-block-start: 1.6em;
+  margin-block-end: 1rem !important;
+  margin-block-start: 1rem !important;
 }
 
 /* 文章内容图片样式 */
