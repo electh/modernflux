@@ -87,6 +87,20 @@ export const getFeedCount = computed(
   },
 );
 
+export const totalUnreadCount = computed(
+  [unreadCounts],
+  ($unreadCounts) => {
+    return Object.values($unreadCounts).reduce((sum, count) => sum + count, 0);
+  }
+);
+
+export const totalStarredCount = computed(
+  [starredCounts],
+  ($starredCounts) => {
+    return Object.values($starredCounts).reduce((sum, count) => sum + count, 0);
+  }
+);
+
 export async function loadFeeds() {
   try {
     await storage.init();

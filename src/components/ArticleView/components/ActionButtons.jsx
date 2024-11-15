@@ -37,17 +37,23 @@ export default function ActionButtons() {
   };
 
   // 处理上一篇按钮点击
-  const handlePrevious = () => {
+  const handlePrevious = async () => {
     if (currentIndex > 0) {
       const prevArticle = $articles[currentIndex - 1];
+      if (prevArticle.status !== "read") {
+        await handleMarkStatus(prevArticle);
+      }
       navigate(`${basePath}/article/${prevArticle.id}`);
     }
   };
 
   // 处理下一篇按钮点击
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentIndex < $articles.length - 1) {
       const nextArticle = $articles[currentIndex + 1];
+      if (nextArticle.status !== "read") {
+        await handleMarkStatus(nextArticle);
+      }
       navigate(`${basePath}/article/${nextArticle.id}`);
     }
   };

@@ -4,6 +4,7 @@ import { cn, extractFirstImage } from "@/lib/utils";
 import { useMemo } from "react";
 import { formatPublishDate } from "@/lib/format";
 import ArticleImage from "./ArticleImage";
+import { handleMarkStatus } from "@/handlers/articleHandlers.js";
 
 export default function ArticleCard({ article }) {
   const navigate = useNavigate();
@@ -13,7 +14,11 @@ export default function ArticleCard({ article }) {
     [article.content],
   );
 
-  const handleArticleClick = (article) => {
+  const handleArticleClick = async (article) => {
+    if (article.status !== "read") {
+      await handleMarkStatus(article);
+    }
+    
     const basePath = window.location.pathname.split("/article/")[0];
     const toUrl =
       basePath === "/"

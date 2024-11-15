@@ -12,7 +12,7 @@ ArticleItem.displayName = 'ArticleItem';
 
 export default function ArticleListContent({ articles }) {
   return (
-    <div className="flex-1 overflow-auto px-2 py-16">
+    <div className="flex-1 px-2 py-16">
       {articles.length !== 0 && (
         <ul className="articles">
           {articles.map((article, index) => (
