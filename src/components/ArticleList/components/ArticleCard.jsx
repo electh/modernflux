@@ -3,7 +3,6 @@ import { Star } from "lucide-react";
 import { cn, extractFirstImage } from "@/lib/utils";
 import { useMemo, useState } from "react";
 import { formatPublishDate } from "@/lib/format";
-import LazyImage from "@/components/ui-customize/LazyImage";
 
 export default function ArticleCard({ article }) {
   const [error, setError] = useState(false);
@@ -35,7 +34,12 @@ export default function ArticleCard({ article }) {
       data-article-id={article.id}
       onClick={() => handleArticleClick(article)}
     >
-      <div className="card-content flex flex-col gap-1">
+      <div
+        className={cn(
+          "card-content flex flex-col gap-1",
+          article.status === "read" && "opacity-50",
+        )}
+      >
         <div className="card-header">
           <div className="card-meta flex items-start justify-between gap-1 mb-1">
             <div className="card-source flex items-center flex-1 gap-1 min-w-0">
@@ -77,10 +81,16 @@ export default function ArticleCard({ article }) {
 
         {imageUrl && !error && (
           <div className="card-image-wide aspect-video bg-muted rounded-lg shadow-custom w-full mt-1 overflow-hidden">
-            <LazyImage
+            <img
+              className="w-full h-full object-cover transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
               src={imageUrl}
-              opacity={article.status === "read" ? "50" : "100"}
+              alt=""
+              loading="lazy"
               onError={() => setError(true)}
+              onLoad={(e) => {
+                e.target.classList.remove("opacity-0");
+                e.target.classList.add("opacity-100");
+              }}
             />
           </div>
         )}
