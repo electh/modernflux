@@ -6,6 +6,8 @@ export default function ArticleImage({ imageUrl }) {
   const imgRef = useRef(null);
 
   useEffect(() => {
+    const imgElement = imgRef.current;
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -21,13 +23,13 @@ export default function ArticleImage({ imageUrl }) {
       }
     );
 
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
+    if (imgElement) {
+      observer.observe(imgElement);
     }
 
     return () => {
-      if (imgRef.current) {
-        observer.unobserve(imgRef.current);
+      if (imgElement) {
+        observer.unobserve(imgElement);
       }
     };
   }, []);
