@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useStore } from "@nanostores/react";
 import "./ArticleView.css";
@@ -14,6 +14,18 @@ const ArticleView = () => {
   const [error, setError] = useState(null);
   const $filteredArticles = useStore(filteredArticles);
   const $activeArticle = useStore(activeArticle);
+  const scrollAreaRef = useRef(null);
+
+  // 监听文章ID变化，滚动到顶部
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTop = 0;
+      }
+    }
+  }, [articleId]);
+
   useEffect(() => {
     const loadArticleByArticleId = async () => {
       if (articleId && $filteredArticles.length > 0) {
@@ -66,7 +78,10 @@ const ArticleView = () => {
 
   return (
     <div className="flex-1 bg-sidebar p-2 h-screen">
-      <ScrollArea className="article-scroll-area h-full bg-background px-8 rounded-lg shadow-custom">
+      <ScrollArea 
+        ref={scrollAreaRef}
+        className="article-scroll-area h-full bg-background px-8 rounded-lg shadow-custom"
+      >
         <ActionButtons articleId={$activeArticle?.id} />
         <div className="max-w-3xl mx-auto py-20">
           <header className="article-header">

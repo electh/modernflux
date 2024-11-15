@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Star } from "lucide-react";
 import { cn, extractFirstImage } from "@/lib/utils";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { formatPublishDate } from "@/lib/format";
+import ArticleImage from "./ArticleImage";
 
 export default function ArticleCard({ article }) {
-  const [error, setError] = useState(false);
   const navigate = useNavigate();
   const { articleId } = useParams();
   const imageUrl = useMemo(
@@ -79,21 +79,7 @@ export default function ArticleCard({ article }) {
           </h3>
         </div>
 
-        {imageUrl && !error && (
-          <div className="card-image-wide aspect-video bg-muted rounded-lg shadow-custom w-full mt-1 overflow-hidden">
-            <img
-              className="w-full h-full object-cover transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
-              src={imageUrl}
-              alt=""
-              loading="lazy"
-              onError={() => setError(true)}
-              onLoad={(e) => {
-                e.target.classList.remove("opacity-0");
-                e.target.classList.add("opacity-100");
-              }}
-            />
-          </div>
-        )}
+        <ArticleImage imageUrl={imageUrl} />
       </div>
     </div>
   );
