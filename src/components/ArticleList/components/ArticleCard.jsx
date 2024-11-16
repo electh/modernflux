@@ -15,16 +15,15 @@ export default function ArticleCard({ article }) {
   );
 
   const handleArticleClick = async (article) => {
-    if (article.status !== "read") {
-      await handleMarkStatus(article);
-    }
-    
     const basePath = window.location.pathname.split("/article/")[0];
     const toUrl =
       basePath === "/"
         ? `/article/${article.id}`
         : `${basePath}/article/${article.id}`;
     navigate(toUrl);
+    if (article.status !== "read") {
+      await handleMarkStatus(article);
+    }
   };
 
   return (
