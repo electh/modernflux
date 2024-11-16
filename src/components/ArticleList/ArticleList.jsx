@@ -47,17 +47,37 @@ const ArticleList = () => {
       if (viewport && articleCard) {
         const viewportRect = viewport.getBoundingClientRect();
         const cardRect = articleCard.getBoundingClientRect();
-
-        // 计算滚动位置，使文章卡片位于视口中间
-        const scrollTop =
-          viewport.scrollTop +
-          (cardRect.top - viewportRect.top) -
-          (viewportRect.height - cardRect.height) / 2;
-
-        viewport.scrollTo({
-          top: scrollTop,
-          behavior: "smooth",
-        });
+        
+        // 考虑 header 和 footer 的高度
+        const headerHeight = 60; // header 高度
+        const footerHeight = 56; // footer 高度
+        
+        // 计算实际可视区域
+        const effectiveViewportTop = viewportRect.top + headerHeight;
+        const effectiveViewportBottom = viewportRect.bottom - footerHeight;
+        
+        // 检查文章卡片是否在有效视口内
+        const isCardInViewport = 
+          cardRect.top >= effectiveViewportTop && 
+          cardRect.bottom <= effectiveViewportBottom;
+        
+        // 如果卡片不在有效视口内，才进行滚动
+        if (!isCardInViewport) {
+          // 如果卡片在视口上方，滚动到顶部对齐（考虑 header）
+          if (cardRect.top < effectiveViewportTop) {
+            viewport.scrollTo({
+              top: viewport.scrollTop + (cardRect.top - effectiveViewportTop),
+              behavior: "smooth",
+            });
+          }
+          // 如果卡片在视口下方，滚动到底部对齐（考虑 footer）
+          else if (cardRect.bottom > effectiveViewportBottom) {
+            viewport.scrollTo({
+              top: viewport.scrollTop + (cardRect.bottom - effectiveViewportBottom),
+              behavior: "smooth",
+            });
+          }
+        }
       }
     }
   }, [articleId]);

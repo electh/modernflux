@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Rss } from "lucide-react";
 
 const FeedIcon = ({ url }) => {
@@ -34,8 +34,8 @@ const FeedIcon = ({ url }) => {
   // 如果URL无效、图片加载失败或图片模糊，显示默认图标
   if (!url || error || isBlurry) {
     return (
-      <span className="flex items-center justify-center w-5 h-5 bg-background rounded transition-opacity duration-300 ease-in-out animate-in fade-in-0">
-        <Rss className="size-4 text-muted-foreground" />
+      <span className="flex items-center justify-center w-5 h-5 bg-transparent rounded transition-opacity duration-300 ease-in-out animate-in fade-in-0">
+        <Rss className="size-5 text-muted-foreground" />
       </span>
     );
   }
@@ -48,8 +48,8 @@ const FeedIcon = ({ url }) => {
       onError={handleError}
       onLoad={(e) => {
         handleLoad(e);
-        e.target.classList.remove('opacity-0');
-        e.target.classList.add('opacity-100');
+        e.target.classList.remove("opacity-0");
+        e.target.classList.add("opacity-100");
       }}
     />
   );
