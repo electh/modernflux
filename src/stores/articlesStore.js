@@ -74,37 +74,44 @@ export async function loadArticles(sourceId = null, type = "feed") {
 
 // 更新文章未读状态
 export async function updateArticleStatus(article) {
+  const newStatus = article.status === "read" ? "unread" : "read";
+  
+  // 乐观更新UI
+  filteredArticles.set(
+    filteredArticles.get().map((a) =>
+      a.id === article.id ? { ...a, status: newStatus } : a
+    )
+  );
+
   try {
-    if (navigator.onLine) {
-      // 更新miniflux文章状态
-      await minifluxAPI.updateEntryStatus(article);
-    }
-
-    const newStatus = article.status === "read" ? "unread" : "read";
-
-    // 先更新数据库中的文章状态
-    await storage.addArticles([
-      {
+    // 并行执行在线和本地更新
+    const updates = [
+      // 如果在线则更新服务器
+      navigator.onLine && minifluxAPI.updateEntryStatus(article),
+      // 更新本地数据库
+      storage.addArticles([{
         ...article,
         status: newStatus,
-      },
-    ]);
+      }]),
+      // 更新未读计数
+      (async () => {
+        const count = await storage.getUnreadCount(article.feedId);
+        const currentCounts = unreadCounts.get();
+        unreadCounts.set({
+          ...currentCounts,
+          [article.feedId]: count,
+        });
+      })()
+    ].filter(Boolean);
 
-    // 更新内存中的文章列表
+    await Promise.all(updates);
+  } catch (err) {
+    // 发生错误时回滚UI状态
     filteredArticles.set(
       filteredArticles.get().map((a) =>
-        a.id === article.id ? { ...a, status: newStatus } : a,
-      ),
+        a.id === article.id ? { ...a, status: article.status } : a
+      )
     );
-
-    // 更新未读计数状态
-    const count = await storage.getUnreadCount(article.feedId);
-    const currentCounts = unreadCounts.get();
-    unreadCounts.set({
-      ...currentCounts,
-      [article.feedId]: count,
-    });
-  } catch (err) {
     console.error("更新文章状态失败:", err);
     throw err;
   }
@@ -112,37 +119,44 @@ export async function updateArticleStatus(article) {
 
 // 更新文章收藏状态
 export async function updateArticleStarred(article) {
+  const newStarred = !article.starred;
+
+  // 乐观更新UI
+  filteredArticles.set(
+    filteredArticles.get().map((a) =>
+      a.id === article.id ? { ...a, starred: newStarred } : a
+    )
+  );
+
   try {
-    if (navigator.onLine) {
-      // 更新 miniflux 文章星标状态
-      await minifluxAPI.updateEntryStarred(article);
-    }
-
-    const newStarred = !article.starred;
-
-    // 更新数据库中的文章星标状态
-    await storage.addArticles([
-      {
+    // 并行执行在线和本地更新
+    const updates = [
+      // 如果在线则更新服务器
+      navigator.onLine && minifluxAPI.updateEntryStarred(article),
+      // 更新本地数据库
+      storage.addArticles([{
         ...article,
         starred: newStarred,
-      },
-    ]);
+      }]),
+      // 更新收藏计数
+      (async () => {
+        const count = await storage.getStarredCount(article.feedId);
+        const currentCounts = starredCounts.get();
+        starredCounts.set({
+          ...currentCounts,
+          [article.feedId]: count,
+        });
+      })()
+    ].filter(Boolean);
 
-    // 更新内存中的文章列表
+    await Promise.all(updates);
+  } catch (err) {
+    // 发生错误时回滚UI状态
     filteredArticles.set(
       filteredArticles.get().map((a) =>
-        a.id === article.id ? { ...a, starred: newStarred } : a,
-      ),
+        a.id === article.id ? { ...a, starred: article.starred } : a
+      )
     );
-
-    // 更新收藏计数
-    const count = await storage.getStarredCount(article.feedId);
-    const currentCounts = starredCounts.get();
-    starredCounts.set({
-      ...currentCounts,
-      [article.feedId]: count,
-    });
-  } catch (err) {
     console.error("更新文章星标状态失败:", err);
     throw err;
   }
