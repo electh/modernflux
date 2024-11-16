@@ -11,6 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area.jsx";
 import ArticleListHeader from "./components/ArticleListHeader";
 import ArticleListContent from "./components/ArticleListContent";
 import ArticleListFooter from "./components/ArticleListFooter";
+import EmptyPlaceholder from "./components/EmptyPlaceholder";
 
 const ArticleList = () => {
   const { feedId, categoryId, articleId } = useParams();
@@ -95,23 +96,21 @@ const ArticleList = () => {
   }, [feedId, categoryId, $filter]);
 
   return (
-    <div className="flex">
+    <div className="flex relative">
       <ScrollArea
         ref={scrollAreaRef}
-        className="w-[22rem] border-r h-screen bg-sidebar flex flex-col"
+        className="w-full sm:w-[22rem] border-r h-screen bg-sidebar flex flex-col"
       >
         <ArticleListContent articles={$filteredArticles} />
         <ArticleListHeader />
         <ArticleListFooter />
       </ScrollArea>
       {!location.pathname.includes("/article/") ? (
-        <div className="flex-1 bg-sidebar p-2 h-screen">
-          <div className="flex items-center justify-center h-full text-muted-foreground">
-            请选择要阅读的文章
-          </div>
-        </div>
+        <EmptyPlaceholder />
       ) : (
-        <Outlet />
+        <div className="sm:flex-1 w-full sm:w-auto">
+          <Outlet />
+        </div>
       )}
     </div>
   );

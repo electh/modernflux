@@ -7,6 +7,7 @@ import ActionButtons from "@/components/ArticleView/components/ActionButtons.jsx
 import { generateReadableDate } from "@/lib/format.js";
 import { activeArticle, filteredArticles } from "@/stores/articlesStore.js";
 import { Separator } from "@/components/ui/separator.jsx";
+import EmptyPlaceholder from "@/components/ArticleList/components/EmptyPlaceholder";
 
 const ArticleView = () => {
   const { articleId } = useParams();
@@ -54,32 +55,12 @@ const ArticleView = () => {
     loadArticleByArticleId();
   }, [$filteredArticles, articleId]);
 
-  if (loading) {
-    return (
-      <div className="flex-1 bg-sidebar p-2 h-screen">
-        <div className="flex items-center justify-center h-full">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      </div>
-    );
-  }
-
-  if (!$activeArticle) {
-    return <div className="flex-1 bg-sidebar p-2 h-screen"></div>;
-  }
-
-  if (error) {
-    return (
-      <div className="flex-1 bg-sidebar p-2 h-screen">
-        <div className="flex items-center justify-center h-full text-muted-foreground">
-          {error}
-        </div>
-      </div>
-    );
+  if (loading || !$activeArticle || error) {
+    return <EmptyPlaceholder />;
   }
 
   return (
-    <div className="flex-1 bg-sidebar p-2 h-screen">
+    <div className="flex-1 bg-sidebar p-2 h-screen fixed sm:static inset-0 z-50">
       <ScrollArea
         ref={scrollAreaRef}
         className="article-scroll-area h-full bg-background px-8 rounded-lg shadow-custom"
