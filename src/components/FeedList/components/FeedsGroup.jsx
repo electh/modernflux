@@ -41,7 +41,12 @@ const FeedsGroup = () => {
       <SidebarGroupContent>
         <SidebarMenu>
           {$feedsByCategory.map((category) => (
-            <Collapsible key={category.id}>
+            <Collapsible
+              key={category.id}
+              defaultOpen={category.feeds.some(
+                (feed) => parseInt(feedId) === feed.id,
+              )}
+            >
               <SidebarMenuItem key={`menu-${category.id}`}>
                 <SidebarMenuButton
                   className={cn(
