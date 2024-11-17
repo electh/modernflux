@@ -63,13 +63,13 @@ const ArticleView = () => {
   return (
     <div 
       className={cn(
-        "flex-1 bg-sidebar p-2 h-screen fixed sm:static inset-0 z-50",
+        "flex-1 bg-sidebar p-0 sm:p-2 h-screen fixed sm:static inset-0 z-50",
         "animate-slide-in-from-right motion-reduce:animate-none"
       )}
     >
       <ScrollArea
         ref={scrollAreaRef}
-        className="article-scroll-area h-full bg-background px-8 rounded-lg shadow-custom"
+        className="article-scroll-area h-full bg-background px-8 rounded-none sm:rounded-lg shadow-none sm:shadow-custom"
       >
         <ActionButtons articleId={$activeArticle?.id} />
         <div className="max-w-3xl py-20">

@@ -101,7 +101,7 @@ const ArticleList = () => {
     <div className="flex relative bg-sidebar">
       <ScrollArea
         ref={scrollAreaRef}
-        className="w-full sm:w-[22rem] border-r h-screen bg-sidebar flex flex-col"
+        className="w-full sm:w-[21rem] border-r h-screen bg-sidebar flex flex-col"
       >
         <ArticleListContent articles={$filteredArticles} />
         <ArticleListHeader />
