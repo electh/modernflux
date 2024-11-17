@@ -8,6 +8,7 @@ import { generateReadableDate } from "@/lib/format.js";
 import { activeArticle, filteredArticles } from "@/stores/articlesStore.js";
 import { Separator } from "@/components/ui/separator.jsx";
 import EmptyPlaceholder from "@/components/ArticleList/components/EmptyPlaceholder";
+import { cn } from "@/lib/utils";
 
 const ArticleView = () => {
   const { articleId } = useParams();
@@ -60,29 +61,39 @@ const ArticleView = () => {
   }
 
   return (
-    <div className="flex-1 bg-sidebar p-2 h-screen fixed sm:static inset-0 z-50">
+    <div 
+      className={cn(
+        "flex-1 bg-sidebar p-2 h-screen fixed sm:static inset-0 z-50",
+        "animate-slide-in-from-right motion-reduce:animate-none"
+      )}
+    >
       <ScrollArea
         ref={scrollAreaRef}
         className="article-scroll-area h-full bg-background px-8 rounded-lg shadow-custom"
       >
         <ActionButtons articleId={$activeArticle?.id} />
-        <div className="max-w-3xl mx-auto py-20">
-          <header className="article-header">
-            <div className="text-muted-foreground text-sm">
-              {$activeArticle?.feed?.title}
-            </div>
-            <h1 className="text-3xl font-bold my-2">{$activeArticle?.title}</h1>
-            <div className="text-muted-foreground text-sm">
-              <time dateTime={$activeArticle?.published_at}>
-                {generateReadableDate($activeArticle?.published_at)}
-              </time>
-            </div>
-          </header>
-          <Separator className="my-4" />
-          <div
-            className="article-content"
-            dangerouslySetInnerHTML={{ __html: $activeArticle?.content }}
-          />
+        <div className="max-w-3xl py-20">
+          <div 
+            key={$activeArticle?.id} 
+            className="animate-fade-in"
+          >
+            <header className="article-header">
+              <div className="text-muted-foreground text-sm">
+                {$activeArticle?.feed?.title}
+              </div>
+              <h1 className="text-3xl font-bold my-2">{$activeArticle?.title}</h1>
+              <div className="text-muted-foreground text-sm">
+                <time dateTime={$activeArticle?.published_at}>
+                  {generateReadableDate($activeArticle?.published_at)}
+                </time>
+              </div>
+            </header>
+            <Separator className="my-4" />
+            <div
+              className="article-content"
+              dangerouslySetInnerHTML={{ __html: $activeArticle?.content }}
+            />
+          </div>
         </div>
       </ScrollArea>
     </div>
