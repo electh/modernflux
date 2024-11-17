@@ -48,20 +48,20 @@ const ArticleList = () => {
       if (viewport && articleCard) {
         const viewportRect = viewport.getBoundingClientRect();
         const cardRect = articleCard.getBoundingClientRect();
-        
+
         // 考虑 header 和 footer 的高度
         const headerHeight = 60; // header 高度
         const footerHeight = 56; // footer 高度
-        
+
         // 计算实际可视区域
         const effectiveViewportTop = viewportRect.top + headerHeight;
         const effectiveViewportBottom = viewportRect.bottom - footerHeight;
-        
+
         // 检查文章卡片是否在有效视口内
-        const isCardInViewport = 
-          cardRect.top >= effectiveViewportTop && 
+        const isCardInViewport =
+          cardRect.top >= effectiveViewportTop &&
           cardRect.bottom <= effectiveViewportBottom;
-        
+
         // 如果卡片不在有效视口内，才进行滚动
         if (!isCardInViewport) {
           // 如果卡片在视口上方，滚动到顶部对齐（考虑 header）
@@ -74,7 +74,9 @@ const ArticleList = () => {
           // 如果卡片在视口下方，滚动到底部对齐（考虑 footer）
           else if (cardRect.bottom > effectiveViewportBottom) {
             viewport.scrollTo({
-              top: viewport.scrollTop + (cardRect.bottom - effectiveViewportBottom),
+              top:
+                viewport.scrollTop +
+                (cardRect.bottom - effectiveViewportBottom),
               behavior: "smooth",
             });
           }
@@ -108,9 +110,7 @@ const ArticleList = () => {
       {!location.pathname.includes("/article/") ? (
         <EmptyPlaceholder />
       ) : (
-        <div className="sm:flex-1 w-full sm:w-auto">
-          <Outlet />
-        </div>
+        <Outlet />
       )}
     </div>
   );
