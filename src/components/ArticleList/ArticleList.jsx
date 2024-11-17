@@ -98,7 +98,7 @@ const ArticleList = () => {
   }, [feedId, categoryId, $filter]);
 
   return (
-    <div className="flex relative">
+    <div className="flex relative bg-sidebar">
       <ScrollArea
         ref={scrollAreaRef}
         className="w-full sm:w-[22rem] border-r h-screen bg-sidebar flex flex-col"
