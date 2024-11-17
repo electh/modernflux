@@ -72,7 +72,7 @@ class miniFluxAPI {
         params: {
           changed_after: timestamp,
           direction: "desc",
-          limit: 100,
+          limit: 0,
         },
       });
       return response.data.entries;
@@ -90,12 +90,28 @@ class miniFluxAPI {
         params: {
           after: timestamp,
           direction: "desc",
-          limit: 100,
+          limit: 0,
         },
       });
       return response.data.entries;
     } catch (error) {
       console.error("获取新文章失败:", error);
+      throw error;
+    }
+  }
+
+  // 标记全部已读
+  async markAllAsRead(type, id = null) {
+    try {
+      let endpoint = '/v1/entries';
+      if (type === 'feed' && id) {
+        endpoint = `/v1/feeds/${id}/mark-all-as-read`;
+      } else if (type === 'category' && id) {
+        endpoint = `/v1/categories/${id}/mark-all-as-read`;
+      }
+      await this.client.put(endpoint);
+    } catch (error) {
+      console.error('标记全部已读失败:', error);
       throw error;
     }
   }

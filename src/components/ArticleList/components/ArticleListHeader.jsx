@@ -4,6 +4,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar.jsx";
 import { Separator } from "@/components/ui/separator.jsx";
 import { filter } from "@/stores/articlesStore.js";
 import { feeds } from "@/stores/feedsStore.js";
+import MarkAllReadButton from "./MarkAllReadButton";
 
 export default function ArticleListHeader() {
   const { feedId, categoryId } = useParams();
@@ -36,7 +37,10 @@ export default function ArticleListHeader() {
     <div className="absolute top-0 bg-sidebar/80 backdrop-blur-sm w-full px-2">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="my-3" />
-        <h1 className="text-sm font-medium">{getTitleText()}</h1>
+        <h1 className="text-sm font-medium truncate">{getTitleText()}</h1>
+        <div className="ml-auto">
+          <MarkAllReadButton />
+        </div>
       </div>
       <Separator className="w-auto" />
     </div>

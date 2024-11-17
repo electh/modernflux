@@ -81,7 +81,10 @@ async function syncFeeds() {
 async function syncEntries() {
   try {
     const lastSyncTime = await storage.getLastSyncTime();
-    
+    // 计算24小时前的时间戳
+    const oneDayAgo = new Date();
+    oneDayAgo.setHours(oneDayAgo.getHours() - 24);
+
     if (!lastSyncTime) {
       // 首次同步,获取所有文章
       const feeds = await storage.getFeeds();
@@ -105,7 +108,7 @@ async function syncEntries() {
     } else {
       // 增量同步
       // 1. 获取变更的文章
-      const changedEntries = await minifluxAPI.getChangedEntries(lastSyncTime);
+      const changedEntries = await minifluxAPI.getChangedEntries(oneDayAgo);
       if (changedEntries.length > 0) {
         await storage.addArticles(
           changedEntries.map((entry) => ({
@@ -124,7 +127,7 @@ async function syncEntries() {
       }
 
       // 2. 获取新发布的文章
-      const newEntries = await minifluxAPI.getNewEntries(lastSyncTime);
+      const newEntries = await minifluxAPI.getNewEntries(oneDayAgo);
       if (newEntries.length > 0) {
         await storage.addArticles(
           newEntries.map((entry) => ({
