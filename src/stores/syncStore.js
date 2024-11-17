@@ -80,24 +80,67 @@ async function syncFeeds() {
 // 从miniflux同步文章并保存到数据库
 async function syncEntries() {
   try {
-    const feeds = await storage.getFeeds();
+    const lastSyncTime = await storage.getLastSyncTime();
+    
+    if (!lastSyncTime) {
+      // 首次同步,获取所有文章
+      const feeds = await storage.getFeeds();
+      for (const feed of feeds) {
+        const entries = await minifluxAPI.getFeedEntries(feed.id);
+        await storage.addArticles(
+          entries.map((entry) => ({
+            id: entry.id,
+            feedId: feed.id,
+            title: entry.title,
+            author: entry.author,
+            url: entry.url,
+            content: entry.content,
+            status: entry.status,
+            starred: entry.starred,
+            published_at: entry.published_at,
+            created_at: entry.created_at,
+          })),
+        );
+      }
+    } else {
+      // 增量同步
+      // 1. 获取变更的文章
+      const changedEntries = await minifluxAPI.getChangedEntries(lastSyncTime);
+      if (changedEntries.length > 0) {
+        await storage.addArticles(
+          changedEntries.map((entry) => ({
+            id: entry.id,
+            feedId: entry.feed.id,
+            title: entry.title,
+            author: entry.author,
+            url: entry.url,
+            content: entry.content,
+            status: entry.status,
+            starred: entry.starred,
+            published_at: entry.published_at,
+            created_at: entry.created_at,
+          })),
+        );
+      }
 
-    for (const feed of feeds) {
-      const entries = await minifluxAPI.getFeedEntries(feed.id);
-      await storage.addArticles(
-        entries.map((entry) => ({
-          id: entry.id,
-          feedId: feed.id,
-          title: entry.title,
-          author: entry.author,
-          url: entry.url,
-          content: entry.content,
-          status: entry.status,
-          starred: entry.starred,
-          published_at: entry.published_at,
-          created_at: entry.created_at,
-        })),
-      );
+      // 2. 获取新发布的文章
+      const newEntries = await minifluxAPI.getNewEntries(lastSyncTime);
+      if (newEntries.length > 0) {
+        await storage.addArticles(
+          newEntries.map((entry) => ({
+            id: entry.id,
+            feedId: entry.feed.id,
+            title: entry.title,
+            author: entry.author,
+            url: entry.url,
+            content: entry.content,
+            status: entry.status,
+            starred: entry.starred,
+            published_at: entry.published_at,
+            created_at: entry.created_at,
+          })),
+        );
+      }
     }
   } catch (error) {
     console.error("同步文章失败:", error);
