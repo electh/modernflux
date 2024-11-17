@@ -195,31 +195,6 @@ class Storage {
       request.onerror = () => reject(request.error);
     });
   }
-
-  // 获取指定分类的所有订阅源
-  async getFeedsByCategory(categoryName) {
-    const tx = this.db.transaction("feeds", "readonly");
-    const store = tx.objectStore("feeds");
-    const index = store.index("categoryName");
-
-    return new Promise((resolve, reject) => {
-      const request = index.getAll(categoryName);
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-  }
-
-  // 获取单篇文章
-  async getArticle(articleId) {
-    const tx = this.db.transaction("articles", "readonly");
-    const store = tx.objectStore("articles");
-
-    return new Promise((resolve, reject) => {
-      const request = store.get(articleId);
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-  }
 }
 
 export default new Storage();
