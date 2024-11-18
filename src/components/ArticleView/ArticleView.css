@@ -25,7 +25,6 @@ p {
 
 /* 文章内容图片样式 */
 .article-content img {
-  border-radius: var(--radius);
   height: auto; /* 自动调整高度，保持原始比例 */
   max-width: 100%; /* 图片最大宽度为容器的 100% */
 }
