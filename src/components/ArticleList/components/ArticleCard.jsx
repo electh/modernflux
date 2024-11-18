@@ -73,7 +73,7 @@ export default function ArticleCard({ article }) {
 
           <h3
             className={cn(
-              "card-title text-base font-bold line-clamp-2",
+              "card-title text-base font-bold line-clamp-2 text-wrap break-words",
               article.status === "read"
                 ? "text-muted-foreground"
                 : "text-foreground",
