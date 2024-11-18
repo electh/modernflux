@@ -82,7 +82,7 @@ async function syncEntries() {
   try {
     const lastSyncTime = await storage.getLastSyncTime();
     // 计算24小时前的时间戳
-    const oneDayAgo = new Date();
+    const oneDayAgo = new Date(lastSyncTime);
     oneDayAgo.setHours(oneDayAgo.getHours() - 24);
 
     if (!lastSyncTime) {
