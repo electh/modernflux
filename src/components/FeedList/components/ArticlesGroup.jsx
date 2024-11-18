@@ -1,6 +1,6 @@
 import { useStore } from "@nanostores/react";
 import { filter } from "@/stores/articlesStore.js";
-import { totalUnreadCount, totalStarredCount } from "@/stores/feedsStore.js";
+import { totalStarredCount, totalUnreadCount } from "@/stores/feedsStore.js";
 import { CircleDot, Infinity, Star } from "lucide-react";
 import {
   SidebarGroup,
@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar.jsx";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const ArticlesGroup = () => {
@@ -19,7 +19,7 @@ const ArticlesGroup = () => {
   const $totalUnreadCount = useStore(totalUnreadCount);
   const $totalStarredCount = useStore(totalStarredCount);
   const { isMobile, setOpenMobile } = useSidebar();
-  const location = useLocation().pathname;
+  const { feedId, categoryId } = useParams();
   // 根据筛选条件获取显示文本和计数
   const getDisplayInfo = () => {
     switch ($filter) {
@@ -50,7 +50,9 @@ const ArticlesGroup = () => {
       <SidebarGroupLabel>文章</SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuItem
-          className={cn(location === "/" && "bg-sidebar-accent rounded-lg")}
+          className={cn(
+            !feedId && !categoryId && "bg-sidebar-accent rounded-md",
+          )}
         >
           <SidebarMenuButton asChild>
             <Link to="/" onClick={() => isMobile && setOpenMobile(false)}>
