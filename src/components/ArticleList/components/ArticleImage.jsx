@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { getReferrerPolicy } from "@/lib/utils";
 
 export default function ArticleImage({ imageUrl }) {
   const [error, setError] = useState(false);
@@ -48,6 +49,7 @@ export default function ArticleImage({ imageUrl }) {
           className="w-full h-full object-cover transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
           src={imageUrl}
           alt=""
+          referrerPolicy={getReferrerPolicy(imageUrl).referrerPolicy}
           loading="lazy"
           onError={() => setError(true)}
           onLoad={(e) => {
