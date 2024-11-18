@@ -3,7 +3,7 @@ import { Star } from "lucide-react";
 import { cn, extractFirstImage } from "@/lib/utils";
 import { useMemo } from "react";
 import { formatPublishDate } from "@/lib/format";
-import ArticleImage from "./ArticleImage";
+import ArticleCardCover from "./ArticleCardCover.jsx";
 import { handleMarkStatus } from "@/handlers/articleHandlers.js";
 
 export default function ArticleCard({ article }) {
@@ -83,7 +83,7 @@ export default function ArticleCard({ article }) {
           </h3>
         </div>
 
-        <ArticleImage imageUrl={imageUrl} />
+        <ArticleCardCover imageUrl={imageUrl} />
       </div>
     </div>
   );

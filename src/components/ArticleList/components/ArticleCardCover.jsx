@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getReferrerPolicy } from "@/lib/utils";
 
-export default function ArticleImage({ imageUrl }) {
+export default function ArticleCardCover({ imageUrl }) {
   const [error, setError] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const imgRef = useRef(null);
 
   useEffect(() => {
     const imgElement = imgRef.current;
-    
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -20,8 +20,8 @@ export default function ArticleImage({ imageUrl }) {
       },
       {
         rootMargin: "10px",
-        threshold: 0.1
-      }
+        threshold: 0.1,
+      },
     );
 
     if (imgElement) {
@@ -40,7 +40,7 @@ export default function ArticleImage({ imageUrl }) {
   }
 
   return (
-    <div 
+    <div
       ref={imgRef}
       className="card-image-wide aspect-video bg-muted rounded-lg shadow-custom w-full mt-1 overflow-hidden"
     >
@@ -49,7 +49,7 @@ export default function ArticleImage({ imageUrl }) {
           className="w-full h-full object-cover transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
           src={imageUrl}
           alt=""
-          referrerPolicy={getReferrerPolicy(imageUrl).referrerPolicy}
+          referrerPolicy={getReferrerPolicy(imageUrl)}
           loading="lazy"
           onError={() => setError(true)}
           onLoad={(e) => {

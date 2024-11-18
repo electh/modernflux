@@ -22,29 +22,10 @@ export function extractFirstImage(content) {
 export function getReferrerPolicy(url) {
   const rules = [
     {
-      pattern: /^https:\/\/\w+\.sinaimg\.cn/,
-      referrer: "https://weibo.com"
-    },
-    {
-      pattern: /^https:\/\/i\.pximg\.net/,
-      referrer: "https://www.pixiv.net"
-    },
-    {
-      pattern: /^https:\/\/cdnfile\.sspai\.com/,
-      referrer: "https://sspai.com"
-    },
-    {
-      pattern: /^https:\/\/(?:\w|-)+\.cdninstagram\.com/,
-      referrer: "https://www.instagram.com"
-    },
-    {
-      pattern: /^https:\/\/sp1\.piokok\.com/,
-      referrer: "https://sp1.piokok.com"
+      pattern: /^https:\/\/static\.cnbetacdn\.com/
     }
   ];
 
   const matchedRule = rules.find(rule => rule.pattern.test(url));
-  return {
-    referrerPolicy: matchedRule ? `${matchedRule.referrer}` : "no-referrer"
-  };
+  return matchedRule ? "no-referrer" : "origin-when-cross-origin";
 }
