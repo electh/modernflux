@@ -22,7 +22,7 @@ export default function ArticleImage({ imgNode }) {
   return (
     <PhotoView key={src} src={src}>
       <img
-        className="w-full h-auto aspect-video object-cover bg-muted transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
+        className="w-full h-auto object-cover bg-muted transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
         src={src}
         alt={alt}
         loading="lazy"
