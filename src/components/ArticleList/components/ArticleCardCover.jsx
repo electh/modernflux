@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getReferrerPolicy } from "@/lib/utils";
+import { ImageOff } from "lucide-react";
 
 export default function ArticleCardCover({ imageUrl }) {
   const [error, setError] = useState(false);
@@ -35,8 +36,18 @@ export default function ArticleCardCover({ imageUrl }) {
     };
   }, []);
 
-  if (!imageUrl || error) {
+  if (!imageUrl) {
     return null;
+  }
+
+  if (error) {
+    return (
+      <div className="w-full aspect-video bg-muted rounded-lg flex items-center justify-center shadow-custom">
+        <div className="flex flex-col items-center gap-2 text-muted-foreground">
+          <ImageOff className="size-5" />
+        </div>
+      </div>
+    );
   }
 
   return (
