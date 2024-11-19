@@ -4,8 +4,8 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const ArticleItem = memo(({ article, isLast }) => (
-  <li>
+const ArticleItem = memo(({ article, isLast, index }) => (
+  <li key={index} className="animate-fade-in">
     <ArticleCard article={article} />
     {!isLast && <Separator className="my-2" />}
   </li>
@@ -31,6 +31,7 @@ export default function ArticleListContent({ articles }) {
                 key={article.id}
                 article={article}
                 isLast={index === displayArticles.length - 1}
+                index={index}
               />
             ))}
           </ul>
