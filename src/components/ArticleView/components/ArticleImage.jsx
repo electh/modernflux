@@ -2,9 +2,11 @@ import { PhotoView } from "react-photo-view";
 import { useRef, useState } from "react";
 import { ImageOff } from "lucide-react";
 import { getReferrerPolicy } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 export default function ArticleImage({ imgNode }) {
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const imgRef = useRef(null);
 
   const { src, alt = "" } = imgNode.attribs;
@@ -50,21 +52,30 @@ export default function ArticleImage({ imgNode }) {
   }
 
   return (
+    <div
+        className={cn(
+          "w-fit h-fit flex items-center justify-center m-0",
+          isLoading && "bg-muted",
+        )}
+      >
     <PhotoView key={src} src={src}>
-      <img
-        ref={imgRef}
-        className="max-w-full h-auto object-cover bg-transparent transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0 mx-auto"
+      
+        <img
+          ref={imgRef}
+        className="max-w-full h-auto object-cover bg-transparent transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0 mx-auto my-0"
         src={src}
         alt={alt}
         loading="lazy"
         referrerPolicy={getReferrerPolicy(src)}
         onError={() => setError(true)}
         onClick={handleImageClick}
-        onLoad={(e) => {
-          e.target.classList.remove("opacity-0");
-          e.target.classList.add("opacity-100");
-        }}
-      />
-    </PhotoView>
+          onLoad={(e) => {
+            setIsLoading(false);
+            e.target.classList.remove("opacity-0");
+            e.target.classList.add("opacity-100");
+          }}
+        />
+      
+    </PhotoView></div>
   );
 }
