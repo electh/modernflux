@@ -31,7 +31,7 @@ const FeedListSidebar = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <div className="flex items-center gap-2">
-              <div className="flex aspect-square size-9 items-center justify-center rounded-full bg-sidebar-primary text-sidebar-primary-foreground">
+              <div className="flex aspect-square size-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <BookOpenText className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
