@@ -87,5 +87,6 @@ iframe {
   aspect-ratio: 16/9;
   border: none !important;
   border-radius: 4px;
+  height: auto;
   width: 100%;
 }
