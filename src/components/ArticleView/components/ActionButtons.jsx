@@ -59,7 +59,7 @@ export default function ActionButtons() {
   };
 
   return (
-    <div className="border-b absolute top-0 left-0 right-0 bg-background/80 backdrop-blur-sm w-full p-2">
+    <div className="border-b absolute top-0 left-0 right-0 bg-background/80 backdrop-blur-sm w-full p-2 z-10">
       <div className="flex items-center space-between">
         <div className="flex items-center gap-2">
           <Tooltip>
