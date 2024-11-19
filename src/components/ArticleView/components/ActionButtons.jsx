@@ -19,7 +19,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "@nanostores/react";
-import { filteredArticles, activeArticle } from "@/stores/articlesStore";
+import { activeArticle, filteredArticles } from "@/stores/articlesStore";
 
 export default function ActionButtons() {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export default function ActionButtons() {
   };
 
   return (
-    <div className="border-b absolute top-0 left-0 right-0 bg-background/80 backdrop-blur-sm w-full p-2 z-10">
+    <div className="border-b absolute top-0 left-0 right-0 bg-background/80 backdrop-blur-sm w-full p-2">
       <div className="flex items-center space-between">
         <div className="flex items-center gap-2">
           <Tooltip>
@@ -127,9 +127,7 @@ export default function ActionButtons() {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              {$activeArticle?.status === "read"
-                ? "标记为未读"
-                : "标记为已读"}
+              {$activeArticle?.status === "read" ? "标记为未读" : "标记为已读"}
             </TooltipContent>
           </Tooltip>
           <Tooltip>
