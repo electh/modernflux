@@ -2,10 +2,6 @@
   max-width: 100%;
 }
 
-.article-content {
-  line-height: 1.8;
-}
-
 .article-content h1,
 h2,
 h3,
@@ -26,11 +22,6 @@ p {
 /*video 相关样式 */
 .article-content video {
   border-radius: var(--radius);
-}
-
-/* 文章内容文本样式 */
-.article-content {
-  color: hsl(var(--foreground));
 }
 
 /* 文章标题链接样式 */

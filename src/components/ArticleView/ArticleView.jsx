@@ -109,7 +109,10 @@ const ArticleView = () => {
               <div className="text-muted-foreground text-sm">
                 {$activeArticle?.feed?.title}
               </div>
-              <h1 className="text-3xl font-bold my-2">
+              <h1 
+                className="text-3xl font-bold my-2 hover:cursor-pointer" 
+                onClick={() => window.open($activeArticle?.url, '_blank')}
+              >
                 {$activeArticle?.title}
               </h1>
               <div className="text-muted-foreground text-sm">
@@ -124,7 +127,7 @@ const ArticleView = () => {
               bannerVisible={false}
               maskClassName="backdrop-blur"
             >
-              <div className="article-content prose">
+              <div className="article-content prose dark:prose-invert">
                 {parse($activeArticle?.content, {
                   replace(domNode) {
                     if (domNode.type === "tag" && domNode.name === "img") {
