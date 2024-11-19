@@ -124,7 +124,7 @@ const ArticleView = () => {
               bannerVisible={false}
               maskClassName="backdrop-blur"
             >
-              <div className="article-content">
+              <div className="article-content prose">
                 {parse($activeArticle?.content, {
                   replace(domNode) {
                     if (domNode.type === "tag" && domNode.name === "img") {

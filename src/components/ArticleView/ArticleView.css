@@ -23,12 +23,6 @@ p {
   margin-block-start: 1rem !important;
 }
 
-/* 文章内容图片样式 */
-.article-content img {
-  height: auto; /* 自动调整高度，保持原始比例 */
-  max-width: 100%; /* 图片最大宽度为容器的 100% */
-}
-
 /*video 相关样式 */
 .article-content video {
   border-radius: var(--radius);
