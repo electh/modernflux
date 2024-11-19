@@ -40,10 +40,11 @@ export default function ActionButtons() {
   const handlePrevious = async () => {
     if (currentIndex > 0) {
       const prevArticle = $articles[currentIndex - 1];
+      navigate(`${basePath}/article/${prevArticle.id}`);
       if (prevArticle.status !== "read") {
         await handleMarkStatus(prevArticle);
       }
-      navigate(`${basePath}/article/${prevArticle.id}`);
+      
     }
   };
 
@@ -51,10 +52,10 @@ export default function ActionButtons() {
   const handleNext = async () => {
     if (currentIndex < $articles.length - 1) {
       const nextArticle = $articles[currentIndex + 1];
+      navigate(`${basePath}/article/${nextArticle.id}`);
       if (nextArticle.status !== "read") {
         await handleMarkStatus(nextArticle);
       }
-      navigate(`${basePath}/article/${nextArticle.id}`);
     }
   };
 
