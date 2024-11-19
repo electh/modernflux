@@ -53,7 +53,7 @@ export default function ArticleImage({ imgNode }) {
     <PhotoView key={src} src={src}>
       <img
         ref={imgRef}
-        className="w-full h-auto object-cover bg-muted transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0"
+        className="max-w-full h-auto object-cover bg-transparent transition-opacity duration-300 ease-in-out opacity-0 animate-in fade-in-0 mx-auto"
         src={src}
         alt={alt}
         loading="lazy"
