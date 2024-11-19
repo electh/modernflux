@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import ArticleImage from "@/components/ArticleView/components/ArticleImage.jsx";
 import parse from "html-react-parser";
 import { Badge } from "@/components/ui/badge.jsx";
+import MusicPlayer from "@/components/ArticleView/components/MusicPlayer.jsx";
 
 const ArticleView = () => {
   const { articleId } = useParams();
@@ -87,6 +88,11 @@ const ArticleView = () => {
     return domNode;
   };
 
+  // 检查是否有音频附件
+  const audioEnclosure = $activeArticle?.enclosures?.find((enclosure) =>
+    enclosure.mime_type?.startsWith("audio/"),
+  );
+
   if (loading || !$activeArticle || error) {
     return <EmptyPlaceholder />;
   }
@@ -109,9 +115,9 @@ const ArticleView = () => {
               <div className="text-muted-foreground text-sm">
                 {$activeArticle?.feed?.title}
               </div>
-              <h1 
-                className="text-3xl font-bold my-2 hover:cursor-pointer" 
-                onClick={() => window.open($activeArticle?.url, '_blank')}
+              <h1
+                className="text-3xl font-bold my-2 hover:cursor-pointer"
+                onClick={() => window.open($activeArticle?.url, "_blank")}
               >
                 {$activeArticle?.title}
               </h1>
@@ -122,12 +128,13 @@ const ArticleView = () => {
               </div>
             </header>
             <Separator className="my-4" />
+            {audioEnclosure && <MusicPlayer audioEnclosure={audioEnclosure} />}
             <PhotoProvider
               maskOpacity={0.5}
               bannerVisible={false}
               maskClassName="backdrop-blur"
             >
-              <div className="article-content prose dark:prose-invert">
+              <div className="article-content prose dark:prose-invert max-w-none">
                 {parse($activeArticle?.content, {
                   replace(domNode) {
                     if (domNode.type === "tag" && domNode.name === "img") {

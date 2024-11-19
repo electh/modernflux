@@ -102,6 +102,7 @@ async function syncEntries() {
             starred: entry.starred,
             published_at: entry.published_at,
             created_at: entry.created_at,
+            enclosures: entry.enclosures || []
           })),
         );
       }
@@ -122,6 +123,7 @@ async function syncEntries() {
             starred: entry.starred,
             published_at: entry.published_at,
             created_at: entry.created_at,
+            enclosures: entry.enclosures || []
           })),
         );
       }
@@ -141,6 +143,7 @@ async function syncEntries() {
             starred: entry.starred,
             published_at: entry.published_at,
             created_at: entry.created_at,
+            enclosures: entry.enclosures || []
           })),
         );
       }
