@@ -27,7 +27,7 @@ const FeedListSidebar = () => {
 
   return (
     <Sidebar variant="sidebar">
-      <SidebarHeader>
+      <SidebarHeader className="sidebar-header">
         <SidebarMenu>
           <SidebarMenuItem>
             <div className="flex items-center gap-2">

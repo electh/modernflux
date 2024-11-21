@@ -22,7 +22,7 @@ export default function ArticleListContent({ articles }) {
   }, [articles, currentPage, pageSize]);
 
   return (
-    <div className="flex-1 px-2 py-16">
+    <div className="article-list-content flex-1 px-2 py-16">
       {displayArticles.length !== 0 && (
         <>
           <ul className="articles">

@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator.jsx";
 
 export default function ArticleListFooter() {
   return (
-    <div className="absolute bottom-0 bg-sidebar/80 backdrop-blur-sm w-full">
+    <div className="article-list-footer absolute bottom-0 bg-sidebar/80 backdrop-blur-sm w-full">
       <Separator className="mx-2 w-auto" />
       <Tabs
         defaultValue="all"

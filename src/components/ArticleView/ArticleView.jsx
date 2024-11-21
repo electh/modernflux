@@ -109,7 +109,7 @@ const ArticleView = () => {
         className="article-scroll-area h-full bg-background rounded-none sm:rounded-lg shadow-none sm:shadow-custom"
       >
         <ActionButtons articleId={$activeArticle?.id} />
-        <div className="max-w-3xl px-5 py-20 w-full mx-auto">
+        <div className="article-view-content max-w-3xl px-5 py-20 w-full mx-auto">
           <div key={$activeArticle?.id} className="animate-fade-in">
             <header className="article-header">
               <div className="text-muted-foreground text-sm">
