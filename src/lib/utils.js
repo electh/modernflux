@@ -5,17 +5,24 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-export function extractFirstImage(content) {
-  if (!content) return null;
+export function extractFirstImage(article) {
+  if (!article.content) return null;
 
-  // 创建一个临时的 DOM 元素来解析 HTML 内容
+  // 检查附件中的图片
+  if (article.enclosures?.length > 0) {
+    const imgEnclosure = article.enclosures.find((enclosure) =>
+      enclosure.mime_type?.startsWith("image/"),
+    );
+    if (imgEnclosure?.url) {
+      return imgEnclosure.url;
+    }
+  }
+
+  // 如果附件中没有图片，则从内容中查找
   const div = document.createElement("div");
-  div.innerHTML = content;
+  div.innerHTML = article.content;
 
-  // 查找第一个图片元素
   const img = div.querySelector("img");
-
-  // 如果找到图片，返回其 src 属性
   return img ? img.src : null;
 }
 

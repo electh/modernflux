@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Star } from "lucide-react";
 import { cn, extractFirstImage } from "@/lib/utils";
-import { useMemo } from "react";
 import { formatPublishDate } from "@/lib/format";
 import ArticleCardCover from "./ArticleCardCover.jsx";
 import { handleMarkStatus } from "@/handlers/articleHandlers.js";
@@ -9,10 +8,6 @@ import { handleMarkStatus } from "@/handlers/articleHandlers.js";
 export default function ArticleCard({ article }) {
   const navigate = useNavigate();
   const { articleId } = useParams();
-  const imageUrl = useMemo(
-    () => extractFirstImage(article.content),
-    [article.content],
-  );
 
   const handleArticleClick = async (article) => {
     const basePath = window.location.pathname.split("/article/")[0];
@@ -83,7 +78,7 @@ export default function ArticleCard({ article }) {
           </h3>
         </div>
 
-        <ArticleCardCover imageUrl={imageUrl} />
+        <ArticleCardCover imageUrl={extractFirstImage(article)} />
       </div>
     </div>
   );
