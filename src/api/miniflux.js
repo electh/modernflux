@@ -103,15 +103,22 @@ class miniFluxAPI {
   // 标记全部已读
   async markAllAsRead(type, id = null) {
     try {
-      let endpoint = '/v1/entries';
-      if (type === 'feed' && id) {
+      let endpoint = "/v1/entries";
+
+      // 如果是用户级别的标记已读，先获取用户信息
+      if (type === "all") {
+        const response = await this.client.get("/v1/me");
+        const userId = response.data.id;
+        endpoint = `/v1/users/${userId}/mark-all-as-read`;
+      } else if (type === "feed" && id) {
         endpoint = `/v1/feeds/${id}/mark-all-as-read`;
-      } else if (type === 'category' && id) {
+      } else if (type === "category" && id) {
         endpoint = `/v1/categories/${id}/mark-all-as-read`;
       }
+
       await this.client.put(endpoint);
     } catch (error) {
-      console.error('标记全部已读失败:', error);
+      console.error("标记全部已读失败:", error);
       throw error;
     }
   }
