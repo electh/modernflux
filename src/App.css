@@ -34,25 +34,27 @@ body {
   body {
     min-height: 100lvh;
   }
+
   .app {
     padding-left: env(safe-area-inset-left) !important;
     padding-right: env(safe-area-inset-right) !important;
   }
-  
+
   .sidebar-header {
-    padding-top: env(safe-area-inset-top) !important;
+    padding-top: calc(env(safe-area-inset-top) + 8px) !important;
   }
 
   .article-list-header {
     padding-top: env(safe-area-inset-top) !important;
   }
+
   .article-list-footer {
     padding-bottom: env(safe-area-inset-bottom) !important;
   }
 
   .article-list-content {
-    padding-top: calc(env(safe-area-inset-top) + 64px) !important;
     padding-bottom: calc(env(safe-area-inset-bottom) + 64px) !important;
+    padding-top: calc(env(safe-area-inset-top) + 64px) !important;
   }
 
   .action-buttons {
