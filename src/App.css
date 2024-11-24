@@ -32,12 +32,19 @@ body {
 
 @media screen and (display-mode: standalone) {
   body {
+    background-color: hsl(var(--sidebar-background)) !important;
     min-height: 100lvh;
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
   }
 
   .app {
     padding-left: env(safe-area-inset-left) !important;
     padding-right: env(safe-area-inset-right) !important;
+  }
+
+  .sidebar {
+    padding-left: env(safe-area-inset-left) !important;
   }
 
   .sidebar-header {
