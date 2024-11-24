@@ -3,6 +3,7 @@ import {
   Circle,
   CircleDot,
   Forward,
+  LetterText,
   Reply,
   Star,
 } from "lucide-react";
@@ -20,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "@nanostores/react";
 import { activeArticle, filteredArticles } from "@/stores/articlesStore";
+import { customizeModelOpen } from "@/stores/settingsStore";
 
 export default function ActionButtons() {
   const navigate = useNavigate();
@@ -44,7 +46,6 @@ export default function ActionButtons() {
       if (prevArticle.status !== "read") {
         await handleMarkStatus(prevArticle);
       }
-      
     }
   };
 
@@ -149,6 +150,19 @@ export default function ActionButtons() {
             <TooltipContent>
               {$activeArticle?.starred ? "取消收藏" : "收藏"}
             </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => customizeModelOpen.set(true)}
+              >
+                <LetterText className="h-4 w-4" />
+                <span className="sr-only">自定义</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>自定义</TooltipContent>
           </Tooltip>
         </div>
       </div>

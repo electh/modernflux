@@ -39,3 +39,18 @@ export function getReferrerPolicy(url) {
   const matchedRule = rules.find((rule) => rule.pattern.test(url));
   return matchedRule ? "no-referrer" : "origin-when-cross-origin";
 }
+
+export function getFontSizeClass(fontSize) {
+  // fontSize 参数单位为 px
+  if (fontSize === 14) {
+    return "prose-sm"; // 14px
+  } else if (fontSize === 16) {
+    return "prose-base"; // 16px (默认)
+  } else if (fontSize === 18) {
+    return "prose-lg"; // 18px
+  } else if (fontSize === 20) {
+    return "prose-xl"; // 20px
+  } else {
+    return "prose-2xl"; // 24px
+  }
+}

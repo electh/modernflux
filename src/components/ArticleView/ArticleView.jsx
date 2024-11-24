@@ -10,11 +10,13 @@ import { generateReadableDate } from "@/lib/format.js";
 import { activeArticle, filteredArticles } from "@/stores/articlesStore.js";
 import { Separator } from "@/components/ui/separator.jsx";
 import EmptyPlaceholder from "@/components/ArticleList/components/EmptyPlaceholder";
-import { cn } from "@/lib/utils";
+import { cn, getFontSizeClass } from "@/lib/utils";
 import ArticleImage from "@/components/ArticleView/components/ArticleImage.jsx";
 import parse from "html-react-parser";
 import { Badge } from "@/components/ui/badge.jsx";
 import MusicPlayer from "@/components/ArticleView/components/MusicPlayer.jsx";
+import Customize from "@/components/ArticleView/components/customize/Index.jsx";
+import { settingsState } from "@/stores/settingsStore";
 
 const ArticleView = () => {
   const { articleId } = useParams();
@@ -22,6 +24,7 @@ const ArticleView = () => {
   const [error, setError] = useState(null);
   const $filteredArticles = useStore(filteredArticles);
   const $activeArticle = useStore(activeArticle);
+  const { lineHeight, fontSize, maxWidth } = useStore(settingsState);
   const scrollAreaRef = useRef(null);
 
   // 监听文章ID变化,滚动到顶部
@@ -109,7 +112,12 @@ const ArticleView = () => {
         className="article-scroll-area h-full bg-background rounded-none sm:rounded-lg shadow-none sm:shadow-custom"
       >
         <ActionButtons articleId={$activeArticle?.id} />
-        <div className="article-view-content max-w-3xl px-5 py-20 w-full mx-auto">
+        <div
+          className="article-view-content px-5 py-20 w-full mx-auto"
+          style={{
+            maxWidth: `${maxWidth}ch`,
+          }}
+        >
           <div key={$activeArticle?.id} className="animate-fade-in">
             <header className="article-header">
               <div className="text-muted-foreground text-sm">
@@ -134,7 +142,15 @@ const ArticleView = () => {
               bannerVisible={false}
               maskClassName="backdrop-blur"
             >
-              <div className="article-content prose dark:prose-invert max-w-none">
+              <div
+                className={cn(
+                  "article-content prose dark:prose-invert max-w-none",
+                  getFontSizeClass(fontSize),
+                )}
+                style={{
+                  lineHeight: lineHeight + "em",
+                }}
+              >
                 {parse($activeArticle?.content, {
                   replace(domNode) {
                     if (domNode.type === "tag" && domNode.name === "img") {
@@ -152,6 +168,7 @@ const ArticleView = () => {
           </div>
         </div>
       </ScrollArea>
+      <Customize />
     </div>
   );
 };
