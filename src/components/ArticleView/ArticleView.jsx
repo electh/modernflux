@@ -24,7 +24,7 @@ const ArticleView = () => {
   const [error, setError] = useState(null);
   const $filteredArticles = useStore(filteredArticles);
   const $activeArticle = useStore(activeArticle);
-  const { lineHeight, fontSize, maxWidth } = useStore(settingsState);
+  const { lineHeight, fontSize, maxWidth, alignJustify, fontFamily } = useStore(settingsState);
   const scrollAreaRef = useRef(null);
 
   // 监听文章ID变化,滚动到顶部
@@ -116,6 +116,7 @@ const ArticleView = () => {
           className="article-view-content px-5 py-20 w-full mx-auto"
           style={{
             maxWidth: `${maxWidth}ch`,
+            fontFamily: fontFamily,
           }}
         >
           <div key={$activeArticle?.id} className="animate-fade-in">
@@ -149,6 +150,7 @@ const ArticleView = () => {
                 )}
                 style={{
                   lineHeight: lineHeight + "em",
+                  textAlign: alignJustify ? "justify" : "left",
                 }}
               >
                 {parse($activeArticle?.content, {

@@ -7,6 +7,8 @@ const defaultValue = {
   lineHeight: 1.8,
   fontSize: 18,
   maxWidth: 65, // 单位为ch
+  alignJustify: false,
+  fontFamily: "system-ui",
 };
 
 export const settingsState = persistentAtom("settings", defaultValue, {

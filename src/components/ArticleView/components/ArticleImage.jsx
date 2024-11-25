@@ -51,7 +51,7 @@ export default function ArticleImage({ imgNode }) {
   }
 
   return (
-    <div
+    <span
       className={cn(
         "w-fit h-fit flex items-center justify-center my-0 mx-auto",
         isLoading && "bg-muted",
@@ -74,6 +74,6 @@ export default function ArticleImage({ imgNode }) {
           }}
         />
       </PhotoView>
-    </div>
+    </span>
   );
 }

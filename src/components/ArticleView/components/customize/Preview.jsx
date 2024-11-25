@@ -3,7 +3,7 @@ import { useStore } from "@nanostores/react";
 import { cn, getFontSizeClass } from "@/lib/utils";
 
 export default function Preview() {
-  const { lineHeight, fontSize, maxWidth } = useStore(settingsState);
+  const { lineHeight, fontSize, maxWidth, alignJustify, fontFamily } = useStore(settingsState);
 
   return (
     <div
@@ -14,6 +14,8 @@ export default function Preview() {
       style={{
         lineHeight: lineHeight + "em",
         maxWidth: `${maxWidth}ch`,
+        textAlign: alignJustify ? "justify" : "left",
+        fontFamily: fontFamily,
       }}
     >
       <blockquote>白日依山尽，黄河入海流。欲穷千里目，更上一层楼。</blockquote>

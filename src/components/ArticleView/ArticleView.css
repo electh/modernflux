@@ -71,3 +71,11 @@ iframe {
   height: auto;
   width: 100%;
 }
+
+blockquote {
+  font-style: normal !important;
+}
+
+figcaption {
+  font-style: italic !important;
+}
