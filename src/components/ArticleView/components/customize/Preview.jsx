@@ -8,7 +8,7 @@ export default function Preview() {
   return (
     <div
       className={cn(
-        "prose dark:prose-invert p-6 h-48 overflow-hidden",
+        "prose dark:prose-invert p-6 h-48 overflow-hidden shrink-0",
         getFontSizeClass(fontSize),
       )}
       style={{

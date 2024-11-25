@@ -4,8 +4,8 @@ import { atom } from "nanostores";
 export const customizeModelOpen = atom(false);
 
 const defaultValue = {
-  lineHeight: 1.5,
-  fontSize: 16,
+  lineHeight: 1.8,
+  fontSize: 18,
   maxWidth: 65, // 单位为ch
 };
 

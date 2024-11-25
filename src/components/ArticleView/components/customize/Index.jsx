@@ -15,7 +15,7 @@ export default function Customize() {
   if (!isMobile) {
     return (
       <Dialog open={$customizeModelOpen} onOpenChange={customizeModelOpen.set}>
-        <DialogContent className="flex flex-col sm:max-w-xl sm:max-h-[80vh] p-0 gap-0">
+        <DialogContent className="flex flex-col sm:max-w-lg sm:max-h-[80vh] p-0 gap-0">
           <Preview />
           <Separator />
           <CustomizeForm />
