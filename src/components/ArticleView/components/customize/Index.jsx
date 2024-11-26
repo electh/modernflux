@@ -3,8 +3,20 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import Preview from "./Preview";
 import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { useStore } from "@nanostores/react";
 import { customizeModelOpen, resetSettings } from "@/stores/settingsStore";
 import Text from "./Text";
@@ -16,10 +28,12 @@ export default function Customize() {
   if (!isMobile) {
     return (
       <Dialog open={$customizeModelOpen} onOpenChange={customizeModelOpen.set}>
-        <DialogContent className="flex flex-col sm:max-w-lg sm:max-h-[80vh] p-0 gap-0">
+        <DialogContent className="flex flex-col sm:max-w-lg sm:max-h-[80vh] p-0 gap-0 overflow-hidden">
           <DialogHeader className="p-4 hidden">
             <DialogTitle>自定义阅读设置</DialogTitle>
-            <DialogDescription>调整文章显示的字体、大小和其他设置</DialogDescription>
+            <DialogDescription>
+              调整文章显示的字体、大小和其他设置
+            </DialogDescription>
           </DialogHeader>
           <Preview />
           <Separator />
@@ -34,7 +48,9 @@ export default function Customize() {
       <DrawerContent className="max-h-[80vh]">
         <DrawerHeader className="hidden">
           <DrawerTitle>自定义阅读设置</DrawerTitle>
-          <DrawerDescription>调整文章显示的字体、大小和其他设置</DrawerDescription>
+          <DrawerDescription>
+            调整文章显示的字体、大小和其他设置
+          </DrawerDescription>
         </DrawerHeader>
         <Preview />
         <Separator />

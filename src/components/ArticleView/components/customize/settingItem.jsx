@@ -2,7 +2,13 @@ import { updateSettings } from "@/stores/settingsStore";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem as SelectItemUI, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem as SelectItemUI,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const SliderItem = ({
   label,
@@ -33,12 +39,7 @@ export const SliderItem = ({
   );
 };
 
-export const SwitchItem = ({
-  label,
-  icon,
-  settingName,
-  settingValue,
-}) => {
+export const SwitchItem = ({ label, icon, settingName, settingValue }) => {
   return (
     <div className="flex justify-between items-center gap-2 bg-background p-2">
       <div className="flex items-center gap-2">
@@ -47,13 +48,19 @@ export const SwitchItem = ({
       </div>
       <Switch
         checked={settingValue}
-          onCheckedChange={(value) => updateSettings({ [settingName]: value })}
+        onCheckedChange={(value) => updateSettings({ [settingName]: value })}
       />
     </div>
   );
 };
 
-export function SelectItem({ label, icon, settingName, settingValue, options }) {
+export function SelectItem({
+  label,
+  icon,
+  settingName,
+  settingValue,
+  options,
+}) {
   return (
     <div className="flex justify-between items-center gap-2 bg-background p-2">
       <div className="flex items-center gap-2">
@@ -64,13 +71,13 @@ export function SelectItem({ label, icon, settingName, settingValue, options }) 
         value={settingValue}
         onValueChange={(value) => updateSettings({ [settingName]: value })}
       >
-        <SelectTrigger className="w-[140px] h-6 border-none px-0 justify-end gap-2 focus:ring-0">
+        <SelectTrigger className="flex-1 h-6 border-none px-0 justify-end gap-2 focus:ring-background">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="w-48">
+        <SelectContent className="w-48" align="end">
           {options.map((option) => (
-            <SelectItemUI 
-              key={option.value} 
+            <SelectItemUI
+              key={option.value}
               value={option.value}
               style={option.style || {}}
             >
