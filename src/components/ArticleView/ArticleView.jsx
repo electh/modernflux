@@ -24,7 +24,15 @@ const ArticleView = () => {
   const [error, setError] = useState(null);
   const $filteredArticles = useStore(filteredArticles);
   const $activeArticle = useStore(activeArticle);
-  const { lineHeight, fontSize, maxWidth, alignJustify, fontFamily, titleFontSize, titleAlignType } = useStore(settingsState);
+  const {
+    lineHeight,
+    fontSize,
+    maxWidth,
+    alignJustify,
+    fontFamily,
+    titleFontSize,
+    titleAlignType,
+  } = useStore(settingsState);
   const scrollAreaRef = useRef(null);
 
   // 监听文章ID变化,滚动到顶部
@@ -120,7 +128,10 @@ const ArticleView = () => {
           }}
         >
           <div key={$activeArticle?.id} className="animate-fade-in">
-            <header className="article-header" style={{ textAlign: titleAlignType }}>
+            <header
+              className="article-header"
+              style={{ textAlign: titleAlignType }}
+            >
               <div className="text-muted-foreground text-sm">
                 {$activeArticle?.feed?.title}
               </div>
@@ -167,14 +178,18 @@ const ArticleView = () => {
                         : domNode;
                     }
                     if (domNode.type === "tag" && domNode.name === "iframe") {
-                      return {
-                        ...domNode,
-                        attribs: {
-                          ...domNode.attribs,
-                          playsinline: "1",
-                          "webkit-playsinline": "1"
-                        }
-                      };
+                      const { src, width, height, ...rest } = domNode.attribs;
+                      return (
+                        <iframe
+                          {...rest}
+                          src={src}
+                          width={width || "100%"}
+                          height={height || "auto"}
+                          loading="lazy"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      );
                     }
                   },
                 })}
