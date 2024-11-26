@@ -166,6 +166,16 @@ const ArticleView = () => {
                         ? handleLinkWithImg(domNode)
                         : domNode;
                     }
+                    if (domNode.type === "tag" && domNode.name === "iframe") {
+                      return {
+                        ...domNode,
+                        attribs: {
+                          ...domNode.attribs,
+                          playsinline: "1",
+                          "webkit-playsinline": "1"
+                        }
+                      };
+                    }
                   },
                 })}
               </div>
