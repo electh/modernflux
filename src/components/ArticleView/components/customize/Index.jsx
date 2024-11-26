@@ -20,6 +20,7 @@ import {
 import { useStore } from "@nanostores/react";
 import { customizeModelOpen, resetSettings } from "@/stores/settingsStore";
 import Text from "./Text";
+import Title from "./Title";
 
 export default function Customize() {
   const isMobile = useIsMobile();
@@ -69,7 +70,8 @@ function CustomizeForm({ className }) {
       )}
     >
       <Text />
-      <Button onClick={resetSettings}>重置</Button>
+      <Title />
+      <Button onClick={resetSettings}>重 置</Button>
     </div>
   );
 }

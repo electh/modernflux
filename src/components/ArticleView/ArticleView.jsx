@@ -24,7 +24,7 @@ const ArticleView = () => {
   const [error, setError] = useState(null);
   const $filteredArticles = useStore(filteredArticles);
   const $activeArticle = useStore(activeArticle);
-  const { lineHeight, fontSize, maxWidth, alignJustify, fontFamily } = useStore(settingsState);
+  const { lineHeight, fontSize, maxWidth, alignJustify, fontFamily, titleFontSize, titleAlignType } = useStore(settingsState);
   const scrollAreaRef = useRef(null);
 
   // 监听文章ID变化,滚动到顶部
@@ -120,12 +120,15 @@ const ArticleView = () => {
           }}
         >
           <div key={$activeArticle?.id} className="animate-fade-in">
-            <header className="article-header">
+            <header className="article-header" style={{ textAlign: titleAlignType }}>
               <div className="text-muted-foreground text-sm">
                 {$activeArticle?.feed?.title}
               </div>
               <h1
-                className="text-3xl font-bold my-2 hover:cursor-pointer"
+                className="font-bold my-2 hover:cursor-pointer"
+                style={{
+                  fontSize: `${titleFontSize * fontSize}px`,
+                }}
                 onClick={() => window.open($activeArticle?.url, "_blank")}
               >
                 {$activeArticle?.title}

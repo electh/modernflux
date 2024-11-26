@@ -1,0 +1,43 @@
+import { settingsState } from "@/stores/settingsStore";
+import { Separator } from "@/components/ui/separator.jsx";
+import {
+  CaseSensitive,
+  AlignStartVertical,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+} from "lucide-react";
+import { useStore } from "@nanostores/react";
+import { SliderItem, GroupItem } from "./settingItem";
+
+export default function Title() {
+  const { titleFontSize, titleAlignType } = useStore(settingsState);
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="text-xs text-muted-foreground ml-2">标题</div>
+      <div className="rounded-lg overflow-hidden">
+        <GroupItem
+          label="对齐"
+          icon={<AlignStartVertical className="shrink-0 size-4" />}
+          settingName="titleAlignType"
+          settingValue={titleAlignType}
+          options={[
+            { value: "left", icon: <AlignLeft className="shrink-0 size-4" /> },
+            { value: "center", icon: <AlignCenter className="shrink-0 size-4" /> },
+            { value: "right", icon: <AlignRight className="shrink-0 size-4" /> },
+          ]}
+        />
+        <Separator />
+        <SliderItem
+          label="大小"
+          icon={<CaseSensitive className="shrink-0 size-4" />}
+          settingName="titleFontSize"
+          settingValue={titleFontSize}
+          max={3.0}
+          min={1.0}
+          step={0.2}
+        />
+      </div>
+    </div>
+  );
+}

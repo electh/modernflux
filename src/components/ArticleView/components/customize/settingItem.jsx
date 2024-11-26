@@ -3,6 +3,11 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui-customize/AnimatedTabs.jsx";
+import {
   Select,
   SelectContent,
   SelectItem as SelectItemUI,
@@ -89,3 +94,40 @@ export function SelectItem({
     </div>
   );
 }
+
+export const GroupItem = ({
+  label,
+  icon,
+  settingName,
+  settingValue,
+  options,
+}) => {
+  return (
+    <div className="flex justify-between items-center gap-2 bg-background p-2">
+      <div className="flex items-center gap-2">
+        {icon}
+        <div className="text-sm text-foreground">{label}</div>
+      </div>
+      <Tabs
+        value={settingValue}
+        onValueChange={(value) => {
+          updateSettings({ [settingName]: value });
+        }}
+      >
+        <div className="flex items-center justify-center">
+          <TabsList className="rounded-full p-0.5 gap-1 h-fit">
+            {options.map((option) => (
+              <TabsTrigger
+                key={option.value}
+                value={option.value}
+                className="rounded-full px-2 py-0.5"
+              >
+                {option.icon}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
+      </Tabs>
+    </div>
+  );
+};

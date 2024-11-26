@@ -5,10 +5,12 @@ export const customizeModelOpen = atom(false);
 
 const defaultValue = {
   lineHeight: 1.8,
-  fontSize: 18,
-  maxWidth: 65, // 单位为ch
+  fontSize: 16,
+  maxWidth: 70, // 单位为ch
   alignJustify: false,
   fontFamily: "system-ui",
+  titleFontSize: 1.8, // 标题相对于正文大小的倍数
+  titleAlignType: "left",
 };
 
 export const settingsState = persistentAtom("settings", defaultValue, {

@@ -21,18 +21,18 @@ const fontOptions = [
   {
     label: "思源宋体",
     value: "'Noto Serif SC'",
-    style: { fontFamily: "'Noto Serif SC', serif" }
+    style: { fontFamily: "'Noto Serif SC', serif" },
   },
   {
     label: "思源黑体",
     value: "'Noto Sans SC'",
-    style: { fontFamily: "'Noto Sans SC', sans-serif" }
+    style: { fontFamily: "'Noto Sans SC', sans-serif" },
   },
   {
     label: "霞鹜文楷",
     value: "'LXGW WenKai'",
-    style: { fontFamily: "'LXGW WenKai', serif" }
-  }
+    style: { fontFamily: "'LXGW WenKai', serif" },
+  },
 ];
 
 export default function Text() {

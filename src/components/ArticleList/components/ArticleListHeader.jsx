@@ -14,12 +14,12 @@ export default function ArticleListHeader() {
   // 获取标题文本
   const getTitleText = () => {
     if (feedId) {
-      const feed = $feeds.find(f => f.id === parseInt(feedId));
+      const feed = $feeds.find((f) => f.id === parseInt(feedId));
       return feed?.title || "未知订阅源";
     }
-    
+
     if (categoryId) {
-      const feed = $feeds.find(f => f.categoryId === parseInt(categoryId));
+      const feed = $feeds.find((f) => f.categoryId === parseInt(categoryId));
       return feed?.categoryName || "未知分类";
     }
 
