@@ -177,20 +177,6 @@ const ArticleView = () => {
                         ? handleLinkWithImg(domNode)
                         : domNode;
                     }
-                    if (domNode.type === "tag" && domNode.name === "iframe") {
-                      const { src, width, height, ...rest } = domNode.attribs;
-                      return (
-                        <iframe
-                          {...rest}
-                          src={src}
-                          width={width || "100%"}
-                          height={height || "auto"}
-                          loading="lazy"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      );
-                    }
                   },
                 })}
               </div>
