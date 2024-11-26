@@ -1,14 +1,14 @@
 import { settingsState } from "@/stores/settingsStore";
 import { Separator } from "@/components/ui/separator.jsx";
 import {
-  CaseSensitive,
-  AlignStartVertical,
-  AlignLeft,
   AlignCenter,
+  AlignLeft,
   AlignRight,
+  AlignStartVertical,
+  CaseSensitive,
 } from "lucide-react";
 import { useStore } from "@nanostores/react";
-import { SliderItem, GroupItem } from "./settingItem";
+import { GroupItem, SliderItem } from "./settingItem";
 
 export default function Title() {
   const { titleFontSize, titleAlignType } = useStore(settingsState);
@@ -22,9 +22,9 @@ export default function Title() {
           settingName="titleAlignType"
           settingValue={titleAlignType}
           options={[
-            { value: "left", icon: <AlignLeft className="shrink-0 size-4" /> },
-            { value: "center", icon: <AlignCenter className="shrink-0 size-4" /> },
-            { value: "right", icon: <AlignRight className="shrink-0 size-4" /> },
+            { value: "left", icon: <AlignLeft className="size-4" /> },
+            { value: "center", icon: <AlignCenter className="size-4" /> },
+            { value: "right", icon: <AlignRight className="size-4" /> },
           ]}
         />
         <Separator />

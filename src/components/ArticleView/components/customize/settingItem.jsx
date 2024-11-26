@@ -115,12 +115,12 @@ export const GroupItem = ({
         }}
       >
         <div className="flex items-center justify-center">
-          <TabsList className="rounded-full p-0.5 gap-1 h-fit">
+          <TabsList className="gap-1 h-6 py-0">
             {options.map((option) => (
               <TabsTrigger
                 key={option.value}
                 value={option.value}
-                className="rounded-full px-2 py-0.5"
+                className="px-2 py-0.5"
               >
                 {option.icon}
               </TabsTrigger>
