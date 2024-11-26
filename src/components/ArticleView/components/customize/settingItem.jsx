@@ -2,11 +2,7 @@ import { updateSettings } from "@/stores/settingsStore";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui-customize/AnimatedTabs.jsx";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs.jsx";
 import {
   Select,
   SelectContent,
@@ -115,7 +111,7 @@ export const GroupItem = ({
         }}
       >
         <div className="flex items-center justify-center">
-          <TabsList className="gap-1 h-6 py-0">
+          <TabsList className="p-0.5 h-fit">
             {options.map((option) => (
               <TabsTrigger
                 key={option.value}
