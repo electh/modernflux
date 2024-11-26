@@ -78,7 +78,7 @@ const ArticleView = () => {
           <ArticleImage imgNode={imgNode} />
           <Badge
             variant="secondary"
-            className="cursor-pointer hover:bg-primary hover:text-primary-foreground block mx-auto w-fit mt-2"
+            className="cursor-pointer hover:bg-primary/10 hover:text-primary block mx-auto w-fit mt-2"
             onClick={() => {
               window.open(domNode.attribs.href, "_blank");
             }}
