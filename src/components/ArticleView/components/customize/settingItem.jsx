@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.jsx";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem as SelectItemUI,
   SelectTrigger,
   SelectValue,
@@ -72,32 +73,28 @@ export function SelectItem({
         value={settingValue}
         onValueChange={(value) => updateSettings({ [settingName]: value })}
       >
-        <SelectTrigger className="flex-1 h-6 border-none px-0 justify-end gap-2 focus:ring-background">
+        <SelectTrigger className="w-fit h-6 border-none px-0 justify-end gap-2 focus:ring-background">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="w-48" align="end">
-          {options.map((option) => (
-            <SelectItemUI
-              key={option.value}
-              value={option.value}
-              style={option.style || {}}
-            >
-              {option.label}
-            </SelectItemUI>
-          ))}
+        <SelectContent align="end">
+          <SelectGroup>
+            {options.map((option) => (
+              <SelectItemUI
+                key={option.value}
+                value={option.value}
+                style={option.style || {}}
+              >
+                {option.label}
+              </SelectItemUI>
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
     </div>
   );
 }
 
-export const GroupItem = ({
-  label,
-  icon,
-  settingName,
-  settingValue,
-  options,
-}) => {
+export function GroupItem({ label, icon, settingName, settingValue, options }) {
   return (
     <div className="flex justify-between items-center gap-2 bg-background p-2">
       <div className="flex items-center gap-2">
@@ -126,4 +123,4 @@ export const GroupItem = ({
       </Tabs>
     </div>
   );
-};
+}
