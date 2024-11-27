@@ -46,7 +46,7 @@ export default function Customize() {
 
   return (
     <Drawer open={$customizeModelOpen} onOpenChange={customizeModelOpen.set}>
-      <DrawerContent className="max-h-[80vh]">
+      <DrawerContent className="max-h-[80vh] border-none shadow-custom">
         <DrawerHeader className="hidden">
           <DrawerTitle>自定义阅读设置</DrawerTitle>
           <DrawerDescription>

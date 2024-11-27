@@ -47,7 +47,7 @@ const FeedListSidebar = () => {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarSeparator />
-      <ScrollArea>
+      <ScrollArea type="auto">
         <SidebarContent>
           <ArticlesGroup />
           <FeedsGroup />
