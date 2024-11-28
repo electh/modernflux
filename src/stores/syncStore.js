@@ -178,42 +178,43 @@ export async function sync() {
   }
 }
 
-// 后台自动同步数据
-if (typeof window !== "undefined") {
-  async function performSync() {
-    // 如果网络在线且未正在同步，则执行同步
-    if (isOnline.get() && !isSyncing.get()) {
-      try {
-        // 获取最后同步时间
-        const lastSyncTime = await storage.getLastSyncTime();
-        // 获取当前时间
-        const now = new Date();
-        // 如果最后同步时间不存在或距离上次同步时间超过5分钟，则执行同步
-        if (!lastSyncTime || now - lastSyncTime > 5 * 60 * 1000) {
-          // 执行完整同步
-          await sync();
-          // 更新最后同步时间
-          await storage.setLastSyncTime(now);
-        }
-      } catch (error) {
-        console.error("自动同步失败:", error);
-      }
-    }
-  }
-
-  // 初始同步
+// 启动自动同步
+export function startAutoSync() {
+  if (typeof window === "undefined") return;
+  
+  // 执行初始同步
   performSync();
-
+  
   // 设置定时器
   syncInterval = setInterval(performSync, 5 * 60 * 1000);
+  
+  // 添加清理函数
+  window.addEventListener("beforeunload", stopAutoSync);
+}
 
-  // 清理函数
-  window.addEventListener("beforeunload", () => {
-    if (syncInterval) {
-      clearInterval(syncInterval);
-      syncInterval = null;
+// 停止自动同步
+export function stopAutoSync() {
+  if (syncInterval) {
+    clearInterval(syncInterval);
+    syncInterval = null;
+  }
+  window.removeEventListener("beforeunload", stopAutoSync);
+}
+
+// 同步函数
+async function performSync() {
+  if (isOnline.get() && !isSyncing.get()) {
+    try {
+      const lastSyncTime = await storage.getLastSyncTime();
+      const now = new Date();
+      if (!lastSyncTime || now - lastSyncTime > 5 * 60 * 1000) {
+        await sync();
+        await storage.setLastSyncTime(now);
+      }
+    } catch (error) {
+      console.error("自动同步失败:", error);
     }
-  });
+  }
 }
 
 // 手动强制同步,由侧边栏刷新按钮触发

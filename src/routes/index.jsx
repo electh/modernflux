@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "@/App";
 import ArticleList from "@/components/ArticleList/ArticleList";
 import ArticleView from "@/components/ArticleView/ArticleView";
+import LoginPage from "@/pages/LoginPage";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const routerConfig = {
   future: {
@@ -16,8 +18,16 @@ const routerConfig = {
 
 export const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <LoginPage />
+  },
+  {
     path: "/",
-    element: <App />,
+    element: (
+      <ProtectedRoute>
+        <App />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/",

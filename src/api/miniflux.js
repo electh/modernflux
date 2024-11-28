@@ -1,12 +1,34 @@
 import axios from "axios";
+import { authState } from "@/stores/authStore";
+import { logout } from "@/stores/authStore";
 
 class miniFluxAPI {
   constructor() {
+    const auth = authState.get();
+    
     this.client = axios.create({
-      baseURL: "https://rss.electh.top",
-      headers: {
-        "X-Auth-Token": "kfSa5PN4vNG1i3ZZBF05ZvdHUmNBV10lSpThRTS4VAU=",
-      },
+      baseURL: auth?.serverUrl || "",
+      headers: auth?.apiKey ? {
+        "X-Auth-Token": auth.apiKey,
+      } : {},
+    });
+
+    // 添加响应拦截器
+    this.client.interceptors.response.use(
+      response => response,
+      error => {
+        // 如果响应状态码是 401,执行登出操作
+        if (error.response?.status === 401) {
+          logout();
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // 监听认证状态变化
+    authState.listen((newAuth) => {
+      this.client.defaults.baseURL = newAuth?.serverUrl || "";
+      this.client.defaults.headers["X-Auth-Token"] = newAuth?.apiKey || "";
     });
   }
 
