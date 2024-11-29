@@ -1,20 +1,22 @@
 import { persistentAtom } from "@nanostores/persistent";
 import { startAutoSync, stopAutoSync } from "./syncStore";
+import { feeds } from "./feedsStore";
+import { filter, filteredArticles } from "./articlesStore";
 
 const defaultValue = {
   serverUrl: "",
   apiKey: "",
   userId: "",
   username: "",
-}
+};
 
 export const authState = persistentAtom("auth", defaultValue, {
   encode: JSON.stringify,
   decode: (str) => {
-    const storedValue = JSON.parse(str)
-    return { ...defaultValue, ...storedValue }
+    const storedValue = JSON.parse(str);
+    return { ...defaultValue, ...storedValue };
   },
-})
+});
 
 // 登录方法
 export async function login(serverUrl, apiKey) {
@@ -51,13 +53,34 @@ export async function login(serverUrl, apiKey) {
 }
 
 // 登出方法
-export function logout() {
-  // 停止自动同步
-  stopAutoSync();
-  
-  authState.set(defaultValue);
-  // 删除 localStorage 中的全部信息
-  localStorage.clear();
-  // 删除 indexedDB 中的全部信息
-  indexedDB.deleteDatabase("minifluxReader");
+export async function logout() {
+  try {
+    // 停止自动同步
+    stopAutoSync();
+
+    // 重置所有状态
+    authState.set(defaultValue);
+    feeds.set([]);
+    filteredArticles.set([]);
+    filter.set("all");
+    // ... 重置其他状态
+
+    // 异步清理存储
+    await Promise.all([
+      // 清理 localStorage
+      new Promise((resolve) => {
+        localStorage.clear();
+        resolve();
+      }),
+      // 清理 indexedDB
+      new Promise((resolve, reject) => {
+        const request = indexedDB.deleteDatabase("minifluxReader");
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject();
+      }),
+    ]);
+  } catch (error) {
+    console.error("登出失败:", error);
+    // 可以选择是否抛出错误
+  }
 }
