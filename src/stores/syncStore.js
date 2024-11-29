@@ -102,7 +102,7 @@ async function syncEntries() {
             starred: entry.starred,
             published_at: entry.published_at,
             created_at: entry.created_at,
-            enclosures: entry.enclosures || []
+            enclosures: entry.enclosures || [],
           })),
         );
       }
@@ -123,7 +123,7 @@ async function syncEntries() {
             starred: entry.starred,
             published_at: entry.published_at,
             created_at: entry.created_at,
-            enclosures: entry.enclosures || []
+            enclosures: entry.enclosures || [],
           })),
         );
       }
@@ -143,7 +143,7 @@ async function syncEntries() {
             starred: entry.starred,
             published_at: entry.published_at,
             created_at: entry.created_at,
-            enclosures: entry.enclosures || []
+            enclosures: entry.enclosures || [],
           })),
         );
       }
@@ -181,13 +181,16 @@ export async function sync() {
 // 启动自动同步
 export function startAutoSync() {
   if (typeof window === "undefined") return;
-  
+
   // 执行初始同步
   performSync();
-  
+
+  //打印
+  console.log("启动后台刷新。");
+
   // 设置定时器
   syncInterval = setInterval(performSync, 5 * 60 * 1000);
-  
+
   // 添加清理函数
   window.addEventListener("beforeunload", stopAutoSync);
 }

@@ -1,5 +1,5 @@
 import { persistentAtom } from "@nanostores/persistent";
-import { startAutoSync, stopAutoSync } from "./syncStore";
+import { stopAutoSync } from "./syncStore";
 import { feeds } from "./feedsStore";
 import { filter, filteredArticles } from "./articlesStore";
 
@@ -41,9 +41,6 @@ export async function login(serverUrl, apiKey) {
       userId: user.id,
       username: user.username,
     });
-
-    // 启动自动同步
-    startAutoSync();
 
     return user;
   } catch (error) {
