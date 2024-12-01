@@ -1,6 +1,7 @@
 import {
   Keyboard,
   LogOut,
+  Monitor,
   Moon,
   Settings,
   Shirt,
@@ -23,11 +24,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authState, logout } from "@/stores/authStore.js";
-import { useTheme } from "@/components/theme-provider";
+import { setTheme } from "@/stores/themeStore.js";
 
 export function Profile() {
   const { username } = useStore(authState);
-  const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -53,6 +53,10 @@ export function Profile() {
               <DropdownMenuItem onClick={() => setTheme("dark")}>
                 <Moon />
                 <span>深色</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
+                <Monitor />
+                <span>跟随系统</span>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
