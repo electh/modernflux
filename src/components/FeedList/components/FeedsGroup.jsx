@@ -78,7 +78,7 @@ const FeedsGroup = () => {
                         <SidebarMenuSubButton
                           asChild
                           className={cn(
-                            "pl-8 pr-2",
+                            "pl-8 pr-2 h-8",
                             parseInt(feedId) === feed.id &&
                               "bg-sidebar-accent rounded-md",
                           )}
