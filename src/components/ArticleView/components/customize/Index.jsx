@@ -50,8 +50,8 @@ export default function Customize() {
       onOpenChange={customizeModelOpen.set}
       modal={false}
     >
-      <DrawerContent className="max-h-[50vh] border-none shadow-custom">
-        <DrawerHeader className="border-b bg-muted">
+      <DrawerContent className="max-h-[50vh] border-none bg-muted shadow-custom">
+        <DrawerHeader className="border-b">
           <DrawerTitle className="w-full flex items-center space-between">
             <span className="flex-1 text-base text-left">自定义阅读设置</span>
             <span
