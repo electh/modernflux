@@ -1,17 +1,15 @@
 import {
   Check,
+  Cog,
   Keyboard,
+  Laptop,
   LogOut,
-  Monitor,
   Moon,
-  Settings,
-  Shirt,
   Sun,
   User,
 } from "lucide-react";
 import { useStore } from "@nanostores/react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils.js";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,47 +42,41 @@ export function Profile() {
         <DropdownMenuSeparator />
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <Shirt />
+            {theme === "light" ? (
+              <Sun className="size-4" />
+            ) : theme === "dark" ? (
+              <Moon className="size-4" />
+            ) : (
+              <Laptop className="size-4" />
+            )}
             <span>外观</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
               <DropdownMenuItem onClick={() => setTheme("light")}>
-                <Sun />
-                <span>浅色</span>
                 <Check
-                  className={cn(
-                    "ml-auto",
-                    theme === "light" ? "opacity-100" : "opacity-0",
-                  )}
+                  className={theme === "light" ? "opacity-100" : "opacity-0"}
                 />
+                <span>浅色</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("dark")}>
-                <Moon />
-                <span>深色</span>
                 <Check
-                  className={cn(
-                    "ml-auto",
-                    theme === "dark" ? "opacity-100" : "opacity-0",
-                  )}
+                  className={theme === "dark" ? "opacity-100" : "opacity-0"}
                 />
+                <span>深色</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("system")}>
-                <Monitor />
-                <span>跟随系统</span>
                 <Check
-                  className={cn(
-                    "ml-auto",
-                    theme === "system" ? "opacity-100" : "opacity-0",
-                  )}
+                  className={theme === "system" ? "opacity-100" : "opacity-0"}
                 />
+                <span>跟随系统</span>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Settings />
+            <Cog />
             <span>设置</span>
           </DropdownMenuItem>
           <DropdownMenuItem>
