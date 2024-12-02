@@ -45,16 +45,26 @@ export default function Customize() {
   }
 
   return (
-    <Drawer open={$customizeModelOpen} onOpenChange={customizeModelOpen.set}>
-      <DrawerContent className="max-h-[80vh] border-none shadow-custom">
-        <DrawerHeader className="hidden">
-          <DrawerTitle>自定义阅读设置</DrawerTitle>
-          <DrawerDescription>
+    <Drawer
+      open={$customizeModelOpen}
+      onOpenChange={customizeModelOpen.set}
+      modal={false}
+    >
+      <DrawerContent className="max-h-[50vh] border-none shadow-custom">
+        <DrawerHeader className="border-b">
+          <DrawerTitle className="w-full flex items-center space-between">
+            <span className="flex-1 text-base text-left">自定义阅读设置</span>
+            <span
+              className="text-primary text-sm"
+              onClick={() => customizeModelOpen.set(false)}
+            >
+              关闭
+            </span>
+          </DrawerTitle>
+          <DrawerDescription className="hidden">
             调整文章显示的字体、大小和其他设置
           </DrawerDescription>
         </DrawerHeader>
-        <Preview />
-        <Separator />
         <CustomizeForm />
       </DrawerContent>
     </Drawer>
