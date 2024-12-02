@@ -1,4 +1,5 @@
 import {
+  Check,
   Keyboard,
   LogOut,
   Monitor,
@@ -10,6 +11,7 @@ import {
 } from "lucide-react";
 import { useStore } from "@nanostores/react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils.js";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,10 +26,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authState, logout } from "@/stores/authStore.js";
-import { setTheme } from "@/stores/themeStore.js";
+import { setTheme, themeState } from "@/stores/themeStore.js";
 
 export function Profile() {
   const { username } = useStore(authState);
+  const theme = useStore(themeState);
 
   return (
     <DropdownMenu>
@@ -49,14 +52,32 @@ export function Profile() {
               <DropdownMenuItem onClick={() => setTheme("light")}>
                 <Sun />
                 <span>浅色</span>
+                <Check
+                  className={cn(
+                    "ml-auto",
+                    theme === "light" ? "opacity-100" : "opacity-0",
+                  )}
+                />
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("dark")}>
                 <Moon />
                 <span>深色</span>
+                <Check
+                  className={cn(
+                    "ml-auto",
+                    theme === "dark" ? "opacity-100" : "opacity-0",
+                  )}
+                />
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("system")}>
                 <Monitor />
                 <span>跟随系统</span>
+                <Check
+                  className={cn(
+                    "ml-auto",
+                    theme === "system" ? "opacity-100" : "opacity-0",
+                  )}
+                />
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
