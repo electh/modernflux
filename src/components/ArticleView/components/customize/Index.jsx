@@ -50,7 +50,7 @@ export default function Customize() {
       onOpenChange={customizeModelOpen.set}
       modal={false}
     >
-      <DrawerContent className="max-h-[50vh] border-none bg-muted shadow-custom">
+      <DrawerContent className="max-h-[50vh] border-none bg-sidebar shadow-custom">
         <DrawerHeader className="border-b">
           <DrawerTitle className="w-full flex items-center space-between">
             <span className="flex-1 text-base text-left">自定义阅读设置</span>
@@ -75,7 +75,7 @@ function CustomizeForm({ className }) {
   return (
     <div
       className={cn(
-        "customize-form flex-1 overflow-y-auto bg-muted p-4 flex flex-col gap-4",
+        "customize-form flex-1 overflow-y-auto bg-muted dark:bg-sidebar p-4 flex flex-col gap-4",
         className,
       )}
     >
