@@ -85,6 +85,7 @@ export default function ActionButtons() {
                 variant="ghost"
                 size="icon"
                 onClick={handlePrevious}
+                className="hidden"
                 disabled={currentIndex <= 0}
               >
                 <Reply className="h-4 w-4" />
@@ -99,6 +100,7 @@ export default function ActionButtons() {
                 variant="ghost"
                 size="icon"
                 onClick={handleNext}
+                className="hidden"
                 disabled={currentIndex >= $articles.length - 1}
               >
                 <Forward className="h-4 w-4" />
