@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge.jsx";
 import MusicPlayer from "@/components/ArticleView/components/MusicPlayer.jsx";
 import Customize from "@/components/ArticleView/components/customize/Index.jsx";
 import { settingsState } from "@/stores/settingsStore";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ArticleView = () => {
   const { articleId } = useParams();
@@ -38,12 +39,20 @@ const ArticleView = () => {
   // 监听文章ID变化,滚动到顶部
   useEffect(() => {
     if (scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]",
-      );
-      if (viewport) {
-        viewport.scrollTop = 0;
-      }
+      // 添加一个延时，等待退出动画完成
+      const timer = setTimeout(() => {
+        const viewport = scrollAreaRef.current.querySelector(
+          "[data-radix-scroll-area-viewport]",
+        );
+        if (viewport) {
+          viewport.scrollTo({
+            top: 0,
+            behavior: "instant", // 使用 instant 避免与动画冲突
+          });
+        }
+      }, 300); // 300ms 等待动画结束
+
+      return () => clearTimeout(timer);
     }
   }, [articleId]);
 
@@ -128,61 +137,84 @@ const ArticleView = () => {
             fontFamily: fontFamily,
           }}
         >
-          <div key={$activeArticle?.id} className="animate-fade-in">
-            <header
-              className="article-header"
-              style={{ textAlign: titleAlignType }}
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              key={$activeArticle?.id}
+              initial={{ y: 50, opacity: 0 }}
+              animate={{
+                y: 0,
+                opacity: 1,
+                transition: {
+                  type: "spring",
+                  bounce: 0.3,
+                  opacity: { delay: 0.05 },
+                },
+              }}
+              exit={{ y: -50, opacity: 0 }}
+              transition={{
+                duration: 0.3,
+                type: "spring",
+                bounce: 0,
+                opacity: { delay: 0.06 },
+              }}
             >
-              <div className="text-muted-foreground text-sm">
-                {$activeArticle?.feed?.title}
-              </div>
-              <h1
-                className="font-bold my-2 hover:cursor-pointer"
-                style={{
-                  fontSize: `${titleFontSize * fontSize}px`,
-                }}
-                onClick={() => window.open($activeArticle?.url, "_blank")}
+              <header
+                className="article-header"
+                style={{ textAlign: titleAlignType }}
               >
-                {$activeArticle?.title}
-              </h1>
-              <div className="text-muted-foreground text-sm">
-                <time dateTime={$activeArticle?.published_at}>
-                  {generateReadableDate($activeArticle?.published_at)}
-                </time>
-              </div>
-            </header>
-            <Separator className="my-4" />
-            {audioEnclosure && <MusicPlayer audioEnclosure={audioEnclosure} />}
-            <PhotoProvider
-              maskOpacity={0.5}
-              bannerVisible={false}
-              maskClassName="backdrop-blur"
-            >
-              <div
-                className={cn(
-                  "article-content prose dark:prose-invert max-w-none",
-                  getFontSizeClass(fontSize),
-                )}
-                style={{
-                  lineHeight: lineHeight + "em",
-                  textAlign: alignJustify ? "justify" : "left",
-                }}
+                <div className="text-muted-foreground text-sm">
+                  {$activeArticle?.feed?.title}
+                </div>
+                <h1
+                  className="font-bold my-2 hover:cursor-pointer"
+                  style={{
+                    fontSize: `${titleFontSize * fontSize}px`,
+                  }}
+                  onClick={() => window.open($activeArticle?.url, "_blank")}
+                >
+                  {$activeArticle?.title}
+                </h1>
+                <div className="text-muted-foreground text-sm">
+                  <time dateTime={$activeArticle?.published_at}>
+                    {generateReadableDate($activeArticle?.published_at)}
+                  </time>
+                </div>
+              </header>
+              <Separator className="my-4" />
+              {audioEnclosure && (
+                <MusicPlayer audioEnclosure={audioEnclosure} />
+              )}
+              <PhotoProvider
+                maskOpacity={0.5}
+                bannerVisible={false}
+                maskClassName="backdrop-blur"
               >
-                {parse($activeArticle?.content, {
-                  replace(domNode) {
-                    if (domNode.type === "tag" && domNode.name === "img") {
-                      return <ArticleImage imgNode={domNode} />;
-                    }
-                    if (domNode.type === "tag" && domNode.name === "a") {
-                      return domNode.children.length > 0
-                        ? handleLinkWithImg(domNode)
-                        : domNode;
-                    }
-                  },
-                })}
-              </div>
-            </PhotoProvider>
-          </div>
+                <div
+                  className={cn(
+                    "article-content prose dark:prose-invert max-w-none",
+                    getFontSizeClass(fontSize),
+                  )}
+                  style={{
+                    lineHeight: lineHeight + "em",
+                    textAlign: alignJustify ? "justify" : "left",
+                  }}
+                >
+                  {parse($activeArticle?.content, {
+                    replace(domNode) {
+                      if (domNode.type === "tag" && domNode.name === "img") {
+                        return <ArticleImage imgNode={domNode} />;
+                      }
+                      if (domNode.type === "tag" && domNode.name === "a") {
+                        return domNode.children.length > 0
+                          ? handleLinkWithImg(domNode)
+                          : domNode;
+                      }
+                    },
+                  })}
+                </div>
+              </PhotoProvider>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </ScrollArea>
       <Customize />
