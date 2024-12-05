@@ -39,20 +39,15 @@ const ArticleView = () => {
   // 监听文章ID变化,滚动到顶部
   useEffect(() => {
     if (scrollAreaRef.current) {
-      // 添加一个延时，等待退出动画完成
-      const timer = setTimeout(() => {
-        const viewport = scrollAreaRef.current.querySelector(
-          "[data-radix-scroll-area-viewport]",
-        );
-        if (viewport) {
-          viewport.scrollTo({
-            top: 0,
-            behavior: "instant", // 使用 instant 避免与动画冲突
-          });
-        }
-      }, 300); // 300ms 等待动画结束
-
-      return () => clearTimeout(timer);
+      const viewport = scrollAreaRef.current.querySelector(
+        "[data-radix-scroll-area-viewport]",
+      );
+      if (viewport) {
+        viewport.scrollTo({
+          top: 0,
+          behavior: "instant", // 使用 instant 避免与动画冲突
+        });
+      }
     }
   }, [articleId]);
 
@@ -137,7 +132,7 @@ const ArticleView = () => {
             fontFamily: fontFamily,
           }}
         >
-          <AnimatePresence initial={false} mode="wait">
+          <AnimatePresence initial={false}>
             <motion.div
               key={$activeArticle?.id}
               initial={{ y: 50, opacity: 0 }}
@@ -147,15 +142,7 @@ const ArticleView = () => {
                 transition: {
                   type: "spring",
                   bounce: 0.3,
-                  opacity: { delay: 0.05 },
                 },
-              }}
-              exit={{ y: -50, opacity: 0 }}
-              transition={{
-                duration: 0.3,
-                type: "spring",
-                bounce: 0,
-                opacity: { delay: 0.06 },
               }}
             >
               <header
