@@ -1,67 +1,53 @@
-import { memo, useRef } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import { memo, useEffect, useState } from "react";
 import ArticleCard from "./ArticleCard";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
-const ArticleItem = memo(({ article }) => (
-  <div key={article.id} className="animate-fade-in">
+const ArticleItem = memo(({ article, isLast, index }) => (
+  <li key={index} className="animate-fade-in">
     <ArticleCard article={article} />
-  </div>
+    {!isLast && <Separator className="my-2" />}
+  </li>
 ));
-
 ArticleItem.displayName = "ArticleItem";
 
 export default function ArticleListContent({ articles }) {
-  const parentRef = useRef(null);
+  const pageSize = 50;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [displayArticles, setDisplayArticles] = useState(
+    articles.slice(0, pageSize),
+  );
 
-  // 创建一个 Map 来存储每个项目的高度
-  const heightsRef = useRef(new Map());
-
-  const virtualizer = useVirtualizer({
-    count: articles.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 280, // 初始预估高度
-    overscan: 5,
-    measureElement: (element) => {
-      // 测量实际元素高度并缓存
-      const height = element.getBoundingClientRect().height;
-      const index = Number(element.dataset.index);
-      heightsRef.current.set(index, height);
-      return height;
-    },
-  });
+  useEffect(() => {
+    setDisplayArticles(articles.slice(0, currentPage * pageSize));
+  }, [articles, currentPage, pageSize]);
 
   return (
-    <div
-      ref={parentRef}
-      className="article-list-content flex-1 px-2 py-16 overflow-auto"
-    >
-      {articles.length !== 0 && (
-        <div
-          style={{
-            height: `${virtualizer.getTotalSize()}px`,
-            width: "100%",
-            position: "relative",
-          }}
-        >
-          {virtualizer.getVirtualItems().map((virtualItem) => (
-            <div
-              key={articles[virtualItem.index].id}
-              data-index={virtualItem.index}
-              ref={virtualizer.measureElement}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                transform: `translateY(${virtualItem.start}px)`,
-                // 添加间距
-                paddingBottom: "1rem",
-              }}
-            >
-              <ArticleItem article={articles[virtualItem.index]} />
+    <div className="article-list-content flex-1 px-2 py-16">
+      {displayArticles.length !== 0 && (
+        <>
+          <ul className="articles">
+            {displayArticles.map((article, index) => (
+              <ArticleItem
+                key={article.id}
+                article={article}
+                isLast={index === displayArticles.length - 1}
+                index={index}
+              />
+            ))}
+          </ul>
+          {displayArticles.length < articles.length && (
+            <div className="w-full px-2 pt-1">
+              <Button
+                variant="secondary"
+                className="w-full text-muted-foreground"
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                加载更多
+              </Button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );
