@@ -17,7 +17,6 @@ import { Badge } from "@/components/ui/badge.jsx";
 import MusicPlayer from "@/components/ArticleView/components/MusicPlayer.jsx";
 import Customize from "@/components/ArticleView/components/customize/Index.jsx";
 import { settingsState } from "@/stores/settingsStore";
-import { AnimatePresence, motion } from "framer-motion";
 
 const ArticleView = () => {
   const { articleId } = useParams();
@@ -132,20 +131,11 @@ const ArticleView = () => {
             fontFamily: fontFamily,
           }}
         >
-          <AnimatePresence initial={false}>
-            <motion.div
-              key={$activeArticle?.id}
-              initial={{ y: 50, opacity: 0 }}
-              animate={{
-                y: 0,
-                opacity: 1,
-                transition: {
-                  type: "spring",
-                  bounce: 0.3,
-                },
-              }}
-            >
-              <header
+          <div
+            key={$activeArticle?.id}
+            className="animate-fade-in"
+          >
+            <header
                 className="article-header"
                 style={{ textAlign: titleAlignType }}
               >
@@ -198,11 +188,9 @@ const ArticleView = () => {
                       }
                     },
                   })}
-                </div>
-              </PhotoProvider>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+            </div>
+          </PhotoProvider>
+        </div></div>
       </ScrollArea>
       <Customize />
     </div>
