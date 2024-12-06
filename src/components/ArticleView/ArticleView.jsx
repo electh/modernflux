@@ -14,10 +14,10 @@ import { cn, getFontSizeClass } from "@/lib/utils";
 import ArticleImage from "@/components/ArticleView/components/ArticleImage.jsx";
 import parse from "html-react-parser";
 import { Badge } from "@/components/ui/badge.jsx";
-import MusicPlayer from "@/components/ArticleView/components/MusicPlayer.jsx";
 import Customize from "@/components/ArticleView/components/customize/Index.jsx";
 import { settingsState } from "@/stores/settingsStore";
 import { AnimatePresence, motion } from "framer-motion";
+import MediaPlayer from "@/components/ArticleView/components/MediaPlayer.jsx";
 
 const ArticleView = () => {
   const { articleId } = useParams();
@@ -103,10 +103,21 @@ const ArticleView = () => {
     return domNode;
   };
 
-  // 检查是否有音频附件
-  const audioEnclosure = $activeArticle?.enclosures?.find((enclosure) =>
-    enclosure.mime_type?.startsWith("audio/"),
-  );
+  // 检查是否有音频、视频或 YouTube 链接
+  const mediaEnclosure = $activeArticle?.enclosures?.find((enclosure) => {
+    // 检查是否是音频或视频类型
+    const isMediaType =
+      enclosure.mime_type?.startsWith("audio/") ||
+      enclosure.mime_type?.startsWith("video/");
+
+    // 检查是否是 YouTube 链接
+    const isYouTube =
+      enclosure.url &&
+      (enclosure.url.includes("youtube.com") ||
+        enclosure.url.includes("youtu.be"));
+
+    return isMediaType || isYouTube;
+  });
 
   if (loading || !$activeArticle || error) {
     return <EmptyPlaceholder />;
@@ -169,8 +180,15 @@ const ArticleView = () => {
                 </div>
               </header>
               <Separator className="my-4" />
-              {audioEnclosure && (
-                <MusicPlayer audioEnclosure={audioEnclosure} />
+              {mediaEnclosure && (
+                <MediaPlayer
+                  source={mediaEnclosure}
+                  type={
+                    mediaEnclosure.mime_type?.startsWith("audio/")
+                      ? "audio"
+                      : "video"
+                  }
+                />
               )}
               <PhotoProvider
                 maskOpacity={0.5}

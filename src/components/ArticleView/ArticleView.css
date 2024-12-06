@@ -85,3 +85,8 @@ blockquote {
 figcaption {
   font-style: italic !important;
 }
+
+/* Plyr 自定义样式 */
+:root {
+  --plyr-color-main: hsl(var(--primary));
+}
