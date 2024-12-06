@@ -18,7 +18,7 @@ import Customize from "@/components/ArticleView/components/customize/Index.jsx";
 import { settingsState } from "@/stores/settingsStore";
 import { AnimatePresence, motion } from "framer-motion";
 import MediaPlayer from "@/components/ArticleView/components/MediaPlayer.jsx";
-
+import AudioPlayer from "@/components/ArticleView/components/AudioPlayer.jsx";
 const ArticleView = () => {
   const { articleId } = useParams();
   const [loading, setLoading] = useState(true);
@@ -181,15 +181,14 @@ const ArticleView = () => {
               </header>
               <Separator className="my-4" />
               {mediaEnclosure && (
-                <MediaPlayer
-                  source={mediaEnclosure}
-                  type={
-                    mediaEnclosure.mime_type?.startsWith("audio/")
-                      ? "audio"
-                      : "video"
-                  }
-                />
-              )}
+  mediaEnclosure.mime_type?.startsWith("audio/") ? (
+    <AudioPlayer source={mediaEnclosure} />
+  ) : (
+    <MediaPlayer
+      source={mediaEnclosure}
+      type="video"
+    />
+                ))}
               <PhotoProvider
                 maskOpacity={0.5}
                 bannerVisible={false}

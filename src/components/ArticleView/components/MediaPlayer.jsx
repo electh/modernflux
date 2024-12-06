@@ -1,12 +1,10 @@
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
 import Plyr from "plyr";
 import "plyr/dist/plyr.css";
 
 export default function MediaPlayer({ source, type }) {
   const playerRef = useRef(null);
   const plyrRef = useRef(null);
-  const location = useLocation();
 
   useEffect(() => {
     // 初始化 Plyr
@@ -33,24 +31,6 @@ export default function MediaPlayer({ source, type }) {
           normal: '正常'
         }
       });
-
-      // 监听播放器就绪事件
-      plyrRef.current.on('ready', () => {
-        // 处理时间跳转
-        const hash = location.hash;
-        const timeMatch = hash.match(/#t=(\d+):(\d+)/);
-
-        if (timeMatch) {
-          const minutes = parseInt(timeMatch[1]);
-          const seconds = parseInt(timeMatch[2]);
-          const totalSeconds = minutes * 60 + seconds;
-
-          if (!isNaN(totalSeconds)) {
-            // 使用 Plyr 实例设置时间
-            plyrRef.current.currentTime = totalSeconds;
-          }
-        }
-      });
     }
 
     // 清理函数
@@ -60,7 +40,7 @@ export default function MediaPlayer({ source, type }) {
         plyrRef.current = null;
       }
     };
-  }, [location.hash]);
+  }, []);
 
   // 处理 YouTube URL
   const getYouTubeId = (url) => {
