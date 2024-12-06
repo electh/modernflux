@@ -11,25 +11,31 @@ export default function MediaPlayer({ source, type }) {
     if (playerRef.current && !plyrRef.current) {
       plyrRef.current = new Plyr(playerRef.current, {
         controls: [
-          'play',
-          'progress',
-          'current-time',
-          'duration',
-          'mute',
-          'volume',
-          'settings',
-          'airplay',
-          'fullscreen'
+          "play-large",
+          "play",
+          "progress",
+          "current-time",
+          "duration",
+          "mute",
+          "volume",
+          "airplay",
+          "fullscreen",
         ],
         i18n: {
-          play: '播放',
-          pause: '暂停',
-          mute: '静音',
-          unmute: '取消静音',
-          settings: '设置',
-          speed: '速度',
-          normal: '正常'
-        }
+          play: "播放",
+          pause: "暂停",
+          mute: "静音",
+          unmute: "取消静音",
+          settings: "设置",
+          speed: "速度",
+          normal: "正常",
+        },
+        fullscreen: {
+          enabled: true,
+          fallback: true,
+          iosNative: true,
+          container: null,
+        },
       });
     }
 
@@ -44,13 +50,17 @@ export default function MediaPlayer({ source, type }) {
 
   // 处理 YouTube URL
   const getYouTubeId = (url) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return match && match[2].length === 11 ? match[2] : null;
   };
 
   // 如果是 YouTube 链接
-  if (source.url && source.url.includes('youtube.com') || source.url.includes('youtu.be')) {
+  if (
+    (source.url && source.url.includes("youtube.com")) ||
+    source.url.includes("youtu.be")
+  ) {
     const videoId = getYouTubeId(source.url);
     if (videoId) {
       return (
@@ -70,7 +80,7 @@ export default function MediaPlayer({ source, type }) {
   // 原有的音视频播放器逻辑
   return (
     <div className="mb-4">
-      {type === 'audio' ? (
+      {type === "audio" ? (
         <audio ref={playerRef} className="w-full">
           <source src={source.url} type={source.mime_type} />
           您的浏览器不支持音频播放器。
@@ -88,4 +98,4 @@ export default function MediaPlayer({ source, type }) {
       )}
     </div>
   );
-} 
+}

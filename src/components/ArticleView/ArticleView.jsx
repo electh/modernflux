@@ -213,6 +213,34 @@ const ArticleView = () => {
                           ? handleLinkWithImg(domNode)
                           : domNode;
                       }
+                      if (domNode.type === "tag" && domNode.name === "iframe") {
+                        const { src } = domNode.attribs;
+                        
+                        // 判断是否为 YouTube iframe
+                        const isYouTube = src && (
+                          src.includes("youtube.com/embed") || 
+                          src.includes("youtu.be") ||
+                          src.includes("youtube-nocookie.com/embed")
+                        );
+
+                        // 如果不是 YouTube iframe,直接返回原始节点
+                        if (!isYouTube) {
+                          return domNode;
+                        }
+
+                        // YouTube iframe 显示打开链接的按钮
+                        return (
+                          <div className="my-4">
+                            <Badge
+                              variant="secondary"
+                              className="cursor-pointer hover:bg-primary/10 hover:text-primary block mx-auto w-fit"
+                              onClick={() => window.open(src, "_blank")}
+                            >
+                              点击在新窗口中打开嵌入内容
+                            </Badge>
+                          </div>
+                        );
+                      }
                     },
                   })}
                 </div>
