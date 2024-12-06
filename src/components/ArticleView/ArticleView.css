@@ -1,7 +1,7 @@
 .article-content {
-  word-wrap: normal;
-  word-break: break-word;
   overflow-wrap: break-word;
+  word-break: break-word;
+  word-wrap: normal;
 }
 
 .article-content * {
@@ -89,4 +89,9 @@ figcaption {
 /* Plyr 自定义样式 */
 :root {
   --plyr-color-main: hsl(var(--primary));
+}
+
+.plyr {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-custom);
 }

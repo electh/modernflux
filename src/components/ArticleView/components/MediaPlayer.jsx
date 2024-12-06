@@ -17,7 +17,6 @@ export default function MediaPlayer({ source, type }) {
           "current-time",
           "duration",
           "mute",
-          "volume",
           "airplay",
           "fullscreen",
         ],
@@ -36,6 +35,7 @@ export default function MediaPlayer({ source, type }) {
           iosNative: true,
           container: null,
         },
+        playsinline: false,
       });
     }
 
@@ -64,7 +64,7 @@ export default function MediaPlayer({ source, type }) {
     const videoId = getYouTubeId(source.url);
     if (videoId) {
       return (
-        <div className="mb-4">
+        <div className="mb-4 rounded">
           <div className="plyr__video-embed" ref={playerRef}>
             <iframe
               src={`https://www.youtube.com/embed/${videoId}`}
