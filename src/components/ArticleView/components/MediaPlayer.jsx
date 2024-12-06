@@ -34,19 +34,23 @@ export default function MediaPlayer({ source, type }) {
         }
       });
 
-      // 处理时间跳转
-      const hash = location.hash;
-      const timeMatch = hash.match(/#t=(\d+):(\d+)/);
+      // 监听播放器就绪事件
+      plyrRef.current.on('ready', () => {
+        // 处理时间跳转
+        const hash = location.hash;
+        const timeMatch = hash.match(/#t=(\d+):(\d+)/);
 
-      if (timeMatch && playerRef.current) {
-        const minutes = parseInt(timeMatch[1]);
-        const seconds = parseInt(timeMatch[2]);
-        const totalSeconds = minutes * 60 + seconds;
+        if (timeMatch) {
+          const minutes = parseInt(timeMatch[1]);
+          const seconds = parseInt(timeMatch[2]);
+          const totalSeconds = minutes * 60 + seconds;
 
-        if (!isNaN(totalSeconds)) {
-          playerRef.current.currentTime = totalSeconds;
+          if (!isNaN(totalSeconds)) {
+            // 使用 Plyr 实例设置时间
+            plyrRef.current.currentTime = totalSeconds;
+          }
         }
-      }
+      });
     }
 
     // 清理函数
