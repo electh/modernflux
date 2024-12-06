@@ -1,24 +1,24 @@
 import { useEffect, useRef } from "react";
 import Plyr from "plyr";
 import "plyr/dist/plyr.css";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function MediaPlayer({ source, type }) {
   const playerRef = useRef(null);
   const plyrRef = useRef(null);
-  const isMobile = useIsMobile();
+
   useEffect(() => {
     // 初始化 Plyr
     if (playerRef.current && !plyrRef.current) {
       plyrRef.current = new Plyr(playerRef.current, {
         controls: [
+          "play-large",
           "play",
           "progress",
           "current-time",
           "duration",
           "mute",
           "airplay",
-          ...(!isMobile ? ["fullscreen"] : [])
+          "fullscreen",
         ],
         i18n: {
           play: "播放",
@@ -30,7 +30,7 @@ export default function MediaPlayer({ source, type }) {
           normal: "正常",
         },
         fullscreen: {
-          enabled: !isMobile,
+          enabled: true,
           fallback: true,
           iosNative: true,
           container: null,
@@ -46,7 +46,7 @@ export default function MediaPlayer({ source, type }) {
         plyrRef.current = null;
       }
     };
-  }, [isMobile]);
+  }, []);
 
   // 处理 YouTube URL
   const getYouTubeId = (url) => {
