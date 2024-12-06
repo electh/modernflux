@@ -19,6 +19,7 @@ import { settingsState } from "@/stores/settingsStore";
 import { AnimatePresence, motion } from "framer-motion";
 import MediaPlayer from "@/components/ArticleView/components/MediaPlayer.jsx";
 import AudioPlayer from "@/components/ArticleView/components/AudioPlayer.jsx";
+
 const ArticleView = () => {
   const { articleId } = useParams();
   const [loading, setLoading] = useState(true);
@@ -103,12 +104,15 @@ const ArticleView = () => {
     return domNode;
   };
 
+  // 检查是否有音频附件
+  const audioEnclosure = $activeArticle?.enclosures?.find((enclosure) =>
+    enclosure.mime_type?.startsWith("audio/"),
+  );
+
   // 检查是否有音频、视频或 YouTube 链接
   const mediaEnclosure = $activeArticle?.enclosures?.find((enclosure) => {
-    // 检查是否是音频或视频类型
-    const isMediaType =
-      enclosure.mime_type?.startsWith("audio/") ||
-      enclosure.mime_type?.startsWith("video/");
+    // 只检查视频类型
+    const isVideoType = enclosure.mime_type?.startsWith("video/");
 
     // 检查是否是 YouTube 链接
     const isYouTube =
@@ -116,7 +120,7 @@ const ArticleView = () => {
       (enclosure.url.includes("youtube.com") ||
         enclosure.url.includes("youtu.be"));
 
-    return isMediaType || isYouTube;
+    return isVideoType || isYouTube;
   });
 
   if (loading || !$activeArticle || error) {
@@ -181,14 +185,9 @@ const ArticleView = () => {
               </header>
               <Separator className="my-4" />
               {mediaEnclosure && (
-  mediaEnclosure.mime_type?.startsWith("audio/") ? (
-    <AudioPlayer source={mediaEnclosure} />
-  ) : (
-    <MediaPlayer
-      source={mediaEnclosure}
-      type="video"
-    />
-                ))}
+                <MediaPlayer source={mediaEnclosure} type="video" />
+              )}
+              {audioEnclosure && <AudioPlayer source={audioEnclosure} />}
               <PhotoProvider
                 maskOpacity={0.5}
                 bannerVisible={false}
