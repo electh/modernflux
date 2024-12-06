@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function MusicPlayer({ audioEnclosure }) {
+export default function AudioPlayer({ source }) {
   const audioRef = useRef(null);
   const location = useLocation();
 
@@ -23,12 +23,12 @@ export default function MusicPlayer({ audioEnclosure }) {
   return (
     <div className="mb-4">
       <audio ref={audioRef} controls className="w-full z-0" preload="metadata">
-        <source src={audioEnclosure.url} type={audioEnclosure.mime_type} />
+        <source src={source.url} type={source.mime_type} />
         您的浏览器不支持音频播放器。
       </audio>
-      {audioEnclosure.size && (
+      {source.size && (
         <div className="text-xs text-muted-foreground mt-1 text-center">
-          文件大小: {(audioEnclosure.size / 1024 / 1024).toFixed(2)} MB
+          文件大小: {(source.size / 1024 / 1024).toFixed(2)} MB
         </div>
       )}
     </div>
