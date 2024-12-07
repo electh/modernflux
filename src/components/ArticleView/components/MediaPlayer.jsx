@@ -8,7 +8,8 @@ export default function MediaPlayer({ src, type }) {
   const plyrRef = useRef(null);
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIOSDevice = /iphone|ipod/.test(userAgent);
+    const isIOSDevice = /iphone|ipod|ipad|macintosh/.test(userAgent) && 
+                       ('ontouchend' in document);
     
     // 在界面中显示调试信息
     if (playerRef.current) {
@@ -17,6 +18,7 @@ export default function MediaPlayer({ src, type }) {
       debugInfo.innerHTML = `
         <div>UserAgent: ${userAgent}</div>
         <div>是否为 iOS 设备: ${isIOSDevice}</div>
+        <div>是否支持触摸: ${'ontouchend' in document}</div>
       `;
       playerRef.current.parentNode.appendChild(debugInfo);
     }
