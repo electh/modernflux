@@ -9,6 +9,18 @@ export default function MediaPlayer({ src, type }) {
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIOSDevice = /iphone|ipod/.test(userAgent);
+    
+    // 在界面中显示调试信息
+    if (playerRef.current) {
+      const debugInfo = document.createElement('div');
+      debugInfo.className = 'text-xs text-muted-foreground mt-2 text-center';
+      debugInfo.innerHTML = `
+        <div>UserAgent: ${userAgent}</div>
+        <div>是否为 iOS 设备: ${isIOSDevice}</div>
+      `;
+      playerRef.current.parentNode.appendChild(debugInfo);
+    }
+
     // 初始化 Plyr
     if (playerRef.current && !plyrRef.current) {
       plyrRef.current = new Plyr(playerRef.current, {
@@ -37,7 +49,6 @@ export default function MediaPlayer({ src, type }) {
       });
     }
 
-    // 清理函数
     return () => {
       if (plyrRef.current) {
         plyrRef.current.destroy();
