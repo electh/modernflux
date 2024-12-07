@@ -2,11 +2,12 @@ import { useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import Plyr from "plyr";
 import "plyr/dist/plyr.css";
+import { useIsIOS } from "@/hooks/useIsIOS";
 
 export default function MediaPlayer({ src, type }) {
   const playerRef = useRef(null);
   const plyrRef = useRef(null);
-
+  const isIOS = useIsIOS();
   useEffect(() => {
     // 初始化 Plyr
     if (playerRef.current && !plyrRef.current) {
@@ -19,7 +20,7 @@ export default function MediaPlayer({ src, type }) {
           "duration",
           "mute",
           "airplay",
-          "fullscreen",
+          ...(!isIOS ? ["fullscreen"] : []),
         ],
         i18n: {
           play: "播放",
@@ -31,7 +32,7 @@ export default function MediaPlayer({ src, type }) {
           normal: "正常",
         },
         fullscreen: {
-          enabled: true,
+          enabled: !isIOS,
           fallback: true,
           iosNative: true,
           container: null,
