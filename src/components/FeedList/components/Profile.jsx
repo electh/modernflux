@@ -26,10 +26,12 @@ import {
 import { authState, logout } from "@/stores/authStore.js";
 import { setTheme, themeState } from "@/stores/themeStore.js";
 import { settingsModalOpen } from "@/stores/settingsStore.js";
+import { useSidebar } from "@/components/ui/sidebar.jsx";
 
 export function Profile() {
   const { username } = useStore(authState);
   const theme = useStore(themeState);
+  const { isMobile, setOpenMobile } = useSidebar();
 
   return (
     <DropdownMenu>
@@ -76,7 +78,12 @@ export function Profile() {
           </DropdownMenuPortal>
         </DropdownMenuSub>
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => settingsModalOpen.set(true)}>
+          <DropdownMenuItem
+            onClick={() => {
+              settingsModalOpen.set(true);
+              isMobile && setOpenMobile(false);
+            }}
+          >
             <Cog />
             <span>设置</span>
           </DropdownMenuItem>
