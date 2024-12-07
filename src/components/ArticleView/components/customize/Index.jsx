@@ -21,10 +21,17 @@ import { useStore } from "@nanostores/react";
 import { customizeModelOpen, resetSettings } from "@/stores/settingsStore";
 import Text from "./Text";
 import Title from "./Title";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 export default function Customize() {
   const isMobile = useIsMobile();
   const $customizeModelOpen = useStore(customizeModelOpen);
+  const { articleId } = useParams();
+
+  useEffect(() => {
+    customizeModelOpen.set(false);
+  }, [articleId]);
 
   if (!isMobile) {
     return (
