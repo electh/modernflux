@@ -26,11 +26,6 @@ export default function AudioPlayer({ source }) {
         <source src={source.url} type={source.mime_type} />
         您的浏览器不支持音频播放器。
       </audio>
-      {source.size && (
-        <div className="text-xs text-muted-foreground mt-1 text-center">
-          文件大小: {(source.size / 1024 / 1024).toFixed(2)} MB
-        </div>
-      )}
     </div>
   );
 }
