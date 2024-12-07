@@ -1,7 +1,7 @@
-import { updateSettings } from "@/stores/settingsStore";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
+import { updateSettings } from "@/stores/settingsStore.js";
+import { Slider } from "@/components/ui/slider.jsx";
+import { Switch } from "@/components/ui/switch.jsx";
+import { Badge } from "@/components/ui/badge.jsx";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.jsx";
 import {
   Select,
@@ -10,7 +10,7 @@ import {
   SelectItem as SelectItemUI,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select.jsx";
 
 export const SliderItem = ({
   label,
@@ -22,7 +22,7 @@ export const SliderItem = ({
   step,
 }) => {
   return (
-    <div className="grid gap-2 bg-background p-2">
+    <div className="grid gap-2 bg-muted/30 p-2">
       <div className="text-xs text-muted-foreground">{label}</div>
       <div className="flex items-center gap-2">
         {icon}
@@ -43,7 +43,7 @@ export const SliderItem = ({
 
 export const SwitchItem = ({ label, icon, settingName, settingValue }) => {
   return (
-    <div className="flex justify-between items-center gap-2 bg-background p-2">
+    <div className="flex justify-between items-center gap-2 bg-muted/30 p-2">
       <div className="flex items-center gap-2">
         {icon}
         <div className="text-sm text-foreground">{label}</div>
@@ -64,7 +64,7 @@ export function SelectItem({
   options,
 }) {
   return (
-    <div className="flex justify-between items-center gap-2 bg-background p-2">
+    <div className="flex justify-between items-center gap-2 bg-muted/30 p-2">
       <div className="flex items-center gap-2">
         {icon}
         <div className="text-sm text-foreground">{label}</div>
@@ -73,7 +73,7 @@ export function SelectItem({
         value={settingValue}
         onValueChange={(value) => updateSettings({ [settingName]: value })}
       >
-        <SelectTrigger className="w-fit h-6 border-none px-0 justify-end gap-2 focus:ring-background">
+        <SelectTrigger className="w-fit h-6 border-none px-0 justify-end gap-2 bg-transparent focus:ring-transparent focus:ring-0 focus:ring-offset-0">
           <SelectValue />
         </SelectTrigger>
         <SelectContent align="end">
@@ -96,7 +96,7 @@ export function SelectItem({
 
 export function GroupItem({ label, icon, settingName, settingValue, options }) {
   return (
-    <div className="flex justify-between items-center gap-2 bg-background p-2">
+    <div className="flex justify-between items-center gap-2 bg-muted/30 p-2">
       <div className="flex items-center gap-2">
         {icon}
         <div className="text-sm text-foreground">{label}</div>

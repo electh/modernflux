@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authState, logout } from "@/stores/authStore.js";
 import { setTheme, themeState } from "@/stores/themeStore.js";
+import { settingsModalOpen } from "@/stores/settingsStore.js";
 
 export function Profile() {
   const { username } = useStore(authState);
@@ -49,7 +50,7 @@ export function Profile() {
             ) : (
               <Laptop className="size-4" />
             )}
-            <span>外观</span>
+            <span>主题</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
@@ -75,7 +76,7 @@ export function Profile() {
           </DropdownMenuPortal>
         </DropdownMenuSub>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => settingsModalOpen.set(true)}>
             <Cog />
             <span>设置</span>
           </DropdownMenuItem>

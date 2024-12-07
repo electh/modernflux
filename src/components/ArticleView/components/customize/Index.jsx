@@ -82,7 +82,7 @@ function CustomizeForm({ className }) {
   return (
     <div
       className={cn(
-        "customize-form flex-1 overflow-y-auto bg-muted dark:bg-sidebar p-4 flex flex-col gap-4",
+        "customize-form flex-1 overflow-y-auto bg-background p-4 flex flex-col gap-4",
         className,
       )}
     >

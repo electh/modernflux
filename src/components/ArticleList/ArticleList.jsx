@@ -12,12 +12,14 @@ import ArticleListHeader from "./components/ArticleListHeader";
 import ArticleListContent from "./components/ArticleListContent";
 import ArticleListFooter from "./components/ArticleListFooter";
 import EmptyPlaceholder from "./components/EmptyPlaceholder";
+import { settingsState } from "@/stores/settingsStore.js";
 
 const ArticleList = () => {
   const { feedId, categoryId, articleId } = useParams();
   const $filteredArticles = useStore(filteredArticles);
   const $lastSync = useStore(lastSync);
   const $filter = useStore(filter);
+  const { sortDirection } = useStore(settingsState);
   const location = useLocation();
   const scrollAreaRef = useRef(null);
 
@@ -33,7 +35,7 @@ const ArticleList = () => {
     };
 
     loadAndFilterArticles();
-  }, [feedId, categoryId, $lastSync, $filter]);
+  }, [feedId, categoryId, $lastSync, $filter, sortDirection]);
 
   // 监听 articleId 变化，滚动到对应的文章卡片
   useEffect(() => {

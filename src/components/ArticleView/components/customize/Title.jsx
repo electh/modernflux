@@ -8,14 +8,17 @@ import {
   CaseSensitive,
 } from "lucide-react";
 import { useStore } from "@nanostores/react";
-import { GroupItem, SliderItem } from "./settingItem";
+import {
+  GroupItem,
+  SliderItem,
+} from "@/components/ui-customize/settingItem.jsx";
 
 export default function Title() {
   const { titleFontSize, titleAlignType } = useStore(settingsState);
   return (
     <div className="flex flex-col gap-1">
       <div className="text-xs text-muted-foreground ml-2">标题</div>
-      <div className="rounded-lg overflow-hidden">
+      <div className="rounded-lg overflow-hidden border border-border/50">
         <GroupItem
           label="对齐"
           icon={<AlignStartVertical className="shrink-0 size-4" />}

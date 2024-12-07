@@ -3,6 +3,7 @@ import storage from "../db/storage";
 import minifluxAPI from "../api/miniflux";
 import { starredCounts, unreadCounts } from "./feedsStore.js";
 import { forceSync } from "@/stores/syncStore.js";
+import { settingsState } from "./settingsStore";
 
 export const filteredArticles = atom([]);
 export const activeArticle = atom(null);
@@ -60,9 +61,10 @@ export async function loadArticles(sourceId = null, type = "feed") {
     }
 
     // 按发布时间倒序排序
-    const sortedArticles = filtered.sort(
-      (a, b) => new Date(b.created_at) - new Date(a.created_at),
-    );
+    const sortedArticles = filtered.sort((a, b) => {
+      const direction = settingsState.get().sortDirection === "desc" ? 1 : -1;
+      return direction * (new Date(b.created_at) - new Date(a.created_at));
+    });
 
     filteredArticles.set(sortedArticles);
   } catch (err) {

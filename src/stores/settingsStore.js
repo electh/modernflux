@@ -2,7 +2,7 @@ import { persistentAtom } from "@nanostores/persistent";
 import { atom } from "nanostores";
 
 export const customizeModelOpen = atom(false);
-
+export const settingsModalOpen = atom(false);
 const defaultValue = {
   lineHeight: 1.8,
   fontSize: 16,
@@ -11,6 +11,9 @@ const defaultValue = {
   fontFamily: "system-ui",
   titleFontSize: 1.8, // 标题相对于正文大小的倍数
   titleAlignType: "left",
+  feedIconShape: "square", // circle, square
+  useGrayIcon: false,
+  sortDirection: "desc", // asc, desc
 };
 
 export const settingsState = persistentAtom("settings", defaultValue, {
