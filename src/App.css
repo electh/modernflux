@@ -76,4 +76,8 @@ body {
   .customize-form {
     padding-bottom: calc(env(safe-area-inset-bottom) + 16px) !important;
   }
+
+  .plyr__controls {
+    padding-top: calc(env(safe-area-inset-bottom) + 10px) !important;
+  }
 }
