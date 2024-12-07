@@ -61,7 +61,7 @@ export async function loadArticles(sourceId = null, type = "feed") {
 
     // 按发布时间倒序排序
     const sortedArticles = filtered.sort(
-      (a, b) => new Date(b.published_at) - new Date(a.published_at),
+      (a, b) => new Date(b.created_at) - new Date(a.created_at),
     );
 
     filteredArticles.set(sortedArticles);
@@ -204,40 +204,41 @@ export async function markAllAsRead(type = "all", id = null) {
     await forceSync();
 
     // 并行执行更新
-    await Promise.all([
-      // 更新服务器
-      navigator.onLine && minifluxAPI.markAllAsRead(type, id),
-      
-      // 更新本地数据库
-      storage.addArticles(
-        affectedArticles.map((article) => ({
-          ...article,
-          status: "read",
-        })),
-      ),
-      
-      // 批量更新未读计数
-      (async () => {
-        const counts = {};
-        const feedIds = Object.keys(articlesByFeed);
-        
-        // 并行获取所有订阅源的未读计数
-        const unreadCountsArray = await Promise.all(
-          feedIds.map(feedId => storage.getUnreadCount(feedId))
-        );
-        
-        // 组装未读计数对象
-        feedIds.forEach((feedId, index) => {
-          counts[feedId] = unreadCountsArray[index];
-        });
-        
-        unreadCounts.set({
-          ...unreadCounts.get(),
-          ...counts
-        });
-      })(),
-    ].filter(Boolean));
-    
+    await Promise.all(
+      [
+        // 更新服务器
+        navigator.onLine && minifluxAPI.markAllAsRead(type, id),
+
+        // 更新本地数据库
+        storage.addArticles(
+          affectedArticles.map((article) => ({
+            ...article,
+            status: "read",
+          })),
+        ),
+
+        // 批量更新未读计数
+        (async () => {
+          const counts = {};
+          const feedIds = Object.keys(articlesByFeed);
+
+          // 并行获取所有订阅源的未读计数
+          const unreadCountsArray = await Promise.all(
+            feedIds.map((feedId) => storage.getUnreadCount(feedId)),
+          );
+
+          // 组装未读计数对象
+          feedIds.forEach((feedId, index) => {
+            counts[feedId] = unreadCountsArray[index];
+          });
+
+          unreadCounts.set({
+            ...unreadCounts.get(),
+            ...counts,
+          });
+        })(),
+      ].filter(Boolean),
+    );
   } catch (err) {
     // 发生错误时回滚UI状态
     filteredArticles.set(articles);
