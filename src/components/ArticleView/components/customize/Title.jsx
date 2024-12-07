@@ -30,7 +30,7 @@ export default function Title() {
             { value: "right", icon: <AlignRight className="size-4" /> },
           ]}
         />
-        <Separator />
+        <Separator className="bg-border/50" />
         <SliderItem
           label="大小"
           icon={<CaseSensitive className="shrink-0 size-4" />}

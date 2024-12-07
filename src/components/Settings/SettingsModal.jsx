@@ -59,7 +59,7 @@ export default function SettingsModal() {
         open={$settingsModalOpen}
         onOpenChange={(value) => settingsModalOpen.set(value)}
       >
-        <DialogContent className="overflow-hidden p-0 md:max-h-[500px] md:max-w-[700px] lg:max-w-[800px]">
+        <DialogContent className="overflow-hidden p-0 max-h-[90vh] h-[500px] md:max-w-[700px] lg:max-w-[800px]">
           <DialogTitle className="sr-only">设置</DialogTitle>
           <DialogDescription className="sr-only">个性化设置</DialogDescription>
           <SidebarProvider className="items-start">
