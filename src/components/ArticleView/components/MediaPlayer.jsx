@@ -2,25 +2,22 @@ import { useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import Plyr from "plyr";
 import "plyr/dist/plyr.css";
-import { useIsIOS } from "@/hooks/useIsIOS";
 
 export default function MediaPlayer({ src, type }) {
   const playerRef = useRef(null);
   const plyrRef = useRef(null);
-  const isIOS = useIsIOS();
   useEffect(() => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isIOSDevice = /iphone|ipod/.test(userAgent);
     // 初始化 Plyr
     if (playerRef.current && !plyrRef.current) {
       plyrRef.current = new Plyr(playerRef.current, {
         controls: [
           "play-large",
-          "play",
-          "progress",
-          "current-time",
-          "duration",
-          "mute",
-          "airplay",
-          ...(!isIOS ? ["fullscreen"] : []),
+          ...(isIOSDevice && type !== "youtube"
+            ? []
+            : ["play", "progress", "current-time", "duration", "mute"]),
+          ...(isIOSDevice ? [] : ["fullscreen"]),
         ],
         i18n: {
           play: "播放",
@@ -32,12 +29,11 @@ export default function MediaPlayer({ src, type }) {
           normal: "正常",
         },
         fullscreen: {
-          enabled: !isIOS,
+          enabled: !isIOSDevice,
           fallback: true,
           iosNative: true,
           container: null,
         },
-        playsinline: false,
       });
     }
 
