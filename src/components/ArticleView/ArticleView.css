@@ -84,6 +84,7 @@ figcaption {
 /* Plyr 自定义样式 */
 :root {
   --plyr-color-main: hsl(var(--primary));
+  --plyr-control-spacing: calc(env(safe-area-inset-bottom) + 10px);
 }
 
 .plyr {
