@@ -14,11 +14,6 @@ p {
   margin-block-start: 1rem !important;
 }
 
-/*video 相关样式 */
-.article-content video {
-  border-radius: var(--radius);
-}
-
 /* 文章标题链接样式 */
 .article-title a {
   color: hsl(var(--foreground)); /* 设置链接文字颜色 */

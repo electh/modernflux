@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
+import { Badge } from "@/components/ui/badge";
 import Plyr from "plyr";
 import "plyr/dist/plyr.css";
 
-export default function MediaPlayer({ source, type }) {
+export default function MediaPlayer({ src, type }) {
   const playerRef = useRef(null);
   const plyrRef = useRef(null);
 
@@ -57,14 +58,11 @@ export default function MediaPlayer({ source, type }) {
   };
 
   // 如果是 YouTube 链接
-  if (
-    (source.url && source.url.includes("youtube.com")) ||
-    source.url.includes("youtu.be")
-  ) {
-    const videoId = getYouTubeId(source.url);
+  if (type === "youtube") {
+    const videoId = getYouTubeId(src);
     if (videoId) {
       return (
-        <div className="mb-4 rounded">
+        <div className="mb-4">
           <div className="plyr__video-embed" ref={playerRef}>
             <iframe
               src={`https://www.youtube.com/embed/${videoId}`}
@@ -72,30 +70,29 @@ export default function MediaPlayer({ source, type }) {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             />
           </div>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-primary/10 hover:text-primary block mx-auto w-fit my-2"
+            onClick={() =>
+              window.open(
+                `https://www.youtube.com/watch?v=${videoId}`,
+                "_blank",
+              )
+            }
+          >
+            在新窗口中打开嵌入内容
+          </Badge>
         </div>
       );
     }
   }
 
-  // 原有的音视频播放器逻辑
   return (
     <div className="mb-4">
-      {type === "audio" ? (
-        <audio ref={playerRef} className="w-full">
-          <source src={source.url} type={source.mime_type} />
-          您的浏览器不支持音频播放器。
-        </audio>
-      ) : (
-        <video ref={playerRef} className="w-full">
-          <source src={source.url} type={source.mime_type} />
-          您的浏览器不支持视频播放器。
-        </video>
-      )}
-      {source.size && (
-        <div className="text-xs text-muted-foreground mt-1 text-center">
-          文件大小: {(source.size / 1024 / 1024).toFixed(2)} MB
-        </div>
-      )}
+      <video ref={playerRef} className="w-full">
+        <source src={src} type={type} />
+        您的浏览器不支持视频播放器。
+      </video>
     </div>
   );
 }

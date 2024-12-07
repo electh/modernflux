@@ -91,7 +91,7 @@ const ArticleView = () => {
           <ArticleImage imgNode={imgNode} />
           <Badge
             variant="secondary"
-            className="cursor-pointer hover:bg-primary/10 hover:text-primary block mx-auto w-fit mt-2"
+            className="cursor-pointer hover:bg-primary/10 hover:text-primary block mx-auto w-fit my-2"
             onClick={() => {
               window.open(domNode.attribs.href, "_blank");
             }}
@@ -108,20 +108,6 @@ const ArticleView = () => {
   const audioEnclosure = $activeArticle?.enclosures?.find((enclosure) =>
     enclosure.mime_type?.startsWith("audio/"),
   );
-
-  // 检查是否有音频、视频或 YouTube 链接
-  const mediaEnclosure = $activeArticle?.enclosures?.find((enclosure) => {
-    // 只检查视频类型
-    const isVideoType = enclosure.mime_type?.startsWith("video/");
-
-    // 检查是否是 YouTube 链接
-    const isYouTube =
-      enclosure.url &&
-      (enclosure.url.includes("youtube.com") ||
-        enclosure.url.includes("youtu.be"));
-
-    return isVideoType || isYouTube;
-  });
 
   if (loading || !$activeArticle || error) {
     return <EmptyPlaceholder />;
@@ -184,9 +170,6 @@ const ArticleView = () => {
                 </div>
               </header>
               <Separator className="my-4" />
-              {mediaEnclosure && (
-                <MediaPlayer source={mediaEnclosure} type="video" />
-              )}
               {audioEnclosure && <AudioPlayer source={audioEnclosure} />}
               <PhotoProvider
                 maskOpacity={0.5}
@@ -213,15 +196,34 @@ const ArticleView = () => {
                           ? handleLinkWithImg(domNode)
                           : domNode;
                       }
+                      if (domNode.type === "tag" && domNode.name === "video") {
+                        // 查找 source 子元素
+                        const sourceNode = domNode.children?.find(
+                          (child) =>
+                            child.type === "tag" && child.name === "source",
+                        );
+
+                        // 如果找到 source 元素,使用其属性
+                        if (sourceNode?.attribs) {
+                          return (
+                            <MediaPlayer
+                              src={sourceNode.attribs.src}
+                              type={sourceNode.attribs.type}
+                            />
+                          );
+                        }
+
+                        return domNode;
+                      }
                       if (domNode.type === "tag" && domNode.name === "iframe") {
                         const { src } = domNode.attribs;
-                        
+
                         // 判断是否为 YouTube iframe
-                        const isYouTube = src && (
-                          src.includes("youtube.com/embed") || 
-                          src.includes("youtu.be") ||
-                          src.includes("youtube-nocookie.com/embed")
-                        );
+                        const isYouTube =
+                          src &&
+                          (src.includes("youtube.com/embed") ||
+                            src.includes("youtu.be") ||
+                            src.includes("youtube-nocookie.com/embed"));
 
                         // 如果不是 YouTube iframe,直接返回原始节点
                         if (!isYouTube) {
@@ -229,17 +231,7 @@ const ArticleView = () => {
                         }
 
                         // YouTube iframe 显示打开链接的按钮
-                        return (
-                          <div className="my-4">
-                            <Badge
-                              variant="secondary"
-                              className="cursor-pointer hover:bg-primary/10 hover:text-primary block mx-auto w-fit"
-                              onClick={() => window.open(src, "_blank")}
-                            >
-                              点击在新窗口中打开嵌入内容
-                            </Badge>
-                          </div>
-                        );
+                        return <MediaPlayer src={src} type="youtube" />;
                       }
                     },
                   })}
