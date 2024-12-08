@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import Preview from "./Preview";
@@ -21,13 +22,14 @@ import { useStore } from "@nanostores/react";
 import { customizeModelOpen, resetSettings } from "@/stores/settingsStore";
 import Text from "./Text";
 import Title from "./Title";
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 export default function Customize() {
   const isMobile = useIsMobile();
   const $customizeModelOpen = useStore(customizeModelOpen);
   const { articleId } = useParams();
+  const snapPoints = [0.8, 1];
+  const [snap, setSnap] = useState(snapPoints[0]);
 
   useEffect(() => {
     customizeModelOpen.set(false);
@@ -55,9 +57,11 @@ export default function Customize() {
     <Drawer
       open={$customizeModelOpen}
       onOpenChange={customizeModelOpen.set}
-      modal={false}
+      snapPoints={snapPoints}
+      activeSnapPoint={snap}
+      setActiveSnapPoint={setSnap}
     >
-      <DrawerContent className="max-h-[50vh] border-none bg-sidebar shadow-custom">
+      <DrawerContent className=" border-none bg-sidebar shadow-custom">
         <DrawerHeader className="border-b">
           <DrawerTitle className="w-full flex items-center space-between">
             <span className="flex-1 text-base text-left">自定义阅读设置</span>
