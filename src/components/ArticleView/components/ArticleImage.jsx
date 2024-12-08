@@ -13,27 +13,28 @@ export default function ArticleImage({ imgNode }) {
   const handleImageClick = (e) => {
     e.preventDefault();
 
-    // 确保图片元素存在
     if (imgRef.current) {
-      // 获取图片元素的位置信息
       const imgRect = imgRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
-
-      // 如果图片不在视口内或者顶部被遮挡
-      if (imgRect.top < 65 || imgRect.bottom > viewportHeight) {
-        // 找到最近的可滚动容器
-        const scrollContainer = imgRef.current.closest(
-          "[data-radix-scroll-area-viewport]",
-        );
-        if (scrollContainer) {
-          // 计算需要滚动的距离，考虑顶部工具栏的高度
-          const scrollTop = scrollContainer.scrollTop + imgRect.top - 75;
-
-          // 平滑滚动到目标位置
-          scrollContainer.scrollTo({
-            top: scrollTop,
-            behavior: "smooth",
-          });
+      
+      const scrollContainer = imgRef.current.closest(
+        "[data-radix-scroll-area-viewport]"
+      );
+      
+      if (scrollContainer) {
+        const actionButtons = document.querySelector('.action-buttons');
+        if (actionButtons) {
+          const actionButtonsRect = actionButtons.getBoundingClientRect();
+          const actionButtonsHeight = actionButtonsRect.bottom;
+          
+          if (imgRect.top < actionButtonsHeight || imgRect.bottom > viewportHeight) {
+            const scrollTop = scrollContainer.scrollTop + imgRect.top - (actionButtonsHeight + 10);
+            
+            scrollContainer.scrollTo({
+              top: scrollTop,
+              behavior: "smooth",
+            });
+          }
         }
       }
     }
