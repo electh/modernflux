@@ -133,7 +133,7 @@ const ArticleView = () => {
             fontFamily: fontFamily,
           }}
         >
-          <AnimatePresence initial={false}>
+          <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={$activeArticle?.id}
               initial={{ y: 50, opacity: 0 }}
@@ -146,6 +146,7 @@ const ArticleView = () => {
                   opacity: { delay: 0.05 },
                 },
               }}
+              exit={{ y: -20, opacity: 0 }}
             >
               <header
                 className="article-header"
@@ -176,7 +177,7 @@ const ArticleView = () => {
                 bannerVisible={false}
                 maskClassName="backdrop-blur"
               >
-                <div
+                <motion.div
                   className={cn(
                     "article-content prose dark:prose-invert max-w-none",
                     getFontSizeClass(fontSize),
@@ -185,6 +186,18 @@ const ArticleView = () => {
                     lineHeight: lineHeight + "em",
                     textAlign: alignJustify ? "justify" : "left",
                   }}
+                  key={$activeArticle?.id}
+                  initial={{ y: 50, opacity: 0 }}
+                  animate={{
+                    y: 0,
+                    opacity: 1,
+                    transition: {
+                      type: "spring",
+                      bounce: 0.3,
+                      opacity: { delay: 0.05 },
+                    },
+                  }}
+                  exit={{ y: -20, opacity: 0 }}
                 >
                   {parse($activeArticle?.content, {
                     replace(domNode) {
@@ -235,7 +248,7 @@ const ArticleView = () => {
                       }
                     },
                   })}
-                </div>
+                </motion.div>
               </PhotoProvider>
             </motion.div>
           </AnimatePresence>
