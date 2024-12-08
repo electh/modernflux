@@ -28,7 +28,7 @@ export default function Customize() {
   const isMobile = useIsMobile();
   const $customizeModelOpen = useStore(customizeModelOpen);
   const { articleId } = useParams();
-  const snapPoints = [0.8, 1];
+  const snapPoints = [0.6, 1];
   const [snap, setSnap] = useState(snapPoints[0]);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function Customize() {
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
     >
-      <DrawerContent className=" border-none bg-sidebar shadow-custom">
+      <DrawerContent className="h-[90vh] border-none bg-sidebar shadow-custom">
         <DrawerHeader className="border-b">
           <DrawerTitle className="w-full flex items-center space-between">
             <span className="flex-1 text-base text-left">自定义阅读设置</span>
