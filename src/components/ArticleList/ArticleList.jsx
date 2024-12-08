@@ -19,7 +19,7 @@ const ArticleList = () => {
   const $filteredArticles = useStore(filteredArticles);
   const $lastSync = useStore(lastSync);
   const $filter = useStore(filter);
-  const { sortDirection } = useStore(settingsState);
+  const { sortDirection, showHiddenFeeds } = useStore(settingsState);
   const location = useLocation();
   const scrollAreaRef = useRef(null);
 
@@ -35,7 +35,7 @@ const ArticleList = () => {
     };
 
     loadAndFilterArticles();
-  }, [feedId, categoryId, $lastSync, $filter, sortDirection]);
+  }, [feedId, categoryId, $lastSync, $filter, sortDirection, showHiddenFeeds]);
 
   // 监听 articleId 变化，滚动到对应的文章卡片
   useEffect(() => {

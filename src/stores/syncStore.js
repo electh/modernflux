@@ -65,6 +65,7 @@ async function syncFeeds() {
         title: feed.title,
         url: feed.feed_url,
         site_url: feed.site_url,
+        hide_globally: feed.hide_globally,
         categoryId: feed.category.id,
         categoryName: feed.category.title,
       });

@@ -1,6 +1,7 @@
 import { atom, computed } from "nanostores";
 import storage from "../db/storage";
 import { filter } from "@/stores/articlesStore.js";
+import { settingsState } from "@/stores/settingsStore.js";
 
 export const feeds = atom([]);
 export const error = atom(null);
@@ -8,9 +9,12 @@ export const unreadCounts = atom({});
 export const starredCounts = atom({});
 
 export const filteredFeeds = computed(
-  [feeds, filter, starredCounts, unreadCounts],
-  ($feeds, $filter, $starredCounts, $unreadCounts) => {
-    return $feeds.filter((feed) => {
+  [feeds, filter, starredCounts, unreadCounts, settingsState],
+  ($feeds, $filter, $starredCounts, $unreadCounts, $settings) => {
+    const visibleFeeds = $settings.showHiddenFeeds
+      ? $feeds
+      : $feeds.filter((feed) => !feed.hide_globally);
+    return visibleFeeds.filter((feed) => {
       switch ($filter) {
         case "starred":
           return $starredCounts[feed.id] > 0;
@@ -87,30 +91,27 @@ export const getFeedCount = computed(
   },
 );
 
-export const totalUnreadCount = computed(
-  [unreadCounts],
-  ($unreadCounts) => {
-    return Object.values($unreadCounts).reduce((sum, count) => sum + count, 0);
-  }
-);
+export const totalUnreadCount = computed([unreadCounts], ($unreadCounts) => {
+  return Object.values($unreadCounts).reduce((sum, count) => sum + count, 0);
+});
 
-export const totalStarredCount = computed(
-  [starredCounts],
-  ($starredCounts) => {
-    return Object.values($starredCounts).reduce((sum, count) => sum + count, 0);
-  }
-);
+export const totalStarredCount = computed([starredCounts], ($starredCounts) => {
+  return Object.values($starredCounts).reduce((sum, count) => sum + count, 0);
+});
 
 export async function loadFeeds() {
   try {
     await storage.init();
     const storedFeeds = await storage.getFeeds();
     feeds.set(storedFeeds || []);
+    const filteredFeeds = settingsState.get().showHiddenFeeds
+      ? storedFeeds
+      : storedFeeds.filter((feed) => !feed.hide_globally);
 
     // 获取未读和收藏计数
     const unreadCount = {};
     const starredCount = {};
-    for (const feed of storedFeeds) {
+    for (const feed of filteredFeeds) {
       unreadCount[feed.id] = await storage.getUnreadCount(feed.id);
       starredCount[feed.id] = await storage.getStarredCount(feed.id);
     }

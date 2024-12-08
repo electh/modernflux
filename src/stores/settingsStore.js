@@ -14,6 +14,7 @@ const defaultValue = {
   feedIconShape: "square", // circle, square
   useGrayIcon: false,
   sortDirection: "desc", // asc, desc
+  showHiddenFeeds: false,
 };
 
 export const settingsState = persistentAtom("settings", defaultValue, {

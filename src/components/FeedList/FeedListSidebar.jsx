@@ -17,13 +17,15 @@ import ArticlesGroup from "@/components/FeedList/components/ArticlesGroup.jsx";
 import FeedsGroup from "@/components/FeedList/components/FeedsGroup.jsx";
 import { formatLastSync } from "@/lib/format";
 import { Profile } from "@/components/FeedList/components/Profile.jsx";
+import { settingsState } from "@/stores/settingsStore.js";
 
 const FeedListSidebar = () => {
   const $lastSync = useStore(lastSync);
   const $isSyncing = useStore(isSyncing);
+  const { showHiddenFeeds } = useStore(settingsState);
   useEffect(() => {
     loadFeeds();
-  }, [$lastSync]);
+  }, [$lastSync, showHiddenFeeds]);
 
   return (
     <Sidebar variant="sidebar" className="sidebar">

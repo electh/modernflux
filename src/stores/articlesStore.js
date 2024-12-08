@@ -19,6 +19,7 @@ export async function loadArticles(sourceId = null, type = "feed") {
   try {
     await storage.init();
     const feeds = await storage.getFeeds();
+    const showHiddenFeeds = settingsState.get().showHiddenFeeds;
     let targetFeeds;
     let articles = [];
 
@@ -26,14 +27,22 @@ export async function loadArticles(sourceId = null, type = "feed") {
     if (type === "category" && sourceId) {
       // 获取分类下的所有订阅源
       targetFeeds = feeds.filter(
-        (feed) => feed.categoryId === parseInt(sourceId),
+        (feed) =>
+          feed.categoryId === parseInt(sourceId) &&
+          (showHiddenFeeds || !feed.hide_globally),
       );
     } else if (sourceId) {
       // 获取单个订阅源
-      targetFeeds = feeds.filter((feed) => feed.id === parseInt(sourceId));
+      targetFeeds = feeds.filter(
+        (feed) =>
+          feed.id === parseInt(sourceId) &&
+          (showHiddenFeeds || !feed.hide_globally),
+      );
     } else {
       // 获取所有订阅源
-      targetFeeds = feeds;
+      targetFeeds = showHiddenFeeds
+        ? feeds
+        : feeds.filter((feed) => !feed.hide_globally);
     }
 
     // 获取所有目标订阅的文章
