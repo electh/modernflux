@@ -1,84 +1,56 @@
 .article-content {
-  overflow-wrap: break-word;
-  word-break: break-word;
-  word-wrap: normal;
+  @apply break-words;
 }
 
 .article-content * {
-  max-width: 100%;
+  @apply max-w-full;
 }
 
 .article-content li,
 p {
-  margin-block-end: 1rem !important;
-  margin-block-start: 1rem !important;
+  @apply !my-4
 }
 
 /* 文章标题链接样式 */
 .article-title a {
-  color: hsl(var(--foreground)); /* 设置链接文字颜色 */
-  font-weight: 500;
-  text-decoration: none;
+  @apply text-foreground font-medium no-underline
 }
 
 /* 文章内容链接样式 */
 .article-content a {
-  border-bottom: 1px dotted hsl(var(--primary)); /* 设置链接文字颜色 */
-  color: hsl(var(--primary));
-  text-decoration: none;
-  transition: color 0.1s linear;
-}
-
-.article-content a:hover {
-  border-bottom: 1px dotted hsl(var(--primary)); /* 设置链接文字颜色 */
-  color: hsl(var(--primary));
-  text-decoration: none;
+  @apply border-b-[1px] border-dotted border-primary no-underline	transition-colors text-primary
 }
 
 /*code 相关样式 - 表格 */
 .article-content td {
-  color: hsl(var(--muted-foreground));
-  font-size: 0.8em;
+  @apply text-muted-foreground text-sm
 }
 
 /*code 相关样式 */
 .article-content code {
-  background-color: hsl(var(--muted));
-  border-radius: 2px;
-  color: hsl(var(--muted-foreground));
-  font-family: "JetBrains Mono", Consolas, Monaco, "Andale Mono", monospace;
-  font-size: 0.8em;
-  padding: 2px;
+  @apply bg-muted rounded-lg text-muted-foreground text-sm p-0.5 font-mono
 }
 
 /*code 相关样式 */
 .article-content figure {
-  margin: 16px 0;
+  @apply my-4
 }
 
 /*code 相关样式 */
 .article-content pre {
-  background-color: hsl(var(--muted));
-  border-radius: 4px;
-  line-height: 1.2;
-  overflow: auto;
-  padding: 10px;
+  @apply bg-muted rounded-lg overflow-auto p-3 leading-tight
 }
 
 iframe {
-  aspect-ratio: 16/9;
-  border: none !important;
-  border-radius: 4px;
-  height: auto;
-  width: 100%;
+  @apply aspect-video !border-none rounded-lg h-auto w-full
 }
 
 blockquote {
-  font-style: normal !important;
+  @apply !not-italic
 }
 
 figcaption {
-  font-style: italic !important;
+  @apply !italic
 }
 
 /* Plyr 自定义样式 */
@@ -87,6 +59,5 @@ figcaption {
 }
 
 .plyr {
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-custom);
+  @apply rounded-lg border shadow-lg
 }
