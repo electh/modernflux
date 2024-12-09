@@ -62,7 +62,7 @@ export default function SettingsModal() {
         <DialogContent className="overflow-hidden p-0 max-h-[90vh] h-[500px] md:max-w-[700px] lg:max-w-[800px]">
           <DialogTitle className="sr-only">设置</DialogTitle>
           <DialogDescription className="sr-only">个性化设置</DialogDescription>
-          <SidebarProvider className="items-start">
+          <SidebarProvider className="items-start min-h-full">
             <Sidebar collapsible="none" className="hidden md:flex">
               <SidebarContent>
                 <SidebarGroup>
